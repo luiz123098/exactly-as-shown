@@ -34,6 +34,7 @@ function SponsorPage() {
   const { user } = useAuth();
   useEffect(() => { track(id, user?.id, "view"); }, [id, user?.id]);
   const [photo, setPhoto] = useState<string | null>(null);
+  const [showMap, setShowMap] = useState(false);
   if (!s) return <p className="text-sm text-muted-foreground">Carregando…</p>;
   return (
     <div className="space-y-10">
