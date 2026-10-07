@@ -10,33 +10,208 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AppRouteImport } from './routes/app'
+import { Route as AuthRouteImport } from './routes/auth'
+import { Route as ParceirosRouteImport } from './routes/parceiros'
+import { Route as PlanosRouteImport } from './routes/planos'
+import { Route as ResetPasswordRouteImport } from './routes/reset-password'
+import { Route as AppIndexRouteImport } from './routes/app.index'
+import { Route as AppAssinaturaRouteImport } from './routes/app.assinatura'
+import { Route as AppBeneficiosRouteImport } from './routes/app.beneficios'
+import { Route as AppFavoritosRouteImport } from './routes/app.favoritos'
+import { Route as AppMapaRouteImport } from './routes/app.mapa'
+import { Route as AppNotificacoesRouteImport } from './routes/app.notificacoes'
+import { Route as AppPerfilRouteImport } from './routes/app.perfil'
+import { Route as AppPromocoesRouteImport } from './routes/app.promocoes'
+import { Route as AppParceirosIdRouteImport } from './routes/app.parceiros.$id'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AppRoute = AppRouteImport.update({
+  id: '/app',
+  path: '/app',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthRoute = AuthRouteImport.update({
+  id: '/auth',
+  path: '/auth',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ParceirosRoute = ParceirosRouteImport.update({
+  id: '/parceiros',
+  path: '/parceiros',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PlanosRoute = PlanosRouteImport.update({
+  id: '/planos',
+  path: '/planos',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ResetPasswordRoute = ResetPasswordRouteImport.update({
+  id: '/reset-password',
+  path: '/reset-password',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AppIndexRoute = AppIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppAssinaturaRoute = AppAssinaturaRouteImport.update({
+  id: '/assinatura',
+  path: '/assinatura',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppBeneficiosRoute = AppBeneficiosRouteImport.update({
+  id: '/beneficios',
+  path: '/beneficios',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppFavoritosRoute = AppFavoritosRouteImport.update({
+  id: '/favoritos',
+  path: '/favoritos',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppMapaRoute = AppMapaRouteImport.update({
+  id: '/mapa',
+  path: '/mapa',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppNotificacoesRoute = AppNotificacoesRouteImport.update({
+  id: '/notificacoes',
+  path: '/notificacoes',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppPerfilRoute = AppPerfilRouteImport.update({
+  id: '/perfil',
+  path: '/perfil',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppPromocoesRoute = AppPromocoesRouteImport.update({
+  id: '/promocoes',
+  path: '/promocoes',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppParceirosIdRoute = AppParceirosIdRouteImport.update({
+  id: '/parceiros/$id',
+  path: '/parceiros/$id',
+  getParentRoute: () => AppRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/app': typeof AppRouteWithChildren
+  '/auth': typeof AuthRoute
+  '/parceiros': typeof ParceirosRoute
+  '/planos': typeof PlanosRoute
+  '/reset-password': typeof ResetPasswordRoute
+  '/app/assinatura': typeof AppAssinaturaRoute
+  '/app/beneficios': typeof AppBeneficiosRoute
+  '/app/favoritos': typeof AppFavoritosRoute
+  '/app/mapa': typeof AppMapaRoute
+  '/app/notificacoes': typeof AppNotificacoesRoute
+  '/app/perfil': typeof AppPerfilRoute
+  '/app/promocoes': typeof AppPromocoesRoute
+  '/app/': typeof AppIndexRoute
+  '/app/parceiros/$id': typeof AppParceirosIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/auth': typeof AuthRoute
+  '/parceiros': typeof ParceirosRoute
+  '/planos': typeof PlanosRoute
+  '/reset-password': typeof ResetPasswordRoute
+  '/app/assinatura': typeof AppAssinaturaRoute
+  '/app/beneficios': typeof AppBeneficiosRoute
+  '/app/favoritos': typeof AppFavoritosRoute
+  '/app/mapa': typeof AppMapaRoute
+  '/app/notificacoes': typeof AppNotificacoesRoute
+  '/app/perfil': typeof AppPerfilRoute
+  '/app/promocoes': typeof AppPromocoesRoute
+  '/app': typeof AppIndexRoute
+  '/app/parceiros/$id': typeof AppParceirosIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/app': typeof AppRouteWithChildren
+  '/auth': typeof AuthRoute
+  '/parceiros': typeof ParceirosRoute
+  '/planos': typeof PlanosRoute
+  '/reset-password': typeof ResetPasswordRoute
+  '/app/assinatura': typeof AppAssinaturaRoute
+  '/app/beneficios': typeof AppBeneficiosRoute
+  '/app/favoritos': typeof AppFavoritosRoute
+  '/app/mapa': typeof AppMapaRoute
+  '/app/notificacoes': typeof AppNotificacoesRoute
+  '/app/perfil': typeof AppPerfilRoute
+  '/app/promocoes': typeof AppPromocoesRoute
+  '/app/': typeof AppIndexRoute
+  '/app/parceiros/$id': typeof AppParceirosIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths:
+    | '/'
+    | '/app'
+    | '/auth'
+    | '/parceiros'
+    | '/planos'
+    | '/reset-password'
+    | '/app/assinatura'
+    | '/app/beneficios'
+    | '/app/favoritos'
+    | '/app/mapa'
+    | '/app/notificacoes'
+    | '/app/perfil'
+    | '/app/promocoes'
+    | '/app/'
+    | '/app/parceiros/$id'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to:
+    | '/'
+    | '/auth'
+    | '/parceiros'
+    | '/planos'
+    | '/reset-password'
+    | '/app/assinatura'
+    | '/app/beneficios'
+    | '/app/favoritos'
+    | '/app/mapa'
+    | '/app/notificacoes'
+    | '/app/perfil'
+    | '/app/promocoes'
+    | '/app'
+    | '/app/parceiros/$id'
+  id:
+    | '__root__'
+    | '/'
+    | '/app'
+    | '/auth'
+    | '/parceiros'
+    | '/planos'
+    | '/reset-password'
+    | '/app/assinatura'
+    | '/app/beneficios'
+    | '/app/favoritos'
+    | '/app/mapa'
+    | '/app/notificacoes'
+    | '/app/perfil'
+    | '/app/promocoes'
+    | '/app/'
+    | '/app/parceiros/$id'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AppRoute: typeof AppRouteWithChildren
+  AuthRoute: typeof AuthRoute
+  ParceirosRoute: typeof ParceirosRoute
+  PlanosRoute: typeof PlanosRoute
+  ResetPasswordRoute: typeof ResetPasswordRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -48,11 +223,140 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/app': {
+      id: '/app'
+      path: '/app'
+      fullPath: '/app'
+      preLoaderRoute: typeof AppRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/auth': {
+      id: '/auth'
+      path: '/auth'
+      fullPath: '/auth'
+      preLoaderRoute: typeof AuthRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/parceiros': {
+      id: '/parceiros'
+      path: '/parceiros'
+      fullPath: '/parceiros'
+      preLoaderRoute: typeof ParceirosRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/planos': {
+      id: '/planos'
+      path: '/planos'
+      fullPath: '/planos'
+      preLoaderRoute: typeof PlanosRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/reset-password': {
+      id: '/reset-password'
+      path: '/reset-password'
+      fullPath: '/reset-password'
+      preLoaderRoute: typeof ResetPasswordRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/app/': {
+      id: '/app/'
+      path: '/'
+      fullPath: '/app/'
+      preLoaderRoute: typeof AppIndexRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/app/assinatura': {
+      id: '/app/assinatura'
+      path: '/assinatura'
+      fullPath: '/app/assinatura'
+      preLoaderRoute: typeof AppAssinaturaRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/app/beneficios': {
+      id: '/app/beneficios'
+      path: '/beneficios'
+      fullPath: '/app/beneficios'
+      preLoaderRoute: typeof AppBeneficiosRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/app/favoritos': {
+      id: '/app/favoritos'
+      path: '/favoritos'
+      fullPath: '/app/favoritos'
+      preLoaderRoute: typeof AppFavoritosRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/app/mapa': {
+      id: '/app/mapa'
+      path: '/mapa'
+      fullPath: '/app/mapa'
+      preLoaderRoute: typeof AppMapaRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/app/notificacoes': {
+      id: '/app/notificacoes'
+      path: '/notificacoes'
+      fullPath: '/app/notificacoes'
+      preLoaderRoute: typeof AppNotificacoesRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/app/perfil': {
+      id: '/app/perfil'
+      path: '/perfil'
+      fullPath: '/app/perfil'
+      preLoaderRoute: typeof AppPerfilRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/app/promocoes': {
+      id: '/app/promocoes'
+      path: '/promocoes'
+      fullPath: '/app/promocoes'
+      preLoaderRoute: typeof AppPromocoesRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/app/parceiros/$id': {
+      id: '/app/parceiros/$id'
+      path: '/parceiros/$id'
+      fullPath: '/app/parceiros/$id'
+      preLoaderRoute: typeof AppParceirosIdRouteImport
+      parentRoute: typeof AppRoute
+    }
   }
 }
 
+interface AppRouteChildren {
+  AppAssinaturaRoute: typeof AppAssinaturaRoute
+  AppBeneficiosRoute: typeof AppBeneficiosRoute
+  AppFavoritosRoute: typeof AppFavoritosRoute
+  AppMapaRoute: typeof AppMapaRoute
+  AppNotificacoesRoute: typeof AppNotificacoesRoute
+  AppPerfilRoute: typeof AppPerfilRoute
+  AppPromocoesRoute: typeof AppPromocoesRoute
+  AppIndexRoute: typeof AppIndexRoute
+  AppParceirosIdRoute: typeof AppParceirosIdRoute
+}
+
+const AppRouteChildren: AppRouteChildren = {
+  AppAssinaturaRoute: AppAssinaturaRoute,
+  AppBeneficiosRoute: AppBeneficiosRoute,
+  AppFavoritosRoute: AppFavoritosRoute,
+  AppMapaRoute: AppMapaRoute,
+  AppNotificacoesRoute: AppNotificacoesRoute,
+  AppPerfilRoute: AppPerfilRoute,
+  AppPromocoesRoute: AppPromocoesRoute,
+  AppIndexRoute: AppIndexRoute,
+  AppParceirosIdRoute: AppParceirosIdRoute,
+}
+
+const AppRouteWithChildren = AppRoute._addFileChildren(AppRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AppRoute: AppRouteWithChildren,
+  AuthRoute: AuthRoute,
+  ParceirosRoute: ParceirosRoute,
+  PlanosRoute: PlanosRoute,
+  ResetPasswordRoute: ResetPasswordRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
