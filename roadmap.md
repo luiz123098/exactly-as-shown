@@ -1,5 +1,7 @@
 # Roadmap
 
+- [ ] Ativar assinatura de teste da conta atual e permitir Instagram no perfil; verificar salvamento.
+
 - [x] Vitrine do ecossistema: boxes clicáveis de todos os parceiros com benefício em destaque; busca e abertura do parceiro verificadas com sessão de membro.
 
 - [x] Apply uploaded official visual identity across shared branding, theme and favicon; verify rendered public pages.
