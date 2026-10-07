@@ -53,7 +53,7 @@ function Landing() {
             Benefícios exclusivos nos melhores restaurantes, academias, spas e destinos de Goiás — reunidos em um só cartão de membro.
           </p>
           <div className="mt-10 flex flex-wrap gap-3">
-            <Button asChild size="lg">
+            <Button asChild size="lg" variant="secondary">
               <Link to="/auth" search={{ mode: "signup" }}>Quero ser membro <ArrowRight /></Link>
             </Button>
             <Button asChild size="lg" variant="glass">
