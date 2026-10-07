@@ -21,7 +21,7 @@ const ALIASES: Record<string, string[]> = {
 
 function parts(...p: (string | undefined)[]) { return p.map((s) => s?.trim()).filter(Boolean).join(" "); }
 
-async function search(query: string, colorWords?: string[]): Promise<FoundImage | null> {
+async function search(query: string, colorWords?: string[], brand?: string): Promise<FoundImage | null> {
   const u = new URL("https://commons.wikimedia.org/w/api.php");
   Object.entries({
     action: "query", format: "json", origin: "*", generator: "search", gsrsearch: `${query} filetype:bitmap`,
@@ -38,8 +38,9 @@ async function search(query: string, colorWords?: string[]): Promise<FoundImage 
     .find((p) => {
       const i = p.imageinfo?.[0];
       if (!i || !/jpe?g|png|webp/.test(i.mime) || i.width < 800 || i.width < i.height) return false;
-      if (!colorWords) return true;
       const t = p.title.toLowerCase().replace(/[_\-().,]/g, " ");
+      if (brand && !t.includes(brand.toLowerCase())) return false;
+      if (!colorWords) return true;
       return colorWords.some((w) => new RegExp(`(^|\\s)${w}(\\s|$)`).test(t));
     });
   if (!ok) return null;
@@ -65,7 +66,7 @@ export async function findCarImage(q: CarQuery): Promise<FoundImage | null> {
     if (!query || seen.has(key)) continue;
     seen.add(key);
     try {
-      const r = await search(query, w);
+      const r = await search(query, w, q.brand.trim());
       if (r) return r;
     } catch { /* try next */ }
   }
