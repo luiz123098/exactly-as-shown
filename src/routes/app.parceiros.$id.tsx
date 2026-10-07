@@ -1,4 +1,6 @@
-import { lazy, Suspense, useState } from "react";
+import { lazy, Suspense, useEffect, useState } from "react";
+import { track } from "@/lib/club";
+import { useAuth } from "@/lib/auth";
 import { ClientOnly, createFileRoute } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { Clock, Globe, Heart, Navigation, Ticket, X, Instagram, MapPin, MessageCircle, Phone } from "lucide-react";
@@ -29,6 +31,8 @@ function SponsorPage() {
     queryFn: async () => ((await supabase.from("promotions").select("*, sponsor:sponsors(id,name,city,category,cover_url)").eq("sponsor_id", id).eq("status", "approved")).data ?? []) as unknown as Promotion[],
   });
   const fav = useFavorites();
+  const { user } = useAuth();
+  useEffect(() => { track(id, user?.id, "view"); }, [id, user?.id]);
   const [photo, setPhoto] = useState<string | null>(null);
   if (!s) return <p className="text-sm text-muted-foreground">Carregando…</p>;
   return (
@@ -50,7 +54,7 @@ function SponsorPage() {
               <Ticket /> Usar benefício
             </Button>
             <Button asChild variant="outline">
-              <a href={directionsUrl(s.lat, s.lng, `${s.address}, ${s.city}`)} target="_blank" rel="noreferrer"><Navigation /> Como chegar</a>
+              <a href={directionsUrl(s.lat, s.lng, `${s.address}, ${s.city}`)} target="_blank" rel="noreferrer" onClick={() => track(s.id, user?.id, "directions")}><Navigation /> Como chegar</a>
             </Button>
             <Button variant="outline" onClick={() => fav.toggleSaved("sponsor", s.id)}>
               <Heart className={saved ? "fill-primary text-primary" : ""} /> {saved ? "Favorito" : "Favoritar"}

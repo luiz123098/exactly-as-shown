@@ -2,9 +2,9 @@ import { useEffect, useState } from "react";
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
-import { Bell, ChevronRight, Crown, Heart, LogOut } from "lucide-react";
+import { Bell, ChevronRight, Crown, Heart, LogOut, IdCard, PiggyBank, MessagesSquare, Newspaper, CalendarDays } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
-import { planLabel, useAuth } from "@/lib/auth";
+import { planLabel, useAuth, CATEGORIES } from "@/lib/auth";
 import { UserAvatar } from "@/components/app-shell";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -58,7 +58,7 @@ function Profile() {
     <div className="mx-auto max-w-xl space-y-6">
       <div className="flex flex-col items-center pt-2 text-center">
         <UserAvatar size={88} />
-        <h1 className="mt-4 font-display text-4xl">{profile?.full_name || "Meu perfil"}</h1>
+        <h1 className="mt-4 text-3xl font-extrabold">{profile?.full_name || "Meu perfil"}</h1>
         {subscription ? (
           <span className="eyebrow mt-2 rounded-full bg-accent px-3 py-1.5 text-[0.62rem] text-accent-foreground">● Membro ativo · {planLabel(level)}</span>
         ) : (
@@ -76,8 +76,25 @@ function Profile() {
       </div>
       <Button variant="outline" className="w-full" onClick={() => setEdit(true)}>Editar dados</Button>
 
+      <div className="surface p-5">
+        <p className="font-bold">Meus interesses</p>
+        <p className="mb-3 text-xs text-muted-foreground">Destacamos parceiros e ofertas dessas categorias para você.</p>
+        <div className="flex flex-wrap gap-2">
+          {CATEGORIES.map((c) => {
+            const on = (profile?.interests ?? []).includes(c);
+            return (
+              <button key={c} onClick={async () => {
+                const cur = profile?.interests ?? [];
+                await supabase.from("profiles").update({ interests: on ? cur.filter((x) => x !== c) : [...cur, c] }).eq("id", user!.id);
+                refresh();
+              }} className={`rounded-full border px-3 py-1.5 text-xs font-bold transition ${on ? "border-ink bg-ink text-highlight" : "bg-card"}`}>{c}</button>
+            );
+          })}
+        </div>
+      </div>
+
       <div className="surface divide-y px-5">
-        {([["/app/assinatura", "Minha assinatura", Crown], ["/app/favoritos", "Meus favoritos", Heart], ["/app/notificacoes", "Notificações", Bell]] as const).map(([to, l, I]) => (
+        {([["/app/carteirinha", "Minha carteirinha", IdCard], ["/app/economia", "Quanto economizei", PiggyBank], ["/app/eventos", "Meus eventos", CalendarDays], ["/app/comunidade", "Comunidade", MessagesSquare], ["/app/conteudo", "Conteúdo EXOTIC", Newspaper], ["/app/assinatura", "Minha assinatura", Crown], ["/app/favoritos", "Meus favoritos", Heart], ["/app/notificacoes", "Notificações", Bell]] as const).map(([to, l, I]) => (
           <Link key={to} to={to} className="flex items-center gap-3 py-4 text-sm font-semibold">
             <I className="h-4 w-4 text-primary" /><span className="flex-1">{l}</span><ChevronRight className="h-4 w-4 text-muted-foreground" />
           </Link>

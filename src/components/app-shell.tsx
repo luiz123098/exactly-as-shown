@@ -2,7 +2,7 @@ import { useEffect, useState, type ReactNode } from "react";
 import { Link, Navigate, useNavigate, useRouterState } from "@tanstack/react-router";
 import { useQueryClient } from "@tanstack/react-query";
 import {
-  Bell, Crown, Gift, Heart, Home, LayoutDashboard, LogOut, Map, Megaphone, Menu, Building2, Tag, User, Users, ShieldCheck, Send, CreditCard, ArrowLeftRight,
+  Bell, Crown, Gift, CalendarDays, IdCard, MessagesSquare, Newspaper, PiggyBank, ScanLine, LayoutTemplate, Heart, Home, LayoutDashboard, LogOut, Map, Megaphone, Menu, Building2, Tag, User, Users, ShieldCheck, Send, CreditCard, ArrowLeftRight,
 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth, planLabel } from "@/lib/auth";
@@ -13,10 +13,15 @@ type Area = "member" | "sponsor" | "admin";
 
 const NAV: Record<Area, NavItem[]> = {
   member: [
-    { to: "/app/beneficios", label: "Parceiros & benefícios", icon: Gift },
     { to: "/app", label: "Home", icon: Home, exact: true },
-    { to: "/app/promocoes", label: "Promoções", icon: Tag },
+    { to: "/app/beneficios", label: "Parceiros & benefícios", icon: Gift },
+    { to: "/app/promocoes", label: "Ofertas", icon: Tag },
+    { to: "/app/eventos", label: "Experiências", icon: CalendarDays },
     { to: "/app/mapa", label: "Mapa", icon: Map },
+    { to: "/app/comunidade", label: "Comunidade", icon: MessagesSquare },
+    { to: "/app/conteudo", label: "Conteúdo", icon: Newspaper },
+    { to: "/app/carteirinha", label: "Carteirinha", icon: IdCard },
+    { to: "/app/economia", label: "Minha economia", icon: PiggyBank },
     { to: "/app/favoritos", label: "Favoritos", icon: Heart },
     { to: "/app/notificacoes", label: "Notificações", icon: Bell },
     { to: "/app/assinatura", label: "Minha assinatura", icon: Crown },
@@ -25,29 +30,33 @@ const NAV: Record<Area, NavItem[]> = {
   sponsor: [
     { to: "/parceiro", label: "Dashboard", icon: LayoutDashboard, exact: true },
     { to: "/parceiro/empresa", label: "Minha empresa", icon: Building2 },
+    { to: "/parceiro/validar", label: "Validar benefício", icon: ScanLine },
     { to: "/parceiro/beneficios", label: "Benefícios", icon: Gift },
     { to: "/parceiro/promocoes", label: "Promoções", icon: Megaphone },
   ],
   admin: [
     { to: "/admin", label: "Dashboard", icon: ShieldCheck, exact: true },
+    { to: "/admin/home", label: "Home do app", icon: LayoutTemplate },
     { to: "/admin/usuarios", label: "Usuários", icon: Users },
     { to: "/admin/parceiros", label: "Patrocinadores", icon: Building2 },
     { to: "/admin/assinaturas", label: "Assinaturas", icon: CreditCard },
     { to: "/admin/promocoes", label: "Promoções", icon: Megaphone },
+    { to: "/admin/eventos", label: "Eventos", icon: CalendarDays },
+    { to: "/admin/conteudo", label: "Conteúdo", icon: Newspaper },
     { to: "/admin/notificacoes", label: "Notificações", icon: Send },
   ],
 };
 
 const BOTTOM: NavItem[] = [
-  { to: "/app/beneficios", label: "Parceiros", icon: Gift },
-  { to: "/app/mapa", label: "Mapa", icon: Map },
-  { to: "/app/promocoes", label: "Promoções", icon: Tag },
   { to: "/app", label: "Home", icon: Home, exact: true },
+  { to: "/app/beneficios", label: "Benefícios", icon: Gift },
+  { to: "/app/eventos", label: "Eventos", icon: CalendarDays },
+  { to: "/app/mapa", label: "Mapa", icon: Map },
   { to: "/app/perfil", label: "Perfil", icon: User },
 ];
 
 const AREA_LABEL: Record<Area, string> = { member: "App do membro", sponsor: "Painel do parceiro", admin: "Administração" };
-const AREA_HOME: Record<Area, string> = { member: "/app/beneficios", sponsor: "/parceiro", admin: "/admin" };
+const AREA_HOME: Record<Area, string> = { member: "/app", sponsor: "/parceiro", admin: "/admin" };
 
 export function useUnread() {
   const { user } = useAuth();
@@ -172,6 +181,7 @@ export function AppShell({ children, area }: { children: ReactNode; area: Area }
               </span>
             </div>
             <div className="flex items-center gap-2">
+              {isMember && <Link to="/app/carteirinha" aria-label="Carteirinha" className="grid h-10 w-10 place-items-center rounded-full border bg-card"><IdCard className="h-[18px] w-[18px]" /></Link>}
               <BellLink unread={unread} />
               <Link to="/app/perfil" aria-label="Perfil"><UserAvatar /></Link>
             </div>

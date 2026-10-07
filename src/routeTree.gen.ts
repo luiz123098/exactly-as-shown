@@ -19,6 +19,9 @@ import { Route as PlanosRouteImport } from './routes/planos'
 import { Route as ResetPasswordRouteImport } from './routes/reset-password'
 import { Route as AdminIndexRouteImport } from './routes/admin.index'
 import { Route as AdminAssinaturasRouteImport } from './routes/admin.assinaturas'
+import { Route as AdminConteudoRouteImport } from './routes/admin.conteudo'
+import { Route as AdminEventosRouteImport } from './routes/admin.eventos'
+import { Route as AdminHomeRouteImport } from './routes/admin.home'
 import { Route as AdminNotificacoesRouteImport } from './routes/admin.notificacoes'
 import { Route as AdminParceirosRouteImport } from './routes/admin.parceiros'
 import { Route as AdminPromocoesRouteImport } from './routes/admin.promocoes'
@@ -26,6 +29,9 @@ import { Route as AdminUsuariosRouteImport } from './routes/admin.usuarios'
 import { Route as AppIndexRouteImport } from './routes/app.index'
 import { Route as AppAssinaturaRouteImport } from './routes/app.assinatura'
 import { Route as AppBeneficiosRouteImport } from './routes/app.beneficios'
+import { Route as AppCarteirinhaRouteImport } from './routes/app.carteirinha'
+import { Route as AppComunidadeRouteImport } from './routes/app.comunidade'
+import { Route as AppEconomiaRouteImport } from './routes/app.economia'
 import { Route as AppFavoritosRouteImport } from './routes/app.favoritos'
 import { Route as AppMapaRouteImport } from './routes/app.mapa'
 import { Route as AppNotificacoesRouteImport } from './routes/app.notificacoes'
@@ -35,6 +41,11 @@ import { Route as ParceiroIndexRouteImport } from './routes/parceiro.index'
 import { Route as ParceiroBeneficiosRouteImport } from './routes/parceiro.beneficios'
 import { Route as ParceiroEmpresaRouteImport } from './routes/parceiro.empresa'
 import { Route as ParceiroPromocoesRouteImport } from './routes/parceiro.promocoes'
+import { Route as ParceiroValidarRouteImport } from './routes/parceiro.validar'
+import { Route as AppConteudoIndexRouteImport } from './routes/app.conteudo.index'
+import { Route as AppConteudoIdRouteImport } from './routes/app.conteudo.$id'
+import { Route as AppEventosIndexRouteImport } from './routes/app.eventos.index'
+import { Route as AppEventosIdRouteImport } from './routes/app.eventos.$id'
 import { Route as AppParceirosIdRouteImport } from './routes/app.parceiros.$id'
 
 const IndexRoute = IndexRouteImport.update({
@@ -87,6 +98,21 @@ const AdminAssinaturasRoute = AdminAssinaturasRouteImport.update({
   path: '/assinaturas',
   getParentRoute: () => AdminRoute,
 } as any)
+const AdminConteudoRoute = AdminConteudoRouteImport.update({
+  id: '/conteudo',
+  path: '/conteudo',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminEventosRoute = AdminEventosRouteImport.update({
+  id: '/eventos',
+  path: '/eventos',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminHomeRoute = AdminHomeRouteImport.update({
+  id: '/home',
+  path: '/home',
+  getParentRoute: () => AdminRoute,
+} as any)
 const AdminNotificacoesRoute = AdminNotificacoesRouteImport.update({
   id: '/notificacoes',
   path: '/notificacoes',
@@ -120,6 +146,21 @@ const AppAssinaturaRoute = AppAssinaturaRouteImport.update({
 const AppBeneficiosRoute = AppBeneficiosRouteImport.update({
   id: '/beneficios',
   path: '/beneficios',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppCarteirinhaRoute = AppCarteirinhaRouteImport.update({
+  id: '/carteirinha',
+  path: '/carteirinha',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppComunidadeRoute = AppComunidadeRouteImport.update({
+  id: '/comunidade',
+  path: '/comunidade',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppEconomiaRoute = AppEconomiaRouteImport.update({
+  id: '/economia',
+  path: '/economia',
   getParentRoute: () => AppRoute,
 } as any)
 const AppFavoritosRoute = AppFavoritosRouteImport.update({
@@ -167,6 +208,31 @@ const ParceiroPromocoesRoute = ParceiroPromocoesRouteImport.update({
   path: '/promocoes',
   getParentRoute: () => ParceiroRoute,
 } as any)
+const ParceiroValidarRoute = ParceiroValidarRouteImport.update({
+  id: '/validar',
+  path: '/validar',
+  getParentRoute: () => ParceiroRoute,
+} as any)
+const AppConteudoIndexRoute = AppConteudoIndexRouteImport.update({
+  id: '/conteudo/',
+  path: '/conteudo/',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppConteudoIdRoute = AppConteudoIdRouteImport.update({
+  id: '/conteudo/$id',
+  path: '/conteudo/$id',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppEventosIndexRoute = AppEventosIndexRouteImport.update({
+  id: '/eventos/',
+  path: '/eventos/',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppEventosIdRoute = AppEventosIdRouteImport.update({
+  id: '/eventos/$id',
+  path: '/eventos/$id',
+  getParentRoute: () => AppRoute,
+} as any)
 const AppParceirosIdRoute = AppParceirosIdRouteImport.update({
   id: '/parceiros/$id',
   path: '/parceiros/$id',
@@ -183,12 +249,18 @@ export interface FileRoutesByFullPath {
   '/planos': typeof PlanosRoute
   '/reset-password': typeof ResetPasswordRoute
   '/admin/assinaturas': typeof AdminAssinaturasRoute
+  '/admin/conteudo': typeof AdminConteudoRoute
+  '/admin/eventos': typeof AdminEventosRoute
+  '/admin/home': typeof AdminHomeRoute
   '/admin/notificacoes': typeof AdminNotificacoesRoute
   '/admin/parceiros': typeof AdminParceirosRoute
   '/admin/promocoes': typeof AdminPromocoesRoute
   '/admin/usuarios': typeof AdminUsuariosRoute
   '/app/assinatura': typeof AppAssinaturaRoute
   '/app/beneficios': typeof AppBeneficiosRoute
+  '/app/carteirinha': typeof AppCarteirinhaRoute
+  '/app/comunidade': typeof AppComunidadeRoute
+  '/app/economia': typeof AppEconomiaRoute
   '/app/favoritos': typeof AppFavoritosRoute
   '/app/mapa': typeof AppMapaRoute
   '/app/notificacoes': typeof AppNotificacoesRoute
@@ -197,10 +269,15 @@ export interface FileRoutesByFullPath {
   '/parceiro/beneficios': typeof ParceiroBeneficiosRoute
   '/parceiro/empresa': typeof ParceiroEmpresaRoute
   '/parceiro/promocoes': typeof ParceiroPromocoesRoute
+  '/parceiro/validar': typeof ParceiroValidarRoute
   '/admin/': typeof AdminIndexRoute
   '/app/': typeof AppIndexRoute
   '/parceiro/': typeof ParceiroIndexRoute
+  '/app/conteudo/$id': typeof AppConteudoIdRoute
+  '/app/eventos/$id': typeof AppEventosIdRoute
   '/app/parceiros/$id': typeof AppParceirosIdRoute
+  '/app/conteudo/': typeof AppConteudoIndexRoute
+  '/app/eventos/': typeof AppEventosIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -209,12 +286,18 @@ export interface FileRoutesByTo {
   '/planos': typeof PlanosRoute
   '/reset-password': typeof ResetPasswordRoute
   '/admin/assinaturas': typeof AdminAssinaturasRoute
+  '/admin/conteudo': typeof AdminConteudoRoute
+  '/admin/eventos': typeof AdminEventosRoute
+  '/admin/home': typeof AdminHomeRoute
   '/admin/notificacoes': typeof AdminNotificacoesRoute
   '/admin/parceiros': typeof AdminParceirosRoute
   '/admin/promocoes': typeof AdminPromocoesRoute
   '/admin/usuarios': typeof AdminUsuariosRoute
   '/app/assinatura': typeof AppAssinaturaRoute
   '/app/beneficios': typeof AppBeneficiosRoute
+  '/app/carteirinha': typeof AppCarteirinhaRoute
+  '/app/comunidade': typeof AppComunidadeRoute
+  '/app/economia': typeof AppEconomiaRoute
   '/app/favoritos': typeof AppFavoritosRoute
   '/app/mapa': typeof AppMapaRoute
   '/app/notificacoes': typeof AppNotificacoesRoute
@@ -223,10 +306,15 @@ export interface FileRoutesByTo {
   '/parceiro/beneficios': typeof ParceiroBeneficiosRoute
   '/parceiro/empresa': typeof ParceiroEmpresaRoute
   '/parceiro/promocoes': typeof ParceiroPromocoesRoute
+  '/parceiro/validar': typeof ParceiroValidarRoute
   '/admin': typeof AdminIndexRoute
   '/app': typeof AppIndexRoute
   '/parceiro': typeof ParceiroIndexRoute
+  '/app/conteudo/$id': typeof AppConteudoIdRoute
+  '/app/eventos/$id': typeof AppEventosIdRoute
   '/app/parceiros/$id': typeof AppParceirosIdRoute
+  '/app/conteudo': typeof AppConteudoIndexRoute
+  '/app/eventos': typeof AppEventosIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -239,12 +327,18 @@ export interface FileRoutesById {
   '/planos': typeof PlanosRoute
   '/reset-password': typeof ResetPasswordRoute
   '/admin/assinaturas': typeof AdminAssinaturasRoute
+  '/admin/conteudo': typeof AdminConteudoRoute
+  '/admin/eventos': typeof AdminEventosRoute
+  '/admin/home': typeof AdminHomeRoute
   '/admin/notificacoes': typeof AdminNotificacoesRoute
   '/admin/parceiros': typeof AdminParceirosRoute
   '/admin/promocoes': typeof AdminPromocoesRoute
   '/admin/usuarios': typeof AdminUsuariosRoute
   '/app/assinatura': typeof AppAssinaturaRoute
   '/app/beneficios': typeof AppBeneficiosRoute
+  '/app/carteirinha': typeof AppCarteirinhaRoute
+  '/app/comunidade': typeof AppComunidadeRoute
+  '/app/economia': typeof AppEconomiaRoute
   '/app/favoritos': typeof AppFavoritosRoute
   '/app/mapa': typeof AppMapaRoute
   '/app/notificacoes': typeof AppNotificacoesRoute
@@ -253,10 +347,15 @@ export interface FileRoutesById {
   '/parceiro/beneficios': typeof ParceiroBeneficiosRoute
   '/parceiro/empresa': typeof ParceiroEmpresaRoute
   '/parceiro/promocoes': typeof ParceiroPromocoesRoute
+  '/parceiro/validar': typeof ParceiroValidarRoute
   '/admin/': typeof AdminIndexRoute
   '/app/': typeof AppIndexRoute
   '/parceiro/': typeof ParceiroIndexRoute
+  '/app/conteudo/$id': typeof AppConteudoIdRoute
+  '/app/eventos/$id': typeof AppEventosIdRoute
   '/app/parceiros/$id': typeof AppParceirosIdRoute
+  '/app/conteudo/': typeof AppConteudoIndexRoute
+  '/app/eventos/': typeof AppEventosIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -270,12 +369,18 @@ export interface FileRouteTypes {
     | '/planos'
     | '/reset-password'
     | '/admin/assinaturas'
+    | '/admin/conteudo'
+    | '/admin/eventos'
+    | '/admin/home'
     | '/admin/notificacoes'
     | '/admin/parceiros'
     | '/admin/promocoes'
     | '/admin/usuarios'
     | '/app/assinatura'
     | '/app/beneficios'
+    | '/app/carteirinha'
+    | '/app/comunidade'
+    | '/app/economia'
     | '/app/favoritos'
     | '/app/mapa'
     | '/app/notificacoes'
@@ -284,10 +389,15 @@ export interface FileRouteTypes {
     | '/parceiro/beneficios'
     | '/parceiro/empresa'
     | '/parceiro/promocoes'
+    | '/parceiro/validar'
     | '/admin/'
     | '/app/'
     | '/parceiro/'
+    | '/app/conteudo/$id'
+    | '/app/eventos/$id'
     | '/app/parceiros/$id'
+    | '/app/conteudo/'
+    | '/app/eventos/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -296,12 +406,18 @@ export interface FileRouteTypes {
     | '/planos'
     | '/reset-password'
     | '/admin/assinaturas'
+    | '/admin/conteudo'
+    | '/admin/eventos'
+    | '/admin/home'
     | '/admin/notificacoes'
     | '/admin/parceiros'
     | '/admin/promocoes'
     | '/admin/usuarios'
     | '/app/assinatura'
     | '/app/beneficios'
+    | '/app/carteirinha'
+    | '/app/comunidade'
+    | '/app/economia'
     | '/app/favoritos'
     | '/app/mapa'
     | '/app/notificacoes'
@@ -310,10 +426,15 @@ export interface FileRouteTypes {
     | '/parceiro/beneficios'
     | '/parceiro/empresa'
     | '/parceiro/promocoes'
+    | '/parceiro/validar'
     | '/admin'
     | '/app'
     | '/parceiro'
+    | '/app/conteudo/$id'
+    | '/app/eventos/$id'
     | '/app/parceiros/$id'
+    | '/app/conteudo'
+    | '/app/eventos'
   id:
     | '__root__'
     | '/'
@@ -325,12 +446,18 @@ export interface FileRouteTypes {
     | '/planos'
     | '/reset-password'
     | '/admin/assinaturas'
+    | '/admin/conteudo'
+    | '/admin/eventos'
+    | '/admin/home'
     | '/admin/notificacoes'
     | '/admin/parceiros'
     | '/admin/promocoes'
     | '/admin/usuarios'
     | '/app/assinatura'
     | '/app/beneficios'
+    | '/app/carteirinha'
+    | '/app/comunidade'
+    | '/app/economia'
     | '/app/favoritos'
     | '/app/mapa'
     | '/app/notificacoes'
@@ -339,10 +466,15 @@ export interface FileRouteTypes {
     | '/parceiro/beneficios'
     | '/parceiro/empresa'
     | '/parceiro/promocoes'
+    | '/parceiro/validar'
     | '/admin/'
     | '/app/'
     | '/parceiro/'
+    | '/app/conteudo/$id'
+    | '/app/eventos/$id'
     | '/app/parceiros/$id'
+    | '/app/conteudo/'
+    | '/app/eventos/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -428,6 +560,27 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminAssinaturasRouteImport
       parentRoute: typeof AdminRoute
     }
+    '/admin/conteudo': {
+      id: '/admin/conteudo'
+      path: '/conteudo'
+      fullPath: '/admin/conteudo'
+      preLoaderRoute: typeof AdminConteudoRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/eventos': {
+      id: '/admin/eventos'
+      path: '/eventos'
+      fullPath: '/admin/eventos'
+      preLoaderRoute: typeof AdminEventosRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/home': {
+      id: '/admin/home'
+      path: '/home'
+      fullPath: '/admin/home'
+      preLoaderRoute: typeof AdminHomeRouteImport
+      parentRoute: typeof AdminRoute
+    }
     '/admin/notificacoes': {
       id: '/admin/notificacoes'
       path: '/notificacoes'
@@ -475,6 +628,27 @@ declare module '@tanstack/react-router' {
       path: '/beneficios'
       fullPath: '/app/beneficios'
       preLoaderRoute: typeof AppBeneficiosRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/app/carteirinha': {
+      id: '/app/carteirinha'
+      path: '/carteirinha'
+      fullPath: '/app/carteirinha'
+      preLoaderRoute: typeof AppCarteirinhaRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/app/comunidade': {
+      id: '/app/comunidade'
+      path: '/comunidade'
+      fullPath: '/app/comunidade'
+      preLoaderRoute: typeof AppComunidadeRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/app/economia': {
+      id: '/app/economia'
+      path: '/economia'
+      fullPath: '/app/economia'
+      preLoaderRoute: typeof AppEconomiaRouteImport
       parentRoute: typeof AppRoute
     }
     '/app/favoritos': {
@@ -540,6 +714,41 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ParceiroPromocoesRouteImport
       parentRoute: typeof ParceiroRoute
     }
+    '/parceiro/validar': {
+      id: '/parceiro/validar'
+      path: '/validar'
+      fullPath: '/parceiro/validar'
+      preLoaderRoute: typeof ParceiroValidarRouteImport
+      parentRoute: typeof ParceiroRoute
+    }
+    '/app/conteudo/': {
+      id: '/app/conteudo/'
+      path: '/conteudo'
+      fullPath: '/app/conteudo/'
+      preLoaderRoute: typeof AppConteudoIndexRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/app/conteudo/$id': {
+      id: '/app/conteudo/$id'
+      path: '/conteudo/$id'
+      fullPath: '/app/conteudo/$id'
+      preLoaderRoute: typeof AppConteudoIdRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/app/eventos/': {
+      id: '/app/eventos/'
+      path: '/eventos'
+      fullPath: '/app/eventos/'
+      preLoaderRoute: typeof AppEventosIndexRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/app/eventos/$id': {
+      id: '/app/eventos/$id'
+      path: '/eventos/$id'
+      fullPath: '/app/eventos/$id'
+      preLoaderRoute: typeof AppEventosIdRouteImport
+      parentRoute: typeof AppRoute
+    }
     '/app/parceiros/$id': {
       id: '/app/parceiros/$id'
       path: '/parceiros/$id'
@@ -552,6 +761,9 @@ declare module '@tanstack/react-router' {
 
 interface AdminRouteChildren {
   AdminAssinaturasRoute: typeof AdminAssinaturasRoute
+  AdminConteudoRoute: typeof AdminConteudoRoute
+  AdminEventosRoute: typeof AdminEventosRoute
+  AdminHomeRoute: typeof AdminHomeRoute
   AdminNotificacoesRoute: typeof AdminNotificacoesRoute
   AdminParceirosRoute: typeof AdminParceirosRoute
   AdminPromocoesRoute: typeof AdminPromocoesRoute
@@ -561,6 +773,9 @@ interface AdminRouteChildren {
 
 const AdminRouteChildren: AdminRouteChildren = {
   AdminAssinaturasRoute: AdminAssinaturasRoute,
+  AdminConteudoRoute: AdminConteudoRoute,
+  AdminEventosRoute: AdminEventosRoute,
+  AdminHomeRoute: AdminHomeRoute,
   AdminNotificacoesRoute: AdminNotificacoesRoute,
   AdminParceirosRoute: AdminParceirosRoute,
   AdminPromocoesRoute: AdminPromocoesRoute,
@@ -573,25 +788,39 @@ const AdminRouteWithChildren = AdminRoute._addFileChildren(AdminRouteChildren)
 interface AppRouteChildren {
   AppAssinaturaRoute: typeof AppAssinaturaRoute
   AppBeneficiosRoute: typeof AppBeneficiosRoute
+  AppCarteirinhaRoute: typeof AppCarteirinhaRoute
+  AppComunidadeRoute: typeof AppComunidadeRoute
+  AppEconomiaRoute: typeof AppEconomiaRoute
   AppFavoritosRoute: typeof AppFavoritosRoute
   AppMapaRoute: typeof AppMapaRoute
   AppNotificacoesRoute: typeof AppNotificacoesRoute
   AppPerfilRoute: typeof AppPerfilRoute
   AppPromocoesRoute: typeof AppPromocoesRoute
   AppIndexRoute: typeof AppIndexRoute
+  AppConteudoIdRoute: typeof AppConteudoIdRoute
+  AppEventosIdRoute: typeof AppEventosIdRoute
   AppParceirosIdRoute: typeof AppParceirosIdRoute
+  AppConteudoIndexRoute: typeof AppConteudoIndexRoute
+  AppEventosIndexRoute: typeof AppEventosIndexRoute
 }
 
 const AppRouteChildren: AppRouteChildren = {
   AppAssinaturaRoute: AppAssinaturaRoute,
   AppBeneficiosRoute: AppBeneficiosRoute,
+  AppCarteirinhaRoute: AppCarteirinhaRoute,
+  AppComunidadeRoute: AppComunidadeRoute,
+  AppEconomiaRoute: AppEconomiaRoute,
   AppFavoritosRoute: AppFavoritosRoute,
   AppMapaRoute: AppMapaRoute,
   AppNotificacoesRoute: AppNotificacoesRoute,
   AppPerfilRoute: AppPerfilRoute,
   AppPromocoesRoute: AppPromocoesRoute,
   AppIndexRoute: AppIndexRoute,
+  AppConteudoIdRoute: AppConteudoIdRoute,
+  AppEventosIdRoute: AppEventosIdRoute,
   AppParceirosIdRoute: AppParceirosIdRoute,
+  AppConteudoIndexRoute: AppConteudoIndexRoute,
+  AppEventosIndexRoute: AppEventosIndexRoute,
 }
 
 const AppRouteWithChildren = AppRoute._addFileChildren(AppRouteChildren)
@@ -600,6 +829,7 @@ interface ParceiroRouteChildren {
   ParceiroBeneficiosRoute: typeof ParceiroBeneficiosRoute
   ParceiroEmpresaRoute: typeof ParceiroEmpresaRoute
   ParceiroPromocoesRoute: typeof ParceiroPromocoesRoute
+  ParceiroValidarRoute: typeof ParceiroValidarRoute
   ParceiroIndexRoute: typeof ParceiroIndexRoute
 }
 
@@ -607,6 +837,7 @@ const ParceiroRouteChildren: ParceiroRouteChildren = {
   ParceiroBeneficiosRoute: ParceiroBeneficiosRoute,
   ParceiroEmpresaRoute: ParceiroEmpresaRoute,
   ParceiroPromocoesRoute: ParceiroPromocoesRoute,
+  ParceiroValidarRoute: ParceiroValidarRoute,
   ParceiroIndexRoute: ParceiroIndexRoute,
 }
 

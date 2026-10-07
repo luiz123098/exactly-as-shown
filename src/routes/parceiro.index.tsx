@@ -13,7 +13,7 @@ export function Stat({ label, value }: { label: string; value: number | string }
   return (
     <div className="surface p-6">
       <p className="eyebrow text-muted-foreground">{label}</p>
-      <p className="mt-3 font-display text-5xl">{value}</p>
+      <p className="mt-3 text-4xl font-extrabold">{value}</p>
     </div>
   );
 }
@@ -33,7 +33,11 @@ function SponsorDash() {
       const u = ids.length
         ? await supabase.from("benefit_usages").select("id", { count: "exact", head: true }).in("benefit_id", ids)
         : { count: 0 };
-      return { benefits: b.count ?? 0, promos: p.count ?? 0, approved: pa.count ?? 0, usages: u.count ?? 0 };
+      const ev = (await supabase.from("sponsor_events").select("kind,user_id").eq("sponsor_id", sp!.id)).data ?? [];
+      const val = (await supabase.from("benefit_usages").select("id", { count: "exact", head: true }).eq("sponsor_id", sp!.id).eq("status", "validated")).count ?? 0;
+      return { benefits: b.count ?? 0, promos: p.count ?? 0, approved: pa.count ?? 0, usages: u.count ?? 0,
+        views: ev.filter((e) => e.kind === "view").length, clicks: ev.filter((e) => e.kind !== "view").length,
+        reach: new Set(ev.map((e) => e.user_id)).size, validated: val };
     },
   });
   if (isLoading) return null;
@@ -51,6 +55,13 @@ function SponsorDash() {
       {sp.status === "pending" && (
         <div className="surface mb-6 p-5 text-sm">Sua empresa está em análise pela curadoria. Você já pode cadastrar benefícios e promoções — elas aparecerão para os membros após a aprovação.</div>
       )}
+      <h2 className="mb-3 text-lg font-bold">Meu desempenho</h2>
+      <div className="mb-5 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+        <Stat label="Visualizações" value={stats?.views ?? "–"} />
+        <Stat label="Cliques (rotas)" value={stats?.clicks ?? "–"} />
+        <Stat label="Membros alcançados" value={stats?.reach ?? "–"} />
+        <Stat label="Conversões" value={stats ? `${stats.validated}${stats.reach ? ` · ${Math.round((stats.validated / stats.reach) * 100)}%` : ""}` : "–"} />
+      </div>
       <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
         <Stat label="Benefícios" value={stats?.benefits ?? "–"} />
         <Stat label="Promoções" value={stats?.promos ?? "–"} />
@@ -58,7 +69,8 @@ function SponsorDash() {
         <Stat label="Usos por membros" value={stats?.usages ?? "–"} />
       </div>
       <div className="mt-8 flex flex-wrap gap-3">
-        <Button asChild><Link to="/parceiro/promocoes">Nova promoção</Link></Button>
+        <Button asChild><Link to="/parceiro/validar">Validar benefício</Link></Button>
+        <Button asChild variant="outline"><Link to="/parceiro/promocoes">Nova promoção</Link></Button>
         <Button asChild variant="outline"><Link to="/parceiro/beneficios">Gerenciar benefícios</Link></Button>
       </div>
     </div>
