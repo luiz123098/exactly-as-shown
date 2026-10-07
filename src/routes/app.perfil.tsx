@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
-import { Bell, ChevronRight, Crown, Heart, LogOut, IdCard, PiggyBank, MessagesSquare, Newspaper, CalendarDays } from "lucide-react";
+import { Bell, ChevronRight, Crown, Heart, LogOut, IdCard, PiggyBank, Car, Newspaper, CalendarDays } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { planLabel, useAuth, CATEGORIES } from "@/lib/auth";
 import { UserAvatar } from "@/components/app-shell";
@@ -94,7 +94,7 @@ function Profile() {
       </div>
 
       <div className="surface divide-y px-5">
-        {([["/app/carteirinha", "Minha carteirinha", IdCard], ["/app/economia", "Quanto economizei", PiggyBank], ["/app/eventos", "Meus eventos", CalendarDays], ["/app/comunidade", "Comunidade", MessagesSquare], ["/app/conteudo", "Conteúdo EXOTIC", Newspaper], ["/app/assinatura", "Minha assinatura", Crown], ["/app/favoritos", "Meus favoritos", Heart], ["/app/notificacoes", "Notificações", Bell]] as const).map(([to, l, I]) => (
+        {([["/app/carteirinha", "Minha carteirinha", IdCard], ["/app/economia", "Quanto economizei", PiggyBank], ["/app/eventos", "Meus eventos", CalendarDays], ["/app/garagem", "Minha garagem", Car], ["/app/conteudo", "Conteúdo EXOTIC", Newspaper], ["/app/assinatura", "Minha assinatura", Crown], ["/app/favoritos", "Meus favoritos", Heart], ["/app/notificacoes", "Notificações", Bell]] as const).map(([to, l, I]) => (
           <Link key={to} to={to} className="flex items-center gap-3 py-4 text-sm font-semibold">
             <I className="h-4 w-4 text-primary" /><span className="flex-1">{l}</span><ChevronRight className="h-4 w-4 text-muted-foreground" />
           </Link>
