@@ -2,7 +2,7 @@ import { useEffect, useState, type ReactNode } from "react";
 import { Link, Navigate, useNavigate, useRouterState } from "@tanstack/react-router";
 import { useQueryClient } from "@tanstack/react-query";
 import {
-  Bell, Crown, Gift, CalendarDays, IdCard, MessagesSquare, Newspaper, PiggyBank, ScanLine, LayoutTemplate, Heart, Home, LayoutDashboard, LogOut, Map, Megaphone, Menu, Building2, Tag, User, Users, ShieldCheck, Send, CreditCard, ArrowLeftRight,
+  Bell, Car, Crown, Gift, CalendarDays, IdCard, MessagesSquare, Newspaper, PiggyBank, ScanLine, LayoutTemplate, Heart, Home, LayoutDashboard, LogOut, Map, Megaphone, Menu, Building2, Tag, User, Users, ShieldCheck, Send, CreditCard, ArrowLeftRight,
 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth, planLabel } from "@/lib/auth";
@@ -17,7 +17,7 @@ const NAV: Record<Area, NavItem[]> = {
     { to: "/app/beneficios", label: "Parceiros & benefícios", icon: Gift },
     { to: "/app/promocoes", label: "Ofertas", icon: Tag },
     { to: "/app/eventos", label: "Experiências", icon: CalendarDays },
-    { to: "/app/comunidade", label: "Comunidade", icon: MessagesSquare },
+    { to: "/app/garagem", label: "Garagem", icon: Car },
     { to: "/app/conteudo", label: "Conteúdo", icon: Newspaper },
     { to: "/app/carteirinha", label: "Carteirinha", icon: IdCard },
     { to: "/app/economia", label: "Minha economia", icon: PiggyBank },
@@ -50,7 +50,7 @@ const BOTTOM: NavItem[] = [
   { to: "/app", label: "Home", icon: Home, exact: true },
   { to: "/app/beneficios", label: "Benefícios", icon: Gift },
   { to: "/app/eventos", label: "Eventos", icon: CalendarDays },
-  { to: "/app/comunidade", label: "Comunidade", icon: MessagesSquare },
+  { to: "/app/garagem", label: "Garagem", icon: Car },
   { to: "/app/perfil", label: "Perfil", icon: User },
 ];
 

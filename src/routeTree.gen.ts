@@ -30,9 +30,9 @@ import { Route as AppIndexRouteImport } from './routes/app.index'
 import { Route as AppAssinaturaRouteImport } from './routes/app.assinatura'
 import { Route as AppBeneficiosRouteImport } from './routes/app.beneficios'
 import { Route as AppCarteirinhaRouteImport } from './routes/app.carteirinha'
-import { Route as AppComunidadeRouteImport } from './routes/app.comunidade'
 import { Route as AppEconomiaRouteImport } from './routes/app.economia'
 import { Route as AppFavoritosRouteImport } from './routes/app.favoritos'
+import { Route as AppGaragemRouteImport } from './routes/app.garagem'
 import { Route as AppNotificacoesRouteImport } from './routes/app.notificacoes'
 import { Route as AppPerfilRouteImport } from './routes/app.perfil'
 import { Route as AppPromocoesRouteImport } from './routes/app.promocoes'
@@ -152,11 +152,6 @@ const AppCarteirinhaRoute = AppCarteirinhaRouteImport.update({
   path: '/carteirinha',
   getParentRoute: () => AppRoute,
 } as any)
-const AppComunidadeRoute = AppComunidadeRouteImport.update({
-  id: '/comunidade',
-  path: '/comunidade',
-  getParentRoute: () => AppRoute,
-} as any)
 const AppEconomiaRoute = AppEconomiaRouteImport.update({
   id: '/economia',
   path: '/economia',
@@ -165,6 +160,11 @@ const AppEconomiaRoute = AppEconomiaRouteImport.update({
 const AppFavoritosRoute = AppFavoritosRouteImport.update({
   id: '/favoritos',
   path: '/favoritos',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppGaragemRoute = AppGaragemRouteImport.update({
+  id: '/garagem',
+  path: '/garagem',
   getParentRoute: () => AppRoute,
 } as any)
 const AppNotificacoesRoute = AppNotificacoesRouteImport.update({
@@ -253,9 +253,9 @@ export interface FileRoutesByFullPath {
   '/app/assinatura': typeof AppAssinaturaRoute
   '/app/beneficios': typeof AppBeneficiosRoute
   '/app/carteirinha': typeof AppCarteirinhaRoute
-  '/app/comunidade': typeof AppComunidadeRoute
   '/app/economia': typeof AppEconomiaRoute
   '/app/favoritos': typeof AppFavoritosRoute
+  '/app/garagem': typeof AppGaragemRoute
   '/app/notificacoes': typeof AppNotificacoesRoute
   '/app/perfil': typeof AppPerfilRoute
   '/app/promocoes': typeof AppPromocoesRoute
@@ -289,9 +289,9 @@ export interface FileRoutesByTo {
   '/app/assinatura': typeof AppAssinaturaRoute
   '/app/beneficios': typeof AppBeneficiosRoute
   '/app/carteirinha': typeof AppCarteirinhaRoute
-  '/app/comunidade': typeof AppComunidadeRoute
   '/app/economia': typeof AppEconomiaRoute
   '/app/favoritos': typeof AppFavoritosRoute
+  '/app/garagem': typeof AppGaragemRoute
   '/app/notificacoes': typeof AppNotificacoesRoute
   '/app/perfil': typeof AppPerfilRoute
   '/app/promocoes': typeof AppPromocoesRoute
@@ -329,9 +329,9 @@ export interface FileRoutesById {
   '/app/assinatura': typeof AppAssinaturaRoute
   '/app/beneficios': typeof AppBeneficiosRoute
   '/app/carteirinha': typeof AppCarteirinhaRoute
-  '/app/comunidade': typeof AppComunidadeRoute
   '/app/economia': typeof AppEconomiaRoute
   '/app/favoritos': typeof AppFavoritosRoute
+  '/app/garagem': typeof AppGaragemRoute
   '/app/notificacoes': typeof AppNotificacoesRoute
   '/app/perfil': typeof AppPerfilRoute
   '/app/promocoes': typeof AppPromocoesRoute
@@ -370,9 +370,9 @@ export interface FileRouteTypes {
     | '/app/assinatura'
     | '/app/beneficios'
     | '/app/carteirinha'
-    | '/app/comunidade'
     | '/app/economia'
     | '/app/favoritos'
+    | '/app/garagem'
     | '/app/notificacoes'
     | '/app/perfil'
     | '/app/promocoes'
@@ -406,9 +406,9 @@ export interface FileRouteTypes {
     | '/app/assinatura'
     | '/app/beneficios'
     | '/app/carteirinha'
-    | '/app/comunidade'
     | '/app/economia'
     | '/app/favoritos'
+    | '/app/garagem'
     | '/app/notificacoes'
     | '/app/perfil'
     | '/app/promocoes'
@@ -445,9 +445,9 @@ export interface FileRouteTypes {
     | '/app/assinatura'
     | '/app/beneficios'
     | '/app/carteirinha'
-    | '/app/comunidade'
     | '/app/economia'
     | '/app/favoritos'
+    | '/app/garagem'
     | '/app/notificacoes'
     | '/app/perfil'
     | '/app/promocoes'
@@ -625,13 +625,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppCarteirinhaRouteImport
       parentRoute: typeof AppRoute
     }
-    '/app/comunidade': {
-      id: '/app/comunidade'
-      path: '/comunidade'
-      fullPath: '/app/comunidade'
-      preLoaderRoute: typeof AppComunidadeRouteImport
-      parentRoute: typeof AppRoute
-    }
     '/app/economia': {
       id: '/app/economia'
       path: '/economia'
@@ -644,6 +637,13 @@ declare module '@tanstack/react-router' {
       path: '/favoritos'
       fullPath: '/app/favoritos'
       preLoaderRoute: typeof AppFavoritosRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/app/garagem': {
+      id: '/app/garagem'
+      path: '/garagem'
+      fullPath: '/app/garagem'
+      preLoaderRoute: typeof AppGaragemRouteImport
       parentRoute: typeof AppRoute
     }
     '/app/notificacoes': {
@@ -770,9 +770,9 @@ interface AppRouteChildren {
   AppAssinaturaRoute: typeof AppAssinaturaRoute
   AppBeneficiosRoute: typeof AppBeneficiosRoute
   AppCarteirinhaRoute: typeof AppCarteirinhaRoute
-  AppComunidadeRoute: typeof AppComunidadeRoute
   AppEconomiaRoute: typeof AppEconomiaRoute
   AppFavoritosRoute: typeof AppFavoritosRoute
+  AppGaragemRoute: typeof AppGaragemRoute
   AppNotificacoesRoute: typeof AppNotificacoesRoute
   AppPerfilRoute: typeof AppPerfilRoute
   AppPromocoesRoute: typeof AppPromocoesRoute
@@ -788,9 +788,9 @@ const AppRouteChildren: AppRouteChildren = {
   AppAssinaturaRoute: AppAssinaturaRoute,
   AppBeneficiosRoute: AppBeneficiosRoute,
   AppCarteirinhaRoute: AppCarteirinhaRoute,
-  AppComunidadeRoute: AppComunidadeRoute,
   AppEconomiaRoute: AppEconomiaRoute,
   AppFavoritosRoute: AppFavoritosRoute,
+  AppGaragemRoute: AppGaragemRoute,
   AppNotificacoesRoute: AppNotificacoesRoute,
   AppPerfilRoute: AppPerfilRoute,
   AppPromocoesRoute: AppPromocoesRoute,
