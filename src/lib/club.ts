@@ -22,7 +22,6 @@ export const HOME_SECTIONS: Record<string, string> = {
   nearby: "Parceiros perto de você",
   events: "Experiências EXOTIC",
   content: "Conteúdo EXOTIC",
-  map: "Mapa",
 };
 export const ARTICLE_CATEGORIES = ["Lifestyle", "Business", "Automotive", "Travel", "Gastronomia", "Experiences"];
 export const EVENT_KINDS = ["Encontro", "Festa", "Jantar", "Experiência", "Viagem", "Track day", "Lançamento", "Networking"];

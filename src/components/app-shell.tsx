@@ -17,7 +17,6 @@ const NAV: Record<Area, NavItem[]> = {
     { to: "/app/beneficios", label: "Parceiros & benefícios", icon: Gift },
     { to: "/app/promocoes", label: "Ofertas", icon: Tag },
     { to: "/app/eventos", label: "Experiências", icon: CalendarDays },
-    { to: "/app/mapa", label: "Mapa", icon: Map },
     { to: "/app/comunidade", label: "Comunidade", icon: MessagesSquare },
     { to: "/app/conteudo", label: "Conteúdo", icon: Newspaper },
     { to: "/app/carteirinha", label: "Carteirinha", icon: IdCard },
@@ -51,7 +50,7 @@ const BOTTOM: NavItem[] = [
   { to: "/app", label: "Home", icon: Home, exact: true },
   { to: "/app/beneficios", label: "Benefícios", icon: Gift },
   { to: "/app/eventos", label: "Eventos", icon: CalendarDays },
-  { to: "/app/mapa", label: "Mapa", icon: Map },
+  { to: "/app/comunidade", label: "Comunidade", icon: MessagesSquare },
   { to: "/app/perfil", label: "Perfil", icon: User },
 ];
 

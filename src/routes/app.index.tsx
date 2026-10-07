@@ -1,5 +1,5 @@
-import { lazy, Suspense, useMemo, type ReactNode } from "react";
-import { ClientOnly, createFileRoute, Link, useNavigate } from "@tanstack/react-router";
+import { useMemo, type ReactNode } from "react";
+import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { ArrowRight, IdCard, MapPin, Star, LayoutGrid } from "lucide-react";
 import { useAuth } from "@/lib/auth";
@@ -13,7 +13,6 @@ import { BellLink, UserAvatar, useUnread } from "@/components/app-shell";
 import { Button } from "@/components/ui/button";
 import { CATEGORIES } from "@/lib/auth";
 
-const SponsorMap = lazy(() => import("@/components/sponsor-map"));
 
 export const Route = createFileRoute("/app/")({
   head: () => ({ meta: [{ title: "Home do membro — Exotic Experience" }, { name: "description", content: "Parceiros, benefícios, ofertas e experiências exclusivas do clube EXOTIC." }, { property: "og:title", content: "Home do membro — Exotic Experience" }, { property: "og:description", content: "Parceiros, benefícios, ofertas e experiências exclusivas do clube EXOTIC." }, { property: "og:type", content: "website" }, { name: "twitter:card", content: "summary_large_image" }] }),
@@ -100,7 +99,7 @@ function Home() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [benefits, interests.join()]);
   const upcoming = events.filter((e) => e.status !== "finished" && new Date(e.starts_at) > new Date());
-  const sections = cfg?.sections ?? ["featured", "benefits", "promotions", "categories", "nearby", "events", "content", "map"];
+  const sections = cfg?.sections ?? ["featured", "benefits", "promotions", "categories", "nearby", "events", "content"];
 
   const blocks: Record<string, ReactNode> = {
     featured: featured.length > 0 && (
@@ -133,7 +132,7 @@ function Home() {
       </section>
     ),
     nearby: (
-      <section><SectionHeader title="📍 Parceiros perto de você" to="/app/mapa" action="Ver no mapa" />
+      <section><SectionHeader title="📍 Parceiros perto de você" />
         <div className="surface divide-y px-4">{nearby.map((s) => <SponsorRow key={s.id} id={s.id} name={s.name} category={s.category} distance={s.d} benefit={s.benefit} />)}</div>
       </section>
     ),
@@ -142,16 +141,6 @@ function Home() {
     ),
     content: articles.length > 0 && (
       <section><SectionHeader title="Conteúdo EXOTIC" to="/app/conteudo" /><Rail>{articles.slice(0, 6).map((a) => <ArticleCard key={a.id} a={a} />)}</Rail></section>
-    ),
-    map: (
-      <section><SectionHeader title="Mapa de parceiros" />
-        <div className="relative overflow-hidden rounded-3xl border">
-          <ClientOnly fallback={<div className="h-[220px] bg-secondary" />}>
-            <Suspense fallback={<div className="h-[220px] bg-secondary" />}><SponsorMap sponsors={sponsors} height={220} center={loc} interactive={false} /></Suspense>
-          </ClientOnly>
-          <div className="absolute inset-x-3 bottom-3 z-[500]"><Button asChild variant="ink" className="w-full"><Link to="/app/mapa">Abrir mapa completo</Link></Button></div>
-        </div>
-      </section>
     ),
   };
 
@@ -178,7 +167,7 @@ function Home() {
         </div>
       </Link>
 
-      {sections.map((k) => <div key={k}>{blocks[k]}</div>)}
+      {sections.filter((k) => k !== "map").map((k) => <div key={k}>{blocks[k]}</div>)}
 
       {!subscription && (
         <section className="member-card flex items-center justify-between gap-3 rounded-3xl p-5">

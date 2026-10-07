@@ -34,6 +34,7 @@ function SponsorPage() {
   const { user } = useAuth();
   useEffect(() => { track(id, user?.id, "view"); }, [id, user?.id]);
   const [photo, setPhoto] = useState<string | null>(null);
+  const [showMap, setShowMap] = useState(false);
   if (!s) return <p className="text-sm text-muted-foreground">Carregando…</p>;
   return (
     <div className="space-y-10">
@@ -108,14 +109,20 @@ function SponsorPage() {
               <a href={`https://wa.me/55${encodeURIComponent(s.whatsapp)}`} target="_blank" rel="noreferrer"><MessageCircle /> WhatsApp</a>
             </Button>
           )}
-          {s.lat != null && (
-            <div className="overflow-hidden rounded-xl border">
-              <ClientOnly fallback={<div className="h-[200px] bg-secondary" />}>
-                <Suspense fallback={<div className="h-[200px] bg-secondary" />}>
-                  <SponsorMap sponsors={[s]} height={200} />
-                </Suspense>
-              </ClientOnly>
-            </div>
+          {s.lat != null && s.lng != null ? (
+            showMap ? (
+              <div className="overflow-hidden rounded-xl border">
+                <ClientOnly fallback={<div className="h-[260px] bg-secondary" />}>
+                  <Suspense fallback={<div className="h-[260px] bg-secondary" />}>
+                    <SponsorMap sponsors={[s]} height={260} center={{ lat: s.lat, lng: s.lng }} />
+                  </Suspense>
+                </ClientOnly>
+              </div>
+            ) : (
+              <Button variant="outline" className="w-full" onClick={() => setShowMap(true)}><MapPin /> Ver localização</Button>
+            )
+          ) : (
+            <p className="text-xs text-muted-foreground">Localização ainda não informada pelo parceiro.</p>
           )}
         </aside>
       </div>

@@ -33,7 +33,6 @@ import { Route as AppCarteirinhaRouteImport } from './routes/app.carteirinha'
 import { Route as AppComunidadeRouteImport } from './routes/app.comunidade'
 import { Route as AppEconomiaRouteImport } from './routes/app.economia'
 import { Route as AppFavoritosRouteImport } from './routes/app.favoritos'
-import { Route as AppMapaRouteImport } from './routes/app.mapa'
 import { Route as AppNotificacoesRouteImport } from './routes/app.notificacoes'
 import { Route as AppPerfilRouteImport } from './routes/app.perfil'
 import { Route as AppPromocoesRouteImport } from './routes/app.promocoes'
@@ -168,11 +167,6 @@ const AppFavoritosRoute = AppFavoritosRouteImport.update({
   path: '/favoritos',
   getParentRoute: () => AppRoute,
 } as any)
-const AppMapaRoute = AppMapaRouteImport.update({
-  id: '/mapa',
-  path: '/mapa',
-  getParentRoute: () => AppRoute,
-} as any)
 const AppNotificacoesRoute = AppNotificacoesRouteImport.update({
   id: '/notificacoes',
   path: '/notificacoes',
@@ -262,7 +256,6 @@ export interface FileRoutesByFullPath {
   '/app/comunidade': typeof AppComunidadeRoute
   '/app/economia': typeof AppEconomiaRoute
   '/app/favoritos': typeof AppFavoritosRoute
-  '/app/mapa': typeof AppMapaRoute
   '/app/notificacoes': typeof AppNotificacoesRoute
   '/app/perfil': typeof AppPerfilRoute
   '/app/promocoes': typeof AppPromocoesRoute
@@ -299,7 +292,6 @@ export interface FileRoutesByTo {
   '/app/comunidade': typeof AppComunidadeRoute
   '/app/economia': typeof AppEconomiaRoute
   '/app/favoritos': typeof AppFavoritosRoute
-  '/app/mapa': typeof AppMapaRoute
   '/app/notificacoes': typeof AppNotificacoesRoute
   '/app/perfil': typeof AppPerfilRoute
   '/app/promocoes': typeof AppPromocoesRoute
@@ -340,7 +332,6 @@ export interface FileRoutesById {
   '/app/comunidade': typeof AppComunidadeRoute
   '/app/economia': typeof AppEconomiaRoute
   '/app/favoritos': typeof AppFavoritosRoute
-  '/app/mapa': typeof AppMapaRoute
   '/app/notificacoes': typeof AppNotificacoesRoute
   '/app/perfil': typeof AppPerfilRoute
   '/app/promocoes': typeof AppPromocoesRoute
@@ -382,7 +373,6 @@ export interface FileRouteTypes {
     | '/app/comunidade'
     | '/app/economia'
     | '/app/favoritos'
-    | '/app/mapa'
     | '/app/notificacoes'
     | '/app/perfil'
     | '/app/promocoes'
@@ -419,7 +409,6 @@ export interface FileRouteTypes {
     | '/app/comunidade'
     | '/app/economia'
     | '/app/favoritos'
-    | '/app/mapa'
     | '/app/notificacoes'
     | '/app/perfil'
     | '/app/promocoes'
@@ -459,7 +448,6 @@ export interface FileRouteTypes {
     | '/app/comunidade'
     | '/app/economia'
     | '/app/favoritos'
-    | '/app/mapa'
     | '/app/notificacoes'
     | '/app/perfil'
     | '/app/promocoes'
@@ -658,13 +646,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppFavoritosRouteImport
       parentRoute: typeof AppRoute
     }
-    '/app/mapa': {
-      id: '/app/mapa'
-      path: '/mapa'
-      fullPath: '/app/mapa'
-      preLoaderRoute: typeof AppMapaRouteImport
-      parentRoute: typeof AppRoute
-    }
     '/app/notificacoes': {
       id: '/app/notificacoes'
       path: '/notificacoes'
@@ -792,7 +773,6 @@ interface AppRouteChildren {
   AppComunidadeRoute: typeof AppComunidadeRoute
   AppEconomiaRoute: typeof AppEconomiaRoute
   AppFavoritosRoute: typeof AppFavoritosRoute
-  AppMapaRoute: typeof AppMapaRoute
   AppNotificacoesRoute: typeof AppNotificacoesRoute
   AppPerfilRoute: typeof AppPerfilRoute
   AppPromocoesRoute: typeof AppPromocoesRoute
@@ -811,7 +791,6 @@ const AppRouteChildren: AppRouteChildren = {
   AppComunidadeRoute: AppComunidadeRoute,
   AppEconomiaRoute: AppEconomiaRoute,
   AppFavoritosRoute: AppFavoritosRoute,
-  AppMapaRoute: AppMapaRoute,
   AppNotificacoesRoute: AppNotificacoesRoute,
   AppPerfilRoute: AppPerfilRoute,
   AppPromocoesRoute: AppPromocoesRoute,
