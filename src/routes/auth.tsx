@@ -5,7 +5,7 @@ import { toast } from "sonner";
 import hero from "@/assets/hero.jpg";
 import { supabase } from "@/integrations/supabase/client";
 import { lovable } from "@/integrations/lovable/index";
-import { useAuth } from "@/lib/auth";
+import { useAuth, homePath } from "@/lib/auth";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -38,15 +38,15 @@ const signupSchema = z.object({
 function AuthPage() {
   const { mode, type } = Route.useSearch();
   const navigate = useNavigate();
-  const { user, isSponsor, loading } = useAuth();
+  const { user, roles, loading } = useAuth();
   const [busy, setBusy] = useState(false);
   const [accountType, setAccountType] = useState<"member" | "sponsor">(type ?? "member");
   const [f, setF] = useState({ full_name: "", email: "", password: "", phone: "", city: "Goiânia" });
   const [sent, setSent] = useState(false);
 
   useEffect(() => {
-    if (!loading && user) navigate({ to: isSponsor ? "/parceiro" : "/app" });
-  }, [user, loading, isSponsor, navigate]);
+    if (!loading && user) navigate({ to: homePath(roles), replace: true });
+  }, [user, loading, roles, navigate]);
 
   async function submit(e: React.FormEvent) {
     e.preventDefault();
