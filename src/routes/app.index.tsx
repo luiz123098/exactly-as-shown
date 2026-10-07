@@ -100,7 +100,7 @@ function Home() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [benefits, interests.join()]);
   const upcoming = events.filter((e) => e.status !== "finished" && new Date(e.starts_at) > new Date());
-  const sections = cfg?.sections ?? ["featured", "benefits", "promotions", "categories", "nearby", "events", "content", "map"];
+  const sections = cfg?.sections ?? ["featured", "benefits", "promotions", "categories", "nearby", "events", "content"];
 
   const blocks: Record<string, ReactNode> = {
     featured: featured.length > 0 && (
@@ -178,7 +178,7 @@ function Home() {
         </div>
       </Link>
 
-      {sections.map((k) => <div key={k}>{blocks[k]}</div>)}
+      {sections.filter((k) => k !== "map").map((k) => <div key={k}>{blocks[k]}</div>)}
 
       {!subscription && (
         <section className="member-card flex items-center justify-between gap-3 rounded-3xl p-5">
