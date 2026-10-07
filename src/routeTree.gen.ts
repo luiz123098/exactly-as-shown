@@ -26,6 +26,7 @@ import { Route as AdminUsuariosRouteImport } from './routes/admin.usuarios'
 import { Route as AppIndexRouteImport } from './routes/app.index'
 import { Route as AppAssinaturaRouteImport } from './routes/app.assinatura'
 import { Route as AppBeneficiosRouteImport } from './routes/app.beneficios'
+import { Route as AppCarteirinhaRouteImport } from './routes/app.carteirinha'
 import { Route as AppFavoritosRouteImport } from './routes/app.favoritos'
 import { Route as AppMapaRouteImport } from './routes/app.mapa'
 import { Route as AppNotificacoesRouteImport } from './routes/app.notificacoes'
@@ -35,6 +36,8 @@ import { Route as ParceiroIndexRouteImport } from './routes/parceiro.index'
 import { Route as ParceiroBeneficiosRouteImport } from './routes/parceiro.beneficios'
 import { Route as ParceiroEmpresaRouteImport } from './routes/parceiro.empresa'
 import { Route as ParceiroPromocoesRouteImport } from './routes/parceiro.promocoes'
+import { Route as AppEventosIndexRouteImport } from './routes/app.eventos.index'
+import { Route as AppEventosIdRouteImport } from './routes/app.eventos.$id'
 import { Route as AppParceirosIdRouteImport } from './routes/app.parceiros.$id'
 
 const IndexRoute = IndexRouteImport.update({
@@ -122,6 +125,11 @@ const AppBeneficiosRoute = AppBeneficiosRouteImport.update({
   path: '/beneficios',
   getParentRoute: () => AppRoute,
 } as any)
+const AppCarteirinhaRoute = AppCarteirinhaRouteImport.update({
+  id: '/carteirinha',
+  path: '/carteirinha',
+  getParentRoute: () => AppRoute,
+} as any)
 const AppFavoritosRoute = AppFavoritosRouteImport.update({
   id: '/favoritos',
   path: '/favoritos',
@@ -167,6 +175,16 @@ const ParceiroPromocoesRoute = ParceiroPromocoesRouteImport.update({
   path: '/promocoes',
   getParentRoute: () => ParceiroRoute,
 } as any)
+const AppEventosIndexRoute = AppEventosIndexRouteImport.update({
+  id: '/eventos/',
+  path: '/eventos/',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppEventosIdRoute = AppEventosIdRouteImport.update({
+  id: '/eventos/$id',
+  path: '/eventos/$id',
+  getParentRoute: () => AppRoute,
+} as any)
 const AppParceirosIdRoute = AppParceirosIdRouteImport.update({
   id: '/parceiros/$id',
   path: '/parceiros/$id',
@@ -189,6 +207,7 @@ export interface FileRoutesByFullPath {
   '/admin/usuarios': typeof AdminUsuariosRoute
   '/app/assinatura': typeof AppAssinaturaRoute
   '/app/beneficios': typeof AppBeneficiosRoute
+  '/app/carteirinha': typeof AppCarteirinhaRoute
   '/app/favoritos': typeof AppFavoritosRoute
   '/app/mapa': typeof AppMapaRoute
   '/app/notificacoes': typeof AppNotificacoesRoute
@@ -200,7 +219,9 @@ export interface FileRoutesByFullPath {
   '/admin/': typeof AdminIndexRoute
   '/app/': typeof AppIndexRoute
   '/parceiro/': typeof ParceiroIndexRoute
+  '/app/eventos/$id': typeof AppEventosIdRoute
   '/app/parceiros/$id': typeof AppParceirosIdRoute
+  '/app/eventos/': typeof AppEventosIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -215,6 +236,7 @@ export interface FileRoutesByTo {
   '/admin/usuarios': typeof AdminUsuariosRoute
   '/app/assinatura': typeof AppAssinaturaRoute
   '/app/beneficios': typeof AppBeneficiosRoute
+  '/app/carteirinha': typeof AppCarteirinhaRoute
   '/app/favoritos': typeof AppFavoritosRoute
   '/app/mapa': typeof AppMapaRoute
   '/app/notificacoes': typeof AppNotificacoesRoute
@@ -226,7 +248,9 @@ export interface FileRoutesByTo {
   '/admin': typeof AdminIndexRoute
   '/app': typeof AppIndexRoute
   '/parceiro': typeof ParceiroIndexRoute
+  '/app/eventos/$id': typeof AppEventosIdRoute
   '/app/parceiros/$id': typeof AppParceirosIdRoute
+  '/app/eventos': typeof AppEventosIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -245,6 +269,7 @@ export interface FileRoutesById {
   '/admin/usuarios': typeof AdminUsuariosRoute
   '/app/assinatura': typeof AppAssinaturaRoute
   '/app/beneficios': typeof AppBeneficiosRoute
+  '/app/carteirinha': typeof AppCarteirinhaRoute
   '/app/favoritos': typeof AppFavoritosRoute
   '/app/mapa': typeof AppMapaRoute
   '/app/notificacoes': typeof AppNotificacoesRoute
@@ -256,7 +281,9 @@ export interface FileRoutesById {
   '/admin/': typeof AdminIndexRoute
   '/app/': typeof AppIndexRoute
   '/parceiro/': typeof ParceiroIndexRoute
+  '/app/eventos/$id': typeof AppEventosIdRoute
   '/app/parceiros/$id': typeof AppParceirosIdRoute
+  '/app/eventos/': typeof AppEventosIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -276,6 +303,7 @@ export interface FileRouteTypes {
     | '/admin/usuarios'
     | '/app/assinatura'
     | '/app/beneficios'
+    | '/app/carteirinha'
     | '/app/favoritos'
     | '/app/mapa'
     | '/app/notificacoes'
@@ -287,7 +315,9 @@ export interface FileRouteTypes {
     | '/admin/'
     | '/app/'
     | '/parceiro/'
+    | '/app/eventos/$id'
     | '/app/parceiros/$id'
+    | '/app/eventos/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -302,6 +332,7 @@ export interface FileRouteTypes {
     | '/admin/usuarios'
     | '/app/assinatura'
     | '/app/beneficios'
+    | '/app/carteirinha'
     | '/app/favoritos'
     | '/app/mapa'
     | '/app/notificacoes'
@@ -313,7 +344,9 @@ export interface FileRouteTypes {
     | '/admin'
     | '/app'
     | '/parceiro'
+    | '/app/eventos/$id'
     | '/app/parceiros/$id'
+    | '/app/eventos'
   id:
     | '__root__'
     | '/'
@@ -331,6 +364,7 @@ export interface FileRouteTypes {
     | '/admin/usuarios'
     | '/app/assinatura'
     | '/app/beneficios'
+    | '/app/carteirinha'
     | '/app/favoritos'
     | '/app/mapa'
     | '/app/notificacoes'
@@ -342,7 +376,9 @@ export interface FileRouteTypes {
     | '/admin/'
     | '/app/'
     | '/parceiro/'
+    | '/app/eventos/$id'
     | '/app/parceiros/$id'
+    | '/app/eventos/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -477,6 +513,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppBeneficiosRouteImport
       parentRoute: typeof AppRoute
     }
+    '/app/carteirinha': {
+      id: '/app/carteirinha'
+      path: '/carteirinha'
+      fullPath: '/app/carteirinha'
+      preLoaderRoute: typeof AppCarteirinhaRouteImport
+      parentRoute: typeof AppRoute
+    }
     '/app/favoritos': {
       id: '/app/favoritos'
       path: '/favoritos'
@@ -540,6 +583,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ParceiroPromocoesRouteImport
       parentRoute: typeof ParceiroRoute
     }
+    '/app/eventos/': {
+      id: '/app/eventos/'
+      path: '/eventos'
+      fullPath: '/app/eventos/'
+      preLoaderRoute: typeof AppEventosIndexRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/app/eventos/$id': {
+      id: '/app/eventos/$id'
+      path: '/eventos/$id'
+      fullPath: '/app/eventos/$id'
+      preLoaderRoute: typeof AppEventosIdRouteImport
+      parentRoute: typeof AppRoute
+    }
     '/app/parceiros/$id': {
       id: '/app/parceiros/$id'
       path: '/parceiros/$id'
@@ -573,25 +630,31 @@ const AdminRouteWithChildren = AdminRoute._addFileChildren(AdminRouteChildren)
 interface AppRouteChildren {
   AppAssinaturaRoute: typeof AppAssinaturaRoute
   AppBeneficiosRoute: typeof AppBeneficiosRoute
+  AppCarteirinhaRoute: typeof AppCarteirinhaRoute
   AppFavoritosRoute: typeof AppFavoritosRoute
   AppMapaRoute: typeof AppMapaRoute
   AppNotificacoesRoute: typeof AppNotificacoesRoute
   AppPerfilRoute: typeof AppPerfilRoute
   AppPromocoesRoute: typeof AppPromocoesRoute
   AppIndexRoute: typeof AppIndexRoute
+  AppEventosIdRoute: typeof AppEventosIdRoute
   AppParceirosIdRoute: typeof AppParceirosIdRoute
+  AppEventosIndexRoute: typeof AppEventosIndexRoute
 }
 
 const AppRouteChildren: AppRouteChildren = {
   AppAssinaturaRoute: AppAssinaturaRoute,
   AppBeneficiosRoute: AppBeneficiosRoute,
+  AppCarteirinhaRoute: AppCarteirinhaRoute,
   AppFavoritosRoute: AppFavoritosRoute,
   AppMapaRoute: AppMapaRoute,
   AppNotificacoesRoute: AppNotificacoesRoute,
   AppPerfilRoute: AppPerfilRoute,
   AppPromocoesRoute: AppPromocoesRoute,
   AppIndexRoute: AppIndexRoute,
+  AppEventosIdRoute: AppEventosIdRoute,
   AppParceirosIdRoute: AppParceirosIdRoute,
+  AppEventosIndexRoute: AppEventosIndexRoute,
 }
 
 const AppRouteWithChildren = AppRoute._addFileChildren(AppRouteChildren)
