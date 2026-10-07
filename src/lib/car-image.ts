@@ -7,23 +7,25 @@ const COLORS: Record<string, string> = {
   cinza: "grey", prata: "silver", laranja: "orange", roxo: "purple", marrom: "brown", bege: "beige", dourado: "gold",
 };
 
-function queries(q: CarQuery) {
-  const color = q.color ? COLORS[q.color.trim().toLowerCase()] ?? q.color.trim() : "";
-  const parts = (...p: (string | undefined)[]) => p.map((s) => s?.trim()).filter(Boolean).join(" ");
-  return Array.from(new Set([
-    parts(q.year, q.brand, q.model, q.version, color),
-    parts(q.year, q.brand, q.model, q.version),
-    parts(q.brand, q.model, q.version),
-    parts(q.brand, q.model, color),
-    parts(q.brand, q.model),
-  ].filter(Boolean)));
-}
+const ALIASES: Record<string, string[]> = {
+  white: ["white", "branco", "weiss", "weiß", "blanc", "bianco", "blanca"],
+  black: ["black", "preto", "schwarz", "noir", "nero", "negro"],
+  red: ["red", "vermelho", "rot", "rouge", "rosso", "rojo"],
+  blue: ["blue", "azul", "blau", "bleu", "blu"],
+  yellow: ["yellow", "amarelo", "gelb", "jaune", "giallo"],
+  green: ["green", "verde", "grün", "vert"],
+  grey: ["grey", "gray", "cinza", "grau", "gris", "grigio"],
+  silver: ["silver", "prata", "silber", "argent", "argento"],
+  orange: ["orange", "laranja", "arancio"],
+};
 
-async function search(query: string): Promise<FoundImage | null> {
+function parts(...p: (string | undefined)[]) { return p.map((s) => s?.trim()).filter(Boolean).join(" "); }
+
+async function search(query: string, colorWords?: string[]): Promise<FoundImage | null> {
   const u = new URL("https://commons.wikimedia.org/w/api.php");
   Object.entries({
     action: "query", format: "json", origin: "*", generator: "search", gsrsearch: `${query} filetype:bitmap`,
-    gsrnamespace: "6", gsrlimit: "10", prop: "imageinfo", iiprop: "url|size|mime", iiurlwidth: "1600",
+    gsrnamespace: "6", gsrlimit: "30", prop: "imageinfo", iiprop: "url|size|mime", iiurlwidth: "1600",
   }).forEach(([k, v]) => u.searchParams.set(k, v));
   const res = await fetch(u);
   if (!res.ok) return null;
@@ -35,7 +37,10 @@ async function search(query: string): Promise<FoundImage | null> {
     .sort((a, b) => a.index - b.index)
     .find((p) => {
       const i = p.imageinfo?.[0];
-      return i && /jpe?g|png|webp/.test(i.mime) && i.width >= 800 && i.width >= i.height;
+      if (!i || !/jpe?g|png|webp/.test(i.mime) || i.width < 800 || i.width < i.height) return false;
+      if (!colorWords) return true;
+      const t = p.title.toLowerCase().replace(/[_\-().,]/g, " ");
+      return colorWords.some((w) => new RegExp(`(^|\\s)${w}(\\s|$)`).test(t));
     });
   if (!ok) return null;
   const i = ok.imageinfo![0]!;
@@ -43,9 +48,24 @@ async function search(query: string): Promise<FoundImage | null> {
 }
 
 export async function findCarImage(q: CarQuery): Promise<FoundImage | null> {
-  for (const query of queries(q)) {
+  const raw = q.color?.trim().toLowerCase() ?? "";
+  const color = raw ? COLORS[raw] ?? raw : "";
+  const words = color ? ALIASES[color] ?? [color, raw] : undefined;
+  const attempts: [string, string[] | undefined][] = [];
+  if (color) {
+    // Color-matching passes: the file title must mention the requested color.
+    for (const query of [parts(q.year, q.brand, q.model, q.version, color), parts(q.brand, q.model, q.version, color), parts(q.brand, q.model, color)])
+      attempts.push([query, words]);
+  }
+  for (const query of [parts(q.year, q.brand, q.model, q.version), parts(q.brand, q.model, q.version), parts(q.brand, q.model)])
+    attempts.push([query, undefined]);
+  const seen = new Set<string>();
+  for (const [query, w] of attempts) {
+    const key = query + "|" + !!w;
+    if (!query || seen.has(key)) continue;
+    seen.add(key);
     try {
-      const r = await search(query);
+      const r = await search(query, w);
       if (r) return r;
     } catch { /* try next */ }
   }
