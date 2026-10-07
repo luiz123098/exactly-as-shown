@@ -29,6 +29,13 @@
       "when": 1791405136344,
       "tag": "0003_club_v2",
       "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1791406916668,
+      "tag": "0004_garage",
+      "breakpoints": true
     }
   ]
 }

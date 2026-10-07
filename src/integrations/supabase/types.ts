@@ -265,6 +265,48 @@ export type Database = {
           },
         ]
       }
+      garage_cars: {
+        Row: {
+          author_name: string
+          brand: string
+          color: string | null
+          created_at: string
+          description: string
+          id: string
+          model: string
+          photo_url: string | null
+          user_id: string
+          video_url: string | null
+          year: number | null
+        }
+        Insert: {
+          author_name?: string
+          brand: string
+          color?: string | null
+          created_at?: string
+          description?: string
+          id?: string
+          model: string
+          photo_url?: string | null
+          user_id: string
+          video_url?: string | null
+          year?: number | null
+        }
+        Update: {
+          author_name?: string
+          brand?: string
+          color?: string | null
+          created_at?: string
+          description?: string
+          id?: string
+          model?: string
+          photo_url?: string | null
+          user_id?: string
+          video_url?: string | null
+          year?: number | null
+        }
+        Relationships: []
+      }
       home_config: {
         Row: {
           hero_badge: string
@@ -455,6 +497,7 @@ export type Database = {
           city: string | null
           created_at: string
           full_name: string
+          garage_public: boolean
           id: string
           interests: string[]
           member_code: string | null
@@ -465,6 +508,7 @@ export type Database = {
           city?: string | null
           created_at?: string
           full_name?: string
+          garage_public?: boolean
           id: string
           interests?: string[]
           member_code?: string | null
@@ -475,6 +519,7 @@ export type Database = {
           city?: string | null
           created_at?: string
           full_name?: string
+          garage_public?: boolean
           id?: string
           interests?: string[]
           member_code?: string | null
@@ -734,6 +779,7 @@ export type Database = {
         Returns: number
       }
       event_taken: { Args: { _event: string }; Returns: number }
+      garage_hidden: { Args: { _uid: string }; Returns: boolean }
       has_role: {
         Args: {
           _role: Database["public"]["Enums"]["app_role"]
