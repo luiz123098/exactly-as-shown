@@ -106,7 +106,7 @@ function SponsorPage() {
           {s.website && <Info icon={Globe} text={s.website} />}
           {s.whatsapp && (
             <Button asChild className="w-full">
-              <a href={`https://wa.me/55${encodeURIComponent(s.whatsapp)}`} target="_blank" rel="noreferrer"><MessageCircle /> WhatsApp</a>
+              <a href={`https://wa.me/55${encodeURIComponent(s.whatsapp)}`}><MessageCircle /> WhatsApp</a>
             </Button>
           )}
           {s.lat != null && s.lng != null ? (
