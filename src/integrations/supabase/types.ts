@@ -806,6 +806,7 @@ export type Database = {
         Args: { _amount: number; _code: string }
         Returns: Json
       }
+      verify_member: { Args: { _code: string }; Returns: Json }
     }
     Enums: {
       app_role: "admin" | "sponsor" | "member"
