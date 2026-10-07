@@ -4,6 +4,7 @@ import {
   Clock, Dumbbell, Heart, HeartPulse, Hotel, Lock, MapPin, PartyPopper, ShoppingBag, Sparkles, Ticket, UtensilsCrossed, Wrench, LayoutGrid,
 } from "lucide-react";
 import { toast } from "sonner";
+import { QRCodeSVG } from "qrcode.react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth, CATEGORIES } from "@/lib/auth";
 import { fmtKm, validity } from "@/lib/geo";
@@ -76,15 +77,17 @@ export function BenefitSheet({ b, open, onOpenChange, distance }: { b: Benefit; 
         )}
         <DrawerHeader className="text-left">
           <p className="eyebrow text-muted-foreground">{b.sponsor?.name} · {b.category}{distance != null ? ` · ${fmtKm(distance)}` : ""}</p>
-          <DrawerTitle className="font-display text-4xl font-normal text-primary">{b.discount_label}</DrawerTitle>
+          <DrawerTitle className="text-4xl font-extrabold text-primary">{b.discount_label}</DrawerTitle>
           <DrawerDescription className="text-base text-foreground">{b.title}</DrawerDescription>
         </DrawerHeader>
         <div className="space-y-4 px-4 pb-8">
           {code ? (
             <div className="member-card rounded-2xl p-8 text-center">
               <p className="eyebrow opacity-70">Apresente no estabelecimento</p>
+              <div className="mx-auto mt-4 w-fit rounded-2xl bg-ink-foreground p-3"><QRCodeSVG value={`EXOTIC-USE:${code}`} size={150} /></div>
               <p className="mt-3 font-mono text-4xl font-bold tracking-widest">{code}</p>
-              <p className="mt-3 text-sm opacity-70">{b.sponsor?.name}</p>
+              <p className="mt-3 text-sm opacity-70">{b.sponsor?.name} · válido por 24 h</p>
+              <p className="mt-1 text-xs opacity-50">O parceiro valida este código no painel dele.</p>
             </div>
           ) : (
             <>
