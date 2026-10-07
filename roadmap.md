@@ -8,3 +8,4 @@
 - [ ] Sponsor: Estabelecimentos (multiple locations), Analytics page, Configurações — awaiting user go-ahead
 - [ ] Admin: Membros, Benefícios, Pagamentos, Configurações pages — awaiting user go-ahead
 - [ ] Real payments — waiting for user decision
+- [x] Club v2: Home controlada pelo admin, eventos/inscrições, carteirinha QR, validação de benefícios pelo parceiro, comunidade, conteúdo, economia, interesses, métricas do parceiro

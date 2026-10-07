@@ -16,3 +16,6 @@
 - Signed-in areas (/app, /parceiro, /admin) are `ssr:false` layouts guarded by `AppShell`.
 - Leaflet map is lazy-loaded behind `<ClientOnly>` because it touches `window` at import.
 - Official brand images are CDN pointers rendered by the shared Logo component; the favicon stays local — keeps branding consistent without storing large uploads.
+- Home section order and hero live in the single-row `home_config` table so admins control the Home without deploys.
+- Benefit codes are validated only via the `validate_usage` security-definer RPC, so sponsors can't edit usage rows directly.
+- Community author names are copied onto posts/comments by trigger, since profiles are private under RLS.
