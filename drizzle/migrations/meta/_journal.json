@@ -50,6 +50,13 @@
       "when": 1791409152224,
       "tag": "0006_garage_auto_image",
       "breakpoints": true
+    },
+    {
+      "idx": 7,
+      "version": "7",
+      "when": 1791410684721,
+      "tag": "0007_verify_member_card",
+      "breakpoints": true
     }
   ]
 }
