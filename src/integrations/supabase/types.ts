@@ -14,27 +14,78 @@ export type Database = {
   }
   public: {
     Tables: {
+      articles: {
+        Row: {
+          body: string
+          category: string
+          cover_url: string | null
+          created_at: string
+          excerpt: string
+          featured: boolean
+          id: string
+          published: boolean
+          title: string
+          video_url: string | null
+        }
+        Insert: {
+          body?: string
+          category?: string
+          cover_url?: string | null
+          created_at?: string
+          excerpt?: string
+          featured?: boolean
+          id?: string
+          published?: boolean
+          title: string
+          video_url?: string | null
+        }
+        Update: {
+          body?: string
+          category?: string
+          cover_url?: string | null
+          created_at?: string
+          excerpt?: string
+          featured?: boolean
+          id?: string
+          published?: boolean
+          title?: string
+          video_url?: string | null
+        }
+        Relationships: []
+      }
       benefit_usages: {
         Row: {
           benefit_id: string
           code: string
           created_at: string
           id: string
+          saved_amount: number
+          sponsor_id: string | null
+          status: string
           user_id: string
+          validated_at: string | null
         }
         Insert: {
           benefit_id: string
           code: string
           created_at?: string
           id?: string
+          saved_amount?: number
+          sponsor_id?: string | null
+          status?: string
           user_id: string
+          validated_at?: string | null
         }
         Update: {
           benefit_id?: string
           code?: string
           created_at?: string
           id?: string
+          saved_amount?: number
+          sponsor_id?: string | null
+          status?: string
           user_id?: string
+          validated_at?: string | null
         }
         Relationships: [
           {
@@ -96,6 +147,98 @@ export type Database = {
           },
         ]
       }
+      event_registrations: {
+        Row: {
+          code: string
+          created_at: string
+          event_id: string
+          guests: number
+          id: string
+          status: string
+          user_id: string
+        }
+        Insert: {
+          code?: string
+          created_at?: string
+          event_id: string
+          guests?: number
+          id?: string
+          status?: string
+          user_id: string
+        }
+        Update: {
+          code?: string
+          created_at?: string
+          event_id?: string
+          guests?: number
+          id?: string
+          status?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "event_registrations_event_id_fkey"
+            columns: ["event_id"]
+            isOneToOne: false
+            referencedRelation: "events"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      events: {
+        Row: {
+          capacity: number
+          created_at: string
+          description: string
+          featured: boolean
+          gallery: string[]
+          id: string
+          image_url: string | null
+          kind: string
+          location: string
+          min_plan_level: number
+          price: number
+          sponsor_ids: string[]
+          starts_at: string
+          status: string
+          title: string
+        }
+        Insert: {
+          capacity?: number
+          created_at?: string
+          description?: string
+          featured?: boolean
+          gallery?: string[]
+          id?: string
+          image_url?: string | null
+          kind?: string
+          location?: string
+          min_plan_level?: number
+          price?: number
+          sponsor_ids?: string[]
+          starts_at: string
+          status?: string
+          title: string
+        }
+        Update: {
+          capacity?: number
+          created_at?: string
+          description?: string
+          featured?: boolean
+          gallery?: string[]
+          id?: string
+          image_url?: string | null
+          kind?: string
+          location?: string
+          min_plan_level?: number
+          price?: number
+          sponsor_ids?: string[]
+          starts_at?: string
+          status?: string
+          title?: string
+        }
+        Relationships: []
+      }
       favorites: {
         Row: {
           benefit_id: string
@@ -121,6 +264,39 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      home_config: {
+        Row: {
+          hero_badge: string
+          hero_image: string | null
+          hero_link: string | null
+          hero_subtitle: string
+          hero_title: string
+          id: number
+          sections: string[]
+          updated_at: string
+        }
+        Insert: {
+          hero_badge?: string
+          hero_image?: string | null
+          hero_link?: string | null
+          hero_subtitle?: string
+          hero_title?: string
+          id?: number
+          sections?: string[]
+          updated_at?: string
+        }
+        Update: {
+          hero_badge?: string
+          hero_image?: string | null
+          hero_link?: string | null
+          hero_subtitle?: string
+          hero_title?: string
+          id?: number
+          sections?: string[]
+          updated_at?: string
+        }
+        Relationships: []
       }
       notifications: {
         Row: {
@@ -188,6 +364,91 @@ export type Database = {
         }
         Relationships: []
       }
+      post_comments: {
+        Row: {
+          author_name: string
+          body: string
+          created_at: string
+          id: string
+          post_id: string
+          user_id: string
+        }
+        Insert: {
+          author_name?: string
+          body: string
+          created_at?: string
+          id?: string
+          post_id: string
+          user_id?: string
+        }
+        Update: {
+          author_name?: string
+          body?: string
+          created_at?: string
+          id?: string
+          post_id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "post_comments_post_id_fkey"
+            columns: ["post_id"]
+            isOneToOne: false
+            referencedRelation: "posts"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      post_likes: {
+        Row: {
+          post_id: string
+          user_id: string
+        }
+        Insert: {
+          post_id: string
+          user_id?: string
+        }
+        Update: {
+          post_id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "post_likes_post_id_fkey"
+            columns: ["post_id"]
+            isOneToOne: false
+            referencedRelation: "posts"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      posts: {
+        Row: {
+          author_name: string
+          body: string
+          created_at: string
+          id: string
+          image_url: string | null
+          user_id: string
+        }
+        Insert: {
+          author_name?: string
+          body: string
+          created_at?: string
+          id?: string
+          image_url?: string | null
+          user_id?: string
+        }
+        Update: {
+          author_name?: string
+          body?: string
+          created_at?: string
+          id?: string
+          image_url?: string | null
+          user_id?: string
+        }
+        Relationships: []
+      }
       profiles: {
         Row: {
           avatar_url: string | null
@@ -195,6 +456,8 @@ export type Database = {
           created_at: string
           full_name: string
           id: string
+          interests: string[]
+          member_code: string | null
           phone: string | null
         }
         Insert: {
@@ -203,6 +466,8 @@ export type Database = {
           created_at?: string
           full_name?: string
           id: string
+          interests?: string[]
+          member_code?: string | null
           phone?: string | null
         }
         Update: {
@@ -211,6 +476,8 @@ export type Database = {
           created_at?: string
           full_name?: string
           id?: string
+          interests?: string[]
+          member_code?: string | null
           phone?: string | null
         }
         Relationships: []
@@ -291,6 +558,38 @@ export type Database = {
           user_id?: string
         }
         Relationships: []
+      }
+      sponsor_events: {
+        Row: {
+          created_at: string
+          id: string
+          kind: string
+          sponsor_id: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          kind: string
+          sponsor_id: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          kind?: string
+          sponsor_id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "sponsor_events_sponsor_id_fkey"
+            columns: ["sponsor_id"]
+            isOneToOne: false
+            referencedRelation: "sponsors"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       sponsors: {
         Row: {
@@ -434,6 +733,7 @@ export type Database = {
         Args: { _body: string; _target: string; _title: string }
         Returns: number
       }
+      event_taken: { Args: { _event: string }; Returns: number }
       has_role: {
         Args: {
           _role: Database["public"]["Enums"]["app_role"]
@@ -444,6 +744,10 @@ export type Database = {
       is_sponsor_owner: { Args: { _sponsor: string }; Returns: boolean }
       member_level: { Args: { _uid: string }; Returns: number }
       sponsor_approved: { Args: { _sponsor: string }; Returns: boolean }
+      validate_usage: {
+        Args: { _amount: number; _code: string }
+        Returns: Json
+      }
     }
     Enums: {
       app_role: "admin" | "sponsor" | "member"
