@@ -22,10 +22,10 @@ export async function fetchPromotions(): Promise<Promotion[]> {
 
 export type SponsorFull = {
   id: string; name: string; category: string; address: string; city: string;
-  lat: number | null; lng: number | null; cover_url: string | null; logo_url: string | null;
+  lat: number | null; lng: number | null; cover_url: string | null; logo_url: string | null; featured: boolean;
 };
 export async function fetchSponsors(): Promise<SponsorFull[]> {
-  const { data } = await supabase.from("sponsors").select("id,name,category,address,city,lat,lng,cover_url,logo_url").order("name");
+  const { data } = await supabase.from("sponsors").select("id,name,category,address,city,lat,lng,cover_url,logo_url,featured").eq("status", "approved").order("name");
   return (data ?? []) as SponsorFull[];
 }
 
