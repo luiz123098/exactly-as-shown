@@ -110,12 +110,17 @@ export const brl = (n: number) =>
   n.toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
 export const CATEGORIES = [
   "Restaurantes",
-  "Bares",
-  "Academias",
-  "Saúde e bem-estar",
-  "Moda",
-  "Viagens",
   "Hotéis",
-  "Automotivo",
-  "Outros",
+  "Academias",
+  "Saúde",
+  "Beleza",
+  "Entretenimento",
+  "Compras",
+  "Serviços",
 ];
+
+export function homePath(roles: string[]) {
+  if (roles.includes("admin")) return "/admin";
+  if (roles.includes("sponsor")) return "/parceiro";
+  return "/app";
+}

@@ -140,4 +140,12 @@
   color: var(--color-ink-foreground);
 }
 
-.leaflet-container { font-family: var(--font-sans); border-radius: var(--radius-xl); }
+.leaflet-container { z-index: 0; isolation: isolate; font-family: var(--font-sans); border-radius: var(--radius-xl); }
+
+@utility no-scrollbar {
+  scrollbar-width: none;
+  &::-webkit-scrollbar { display: none; }
+}
+@utility pb-safe {
+  padding-bottom: calc(env(safe-area-inset-bottom) + 0.5rem);
+}
