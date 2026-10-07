@@ -15,8 +15,8 @@ export default function SponsorMap({
   return (
     <MapContainer center={[-16.69, -49.26]} zoom={12} style={{ height, width: "100%" }} scrollWheelZoom>
       <TileLayer
-        attribution='&copy; OpenStreetMap &copy; CARTO'
-        url="https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png"
+        attribution='&copy; OpenStreetMap'
+        url="https://tile.openstreetmap.org/{z}/{x}/{y}.png"
       />
       {pts.map((s) => (
         <CircleMarker
