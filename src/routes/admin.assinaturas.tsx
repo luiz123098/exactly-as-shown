@@ -27,7 +27,7 @@ function AdminSubs() {
     <div>
       <PageTitle eyebrow="Administração" title="Assinaturas" subtitle="Assinaturas e pagamentos (modo demonstração)." />
       <div className="mb-5 flex gap-2">
-        {[["active", "Ativas"], ["canceled", "Canceladas"], ["", "Todas"]].map(([k, l]) => (
+        {([["active", "Ativas"], ["canceled", "Canceladas"], ["", "Todas"]] as const).map(([k, l]) => (
           <button key={k} onClick={() => setTab(k)} className={`rounded-full border px-4 py-1.5 text-xs font-semibold ${tab === k ? "bg-foreground text-background" : "bg-card"}`}>{l}</button>
         ))}
       </div>

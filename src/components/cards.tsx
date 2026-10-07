@@ -57,7 +57,7 @@ export function SponsorAvatar({ name, size = 44 }: { name: string; size?: number
 
 /* ---------- Benefit ---------- */
 
-export function BenefitSheet({ b, open, onOpenChange, distance }: { b: Benefit; open: boolean; onOpenChange: (o: boolean) => void; distance?: number | null }) {
+export function BenefitSheet({ b, open, onOpenChange, distance }: { b: Benefit; open: boolean; onOpenChange: (o: boolean) => void; distance?: number | null | undefined }) {
   const { user, level } = useAuth();
   const [code, setCode] = useState<string | null>(null);
   const locked = level < b.min_plan_level;
@@ -110,7 +110,7 @@ export function BenefitSheet({ b, open, onOpenChange, distance }: { b: Benefit; 
   );
 }
 
-export function BenefitCard({ b, favorite, onToggleFav, distance }: { b: Benefit; favorite?: boolean; onToggleFav?: () => void; distance?: number | null }) {
+export function BenefitCard({ b, favorite, onToggleFav, distance }: { b: Benefit; favorite?: boolean; onToggleFav?: () => void; distance?: number | null | undefined }) {
   const [open, setOpen] = useState(false);
   return (
     <>
@@ -168,7 +168,7 @@ export function PromoCard({ p, distance, saved, onToggleSave, compact }: { p: Pr
 
 /* ---------- Sponsor row ---------- */
 
-export function SponsorRow({ id, name, category, distance, benefit }: { id: string; name: string; category: string; distance: number | null; benefit?: string }) {
+export function SponsorRow({ id, name, category, distance, benefit }: { id: string; name: string; category: string; distance: number | null; benefit?: string | undefined }) {
   return (
     <Link to="/app/parceiros/$id" params={{ id }} className="flex items-center gap-3 py-3">
       <SponsorAvatar name={name} />
