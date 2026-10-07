@@ -48,3 +48,7 @@ export const fmtDate = (d: string) =>
   new Date(d).toLocaleDateString("pt-BR", { day: "2-digit", month: "short", weekday: "short" });
 export const fmtTime = (d: string) => new Date(d).toLocaleTimeString("pt-BR", { hour: "2-digit", minute: "2-digit" });
 export const brl = (n: number) => n.toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
+
+export const EXOTIC_WHATSAPP = "5562999282306";
+export const eventWhatsappUrl = (title: string) =>
+  `https://wa.me/${EXOTIC_WHATSAPP}?text=${encodeURIComponent(`Olá, EXOTIC! Gostaria de obter mais informações sobre o evento ${title} e saber como posso participar.`)}`;

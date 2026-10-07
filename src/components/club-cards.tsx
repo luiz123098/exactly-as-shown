@@ -1,26 +1,30 @@
 import { Link } from "@tanstack/react-router";
-import { Calendar, MapPin } from "lucide-react";
-import { brl, fmtDate, fmtTime, type Article, type ClubEvent } from "@/lib/club";
+import { Calendar, MessageCircle } from "lucide-react";
+import { eventWhatsappUrl, fmtDate, fmtTime, type Article, type ClubEvent } from "@/lib/club";
+
+export function EventInfoButton({ title, className = "" }: { title: string; className?: string }) {
+  return (
+    <a href={eventWhatsappUrl(title)} target="_blank" rel="noopener noreferrer"
+      className={`inline-flex items-center justify-center gap-2 rounded-full bg-highlight px-4 py-2.5 text-xs font-extrabold uppercase tracking-wider text-ink ${className}`}>
+      <MessageCircle className="h-4 w-4" />Obter mais informações
+    </a>
+  );
+}
 
 export function EventCard({ e, wide }: { e: ClubEvent; wide?: boolean }) {
   return (
-    <Link to="/app/eventos/$id" params={{ id: e.id }}
-      className={`group relative block overflow-hidden rounded-3xl bg-ink text-ink-foreground ${wide ? "h-72" : "h-64 w-[80%] shrink-0 snap-start sm:w-[340px]"}`}>
-      {e.image_url && <img src={e.image_url} alt={e.title} loading="lazy" className="absolute inset-0 h-full w-full object-cover opacity-80 transition duration-700 group-hover:scale-105" />}
-      <div className="absolute inset-0 bg-gradient-to-t from-ink via-ink/40 to-transparent" />
-      <div className="absolute left-4 top-4 flex gap-1.5">
-        <span className="rounded-full bg-highlight px-3 py-1 text-[0.65rem] font-bold uppercase tracking-wider text-ink">{e.kind}</span>
-        {e.status !== "open" && <span className="rounded-full bg-card/90 px-3 py-1 text-[0.65rem] font-bold text-foreground">{e.status === "closed" ? "Esgotado" : "Encerrado"}</span>}
+    <article className={`surface overflow-hidden ${wide ? "" : "w-[80%] shrink-0 snap-start sm:w-[340px]"}`}>
+      <Link to="/app/eventos/$id" params={{ id: e.id }} className="group relative block aspect-[16/10] overflow-hidden bg-ink">
+        {e.image_url && <img src={e.image_url} alt={e.title} loading="lazy" className="h-full w-full object-cover transition duration-700 group-hover:scale-105" />}
+        <span className="absolute left-3 top-3 rounded-full bg-highlight px-3 py-1 text-[0.65rem] font-bold uppercase tracking-wider text-ink">{e.kind}</span>
+      </Link>
+      <div className="p-4">
+        <p className="flex items-center gap-1.5 text-xs font-semibold text-muted-foreground"><Calendar className="h-3.5 w-3.5 text-highlight" />{fmtDate(e.starts_at)} · {fmtTime(e.starts_at)}</p>
+        <Link to="/app/eventos/$id" params={{ id: e.id }}><h3 className="mt-1 text-lg font-extrabold leading-tight">{e.title}</h3></Link>
+        <p className="mt-1 line-clamp-2 text-sm text-muted-foreground">{e.description}</p>
+        <EventInfoButton title={e.title} className="mt-3 w-full" />
       </div>
-      <div className="absolute inset-x-0 bottom-0 p-5">
-        <p className="flex items-center gap-1.5 text-xs font-semibold text-highlight"><Calendar className="h-3.5 w-3.5" /> {fmtDate(e.starts_at)} · {fmtTime(e.starts_at)}</p>
-        <h3 className="mt-1 text-xl font-extrabold leading-tight">{e.title}</h3>
-        <div className="mt-2 flex items-center justify-between gap-2 text-xs opacity-80">
-          <span className="flex min-w-0 items-center gap-1 truncate"><MapPin className="h-3 w-3 shrink-0" />{e.location}</span>
-          <span className="shrink-0 font-bold">{e.price > 0 ? brl(e.price) : "Incluso"}</span>
-        </div>
-      </div>
-    </Link>
+    </article>
   );
 }
 
