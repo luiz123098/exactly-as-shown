@@ -38,7 +38,7 @@ async function search(query: string): Promise<FoundImage | null> {
       return i && /jpe?g|png|webp/.test(i.mime) && i.width >= 800 && i.width >= i.height;
     });
   if (!ok) return null;
-  const i = ok.imageinfo![0];
+  const i = ok.imageinfo![0]!;
   return { url: i.thumburl ?? i.url, id: String(ok.pageid), source: "Wikimedia Commons", query, searched_at: new Date().toISOString(), page: i.descriptionurl };
 }
 
