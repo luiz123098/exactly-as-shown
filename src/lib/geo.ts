@@ -45,7 +45,8 @@ export function validity(ends_at: string | null) {
   if (!ends_at) return "Sem prazo";
   const days = Math.ceil((new Date(ends_at + "T23:59:59").getTime() - Date.now()) / 86400000);
   if (days <= 0) return "Termina hoje";
-  if (days === 1) return "Até amanhã";
+  if (days === 1) return "Termina amanhã";
+  if (days <= 3) return "Últimos dias";
   if (days <= 7) return `Até ${new Date(ends_at + "T12:00:00").toLocaleDateString("pt-BR", { weekday: "long" })}`;
   return `Até ${new Date(ends_at + "T12:00:00").toLocaleDateString("pt-BR", { day: "2-digit", month: "short" })}`;
 }
