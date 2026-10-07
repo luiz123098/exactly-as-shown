@@ -1,6 +1,6 @@
 # Roadmap
 
-- [ ] Ativar assinatura de teste da conta atual e permitir Instagram no perfil; verificar salvamento.
+- [x] Ativar assinatura de teste Essencial da conta atual e permitir Instagram no perfil; salvamento e leitura após recarregar verificados.
 
 - [x] Vitrine do ecossistema: boxes clicáveis de todos os parceiros com benefício em destaque; busca e abertura do parceiro verificadas com sessão de membro.
 
