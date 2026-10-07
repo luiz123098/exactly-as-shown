@@ -4,7 +4,7 @@ import { eventWhatsappUrl, fmtDate, fmtTime, type Article, type ClubEvent } from
 
 export function EventInfoButton({ title, className = "" }: { title: string; className?: string }) {
   return (
-    <a href={eventWhatsappUrl(title)} target="_blank" rel="noopener noreferrer"
+    <a href={eventWhatsappUrl(title)}
       className={`inline-flex items-center justify-center gap-2 rounded-full bg-highlight px-4 py-2.5 text-xs font-extrabold uppercase tracking-wider text-ink ${className}`}>
       <MessageCircle className="h-4 w-4" />Obter mais informações
     </a>
