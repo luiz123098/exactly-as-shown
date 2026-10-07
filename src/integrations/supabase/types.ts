@@ -301,6 +301,7 @@ export type Database = {
           created_at: string
           description: string
           featured: boolean
+          gallery: string[]
           hours: string | null
           id: string
           instagram: string | null
@@ -322,6 +323,7 @@ export type Database = {
           created_at?: string
           description?: string
           featured?: boolean
+          gallery?: string[]
           hours?: string | null
           id?: string
           instagram?: string | null
@@ -343,6 +345,7 @@ export type Database = {
           created_at?: string
           description?: string
           featured?: boolean
+          gallery?: string[]
           hours?: string | null
           id?: string
           instagram?: string | null
