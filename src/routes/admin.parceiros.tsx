@@ -8,7 +8,9 @@ import { PageTitle } from "@/components/cards";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 
-export const Route = createFileRoute("/admin/parceiros")({ component: AdminSponsors });
+export const Route = createFileRoute("/admin/parceiros")({
+  head: () => ({ meta: [{"title": "Gestão de parceiros — Exotic Experience"}, {"name": "description", "content": "Gerencie e aprove os parceiros da Exotic Experience."}, {"property": "og:title", "content": "Gestão de parceiros — Exotic Experience"}, {"property": "og:description", "content": "Gerencie e aprove os parceiros da Exotic Experience."}, {"property": "og:type", "content": "website"}, {"name": "twitter:card", "content": "summary_large_image"}] }),
+  component: AdminSponsors });
 
 type St = "pending" | "approved" | "rejected";
 

@@ -6,7 +6,9 @@ import { useAuth } from "@/lib/auth";
 import { Empty, PageTitle } from "@/components/cards";
 import { Button } from "@/components/ui/button";
 
-export const Route = createFileRoute("/app/notificacoes")({ component: Notifs });
+export const Route = createFileRoute("/app/notificacoes")({
+  head: () => ({ meta: [{"title": "Minhas notificações — Exotic Experience"}, {"name": "description", "content": "Confira novidades e comunicados do clube."}, {"property": "og:title", "content": "Minhas notificações — Exotic Experience"}, {"property": "og:description", "content": "Confira novidades e comunicados do clube."}, {"property": "og:type", "content": "website"}, {"name": "twitter:card", "content": "summary_large_image"}] }),
+  component: Notifs });
 
 function Notifs() {
   const { user } = useAuth();

@@ -5,7 +5,9 @@ import { StatusPill, useMySponsor } from "@/lib/sponsor";
 import { PageTitle } from "@/components/cards";
 import { Button } from "@/components/ui/button";
 
-export const Route = createFileRoute("/parceiro/")({ component: SponsorDash });
+export const Route = createFileRoute("/parceiro/")({
+  head: () => ({ meta: [{"title": "Visão geral do parceiro — Exotic Experience"}, {"name": "description", "content": "Acompanhe a participação da sua empresa na Exotic Experience."}, {"property": "og:title", "content": "Visão geral do parceiro — Exotic Experience"}, {"property": "og:description", "content": "Acompanhe a participação da sua empresa na Exotic Experience."}, {"property": "og:type", "content": "website"}, {"name": "twitter:card", "content": "summary_large_image"}] }),
+  component: SponsorDash });
 
 export function Stat({ label, value }: { label: string; value: number | string }) {
   return (

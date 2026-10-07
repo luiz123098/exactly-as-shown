@@ -11,6 +11,8 @@ const SponsorMap = lazy(() => import("@/components/sponsor-map"));
 export const Route = createFileRoute("/parceiros")({
   head: () => ({
     meta: [
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
       { title: "Parceiros — Exotic Experience" },
       { name: "description", content: "Empresas parceiras do clube Exotic Experience em Goiânia e em Goiás." },
       { property: "og:title", content: "Parceiros — Exotic Experience" },

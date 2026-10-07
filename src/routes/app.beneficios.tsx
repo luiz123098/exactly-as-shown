@@ -10,6 +10,8 @@ import { BenefitCard, CategoryChips, Empty, PageTitle, SponsorAvatar } from "@/c
 import { Input } from "@/components/ui/input";
 
 export const Route = createFileRoute("/app/beneficios")({
+  head: () => ({ meta: [{"title": "Parceiros & benefícios — Exotic Experience"}, {"name": "description", "content": "Conheça todos os parceiros e seus benefícios exclusivos em Goiás."}, {"property": "og:title", "content": "Parceiros & benefícios — Exotic Experience"}, {"property": "og:description", "content": "Conheça todos os parceiros e seus benefícios exclusivos em Goiás."}, {"property": "og:type", "content": "website"}, {"name": "twitter:card", "content": "summary_large_image"}] }),
+ 
   validateSearch: z.object({ cat: z.string().optional(), tab: z.enum(["parceiros", "beneficios"]).optional() }),
   component: PartnersBenefits,
 });

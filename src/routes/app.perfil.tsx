@@ -11,7 +11,9 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Drawer, DrawerContent, DrawerHeader, DrawerTitle } from "@/components/ui/drawer";
 
-export const Route = createFileRoute("/app/perfil")({ component: Profile });
+export const Route = createFileRoute("/app/perfil")({
+  head: () => ({ meta: [{"title": "Meu perfil — Exotic Experience"}, {"name": "description", "content": "Gerencie seus dados de membro da Exotic Experience."}, {"property": "og:title", "content": "Meu perfil — Exotic Experience"}, {"property": "og:description", "content": "Gerencie seus dados de membro da Exotic Experience."}, {"property": "og:type", "content": "website"}, {"name": "twitter:card", "content": "summary_large_image"}] }),
+  component: Profile });
 
 function Profile() {
   const { user, profile, subscription, level, refresh, signOut } = useAuth();

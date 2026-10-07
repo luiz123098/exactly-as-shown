@@ -12,7 +12,9 @@ import { Button } from "@/components/ui/button";
 
 const SponsorMap = lazy(() => import("@/components/sponsor-map"));
 
-export const Route = createFileRoute("/app/")({ component: Home });
+export const Route = createFileRoute("/app/")({
+  head: () => ({ meta: [{"title": "Início do membro — Exotic Experience"}, {"name": "description", "content": "Descubra os parceiros e as experiências exclusivas do clube."}, {"property": "og:title", "content": "Início do membro — Exotic Experience"}, {"property": "og:description", "content": "Descubra os parceiros e as experiências exclusivas do clube."}, {"property": "og:type", "content": "website"}, {"name": "twitter:card", "content": "summary_large_image"}] }),
+  component: Home });
 
 type Partner = SponsorFull & { d: number | null; benefit?: string | undefined; promo?: string | undefined };
 

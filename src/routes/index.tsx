@@ -11,6 +11,8 @@ import { PublicFooter, PublicHeader } from "@/components/brand";
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
       { title: "Exotic Experience — O clube de benefícios mais exclusivo de Goiás" },
       { name: "description", content: "Torne-se membro e acesse benefícios e promoções exclusivas em restaurantes, academias, viagens e muito mais em Goiás." },
       { property: "og:title", content: "Exotic Experience — Clube de membros" },
@@ -45,13 +47,13 @@ function Landing() {
         <div className="relative z-10 mx-auto flex min-h-[92vh] max-w-7xl flex-col justify-end px-6 pb-20">
           <p className="eyebrow text-highlight">Clube de membros · Goiás</p>
           <h1 className="mt-5 max-w-4xl font-display text-6xl leading-[0.95] md:text-8xl">
-            Experiências raras, <em className="text-highlight">para poucos.</em>
+            Exotic<br /><span className="text-highlight">Experience</span>
           </h1>
           <p className="mt-6 max-w-xl text-lg text-ink-foreground/70">
             Benefícios exclusivos nos melhores restaurantes, academias, spas e destinos de Goiás — reunidos em um só cartão de membro.
           </p>
           <div className="mt-10 flex flex-wrap gap-3">
-            <Button asChild size="lg">
+            <Button asChild size="lg" variant="secondary">
               <Link to="/auth" search={{ mode: "signup" }}>Quero ser membro <ArrowRight /></Link>
             </Button>
             <Button asChild size="lg" variant="glass">

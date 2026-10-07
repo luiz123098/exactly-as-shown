@@ -5,7 +5,9 @@ import { supabase } from "@/integrations/supabase/client";
 import { brl } from "@/lib/auth";
 import { PageTitle } from "@/components/cards";
 
-export const Route = createFileRoute("/admin/assinaturas")({ component: AdminSubs });
+export const Route = createFileRoute("/admin/assinaturas")({
+  head: () => ({ meta: [{"title": "Gestão de assinaturas — Exotic Experience"}, {"name": "description", "content": "Acompanhe as assinaturas e os planos dos membros do clube."}, {"property": "og:title", "content": "Gestão de assinaturas — Exotic Experience"}, {"property": "og:description", "content": "Acompanhe as assinaturas e os planos dos membros do clube."}, {"property": "og:type", "content": "website"}, {"name": "twitter:card", "content": "summary_large_image"}] }),
+  component: AdminSubs });
 
 const label: Record<string, string> = { active: "Ativa", canceled: "Cancelada", replaced: "Substituída" };
 

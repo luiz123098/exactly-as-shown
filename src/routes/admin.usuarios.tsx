@@ -6,7 +6,9 @@ import { supabase } from "@/integrations/supabase/client";
 import { PageTitle } from "@/components/cards";
 import { Input } from "@/components/ui/input";
 
-export const Route = createFileRoute("/admin/usuarios")({ component: AdminUsers });
+export const Route = createFileRoute("/admin/usuarios")({
+  head: () => ({ meta: [{"title": "Gestão de usuários — Exotic Experience"}, {"name": "description", "content": "Gerencie os usuários e seus acessos ao clube."}, {"property": "og:title", "content": "Gestão de usuários — Exotic Experience"}, {"property": "og:description", "content": "Gerencie os usuários e seus acessos ao clube."}, {"property": "og:type", "content": "website"}, {"name": "twitter:card", "content": "summary_large_image"}] }),
+  component: AdminUsers });
 
 const ROLES = ["member", "sponsor", "admin"] as const;
 const roleName = { member: "Membro", sponsor: "Parceiro", admin: "Admin" };

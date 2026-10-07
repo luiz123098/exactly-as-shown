@@ -1,5 +1,7 @@
 # Roadmap
 
+- [x] Apply uploaded official visual identity across shared branding, theme and favicon; verify rendered public pages.
+
 - [x] App-first refactor: member Home, bottom nav, sidebar, role-based redirects
 - [x] Map bottom card with directions; favorites for companies/promotions
 - [x] Profile and subscription screens; admin subscriptions page

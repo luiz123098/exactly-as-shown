@@ -9,7 +9,9 @@ import { PageTitle } from "@/components/cards";
 import { Button } from "@/components/ui/button";
 import { PlanCard } from "./index";
 
-export const Route = createFileRoute("/app/assinatura")({ component: Sub });
+export const Route = createFileRoute("/app/assinatura")({
+  head: () => ({ meta: [{"title": "Minha assinatura — Exotic Experience"}, {"name": "description", "content": "Consulte seu plano e histórico de assinatura no clube."}, {"property": "og:title", "content": "Minha assinatura — Exotic Experience"}, {"property": "og:description", "content": "Consulte seu plano e histórico de assinatura no clube."}, {"property": "og:type", "content": "website"}, {"name": "twitter:card", "content": "summary_large_image"}] }),
+  component: Sub });
 
 // PAGAMENTO SIMULADO: a assinatura é ativada diretamente. A integração real de pagamento
 // deve substituir `subscribe()` por um checkout e ativar a assinatura via webhook.

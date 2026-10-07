@@ -13,7 +13,9 @@ import { Textarea } from "@/components/ui/textarea";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { L } from "./parceiro.beneficios";
 
-export const Route = createFileRoute("/parceiro/promocoes")({ component: SponsorPromos });
+export const Route = createFileRoute("/parceiro/promocoes")({
+  head: () => ({ meta: [{"title": "Promoções da empresa — Exotic Experience"}, {"name": "description", "content": "Gerencie as promoções da sua empresa para os membros."}, {"property": "og:title", "content": "Promoções da empresa — Exotic Experience"}, {"property": "og:description", "content": "Gerencie as promoções da sua empresa para os membros."}, {"property": "og:type", "content": "website"}, {"name": "twitter:card", "content": "summary_large_image"}] }),
+  component: SponsorPromos });
 
 const today = () => new Date().toISOString().slice(0, 10);
 const blank = { id: "", title: "", description: "", discount_label: "", image_url: "", category: "Outros", min_plan_level: 1, starts_at: "", ends_at: "" };
