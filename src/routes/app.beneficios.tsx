@@ -2,12 +2,13 @@ import { useMemo, useState } from "react";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { z } from "zod";
-import { MapPin, Search, SlidersHorizontal, Star } from "lucide-react";
+import { ArrowUpRight, Building2, MapPin, Search, SlidersHorizontal, Ticket } from "lucide-react";
 import { distanceKm, fmtKm, useUserLocation } from "@/lib/geo";
 import { fetchBenefits, fetchSponsors, type SponsorFull } from "@/lib/queries";
 import { useFavorites } from "@/lib/use-member";
-import { BenefitCard, CategoryChips, Empty, PageTitle, SponsorAvatar } from "@/components/cards";
+import { BenefitCard, CategoryChips, Empty, PageTitle, type Benefit } from "@/components/cards";
 import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
 
 export const Route = createFileRoute("/app/beneficios")({
   head: () => ({ meta: [{"title": "Parceiros & benefícios — Exotic Experience"}, {"name": "description", "content": "Conheça todos os parceiros e seus benefícios exclusivos em Goiás."}, {"property": "og:title", "content": "Parceiros & benefícios — Exotic Experience"}, {"property": "og:description", "content": "Conheça todos os parceiros e seus benefícios exclusivos em Goiás."}, {"property": "og:type", "content": "website"}, {"name": "twitter:card", "content": "summary_large_image"}] }),
@@ -16,32 +17,31 @@ export const Route = createFileRoute("/app/beneficios")({
   component: PartnersBenefits,
 });
 
-type Partner = SponsorFull & { d: number | null; benefit?: string | undefined };
+type Partner = SponsorFull & { d: number | null; benefit?: Benefit | undefined };
 
 function PartnerCard({ s }: { s: Partner }) {
   return (
-    <Link to="/app/parceiros/$id" params={{ id: s.id }} className="surface group block overflow-hidden transition hover:shadow-lift">
-      <div className="relative h-32 overflow-hidden">
+    <Link to="/app/parceiros/$id" params={{ id: s.id }} aria-label={`Ver parceiro ${s.name}`} className="surface group flex h-full flex-col overflow-hidden transition hover:shadow-lift focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">
+      <div className="relative aspect-video overflow-hidden bg-secondary">
         {s.cover_url ? (
           <img src={s.cover_url} alt={s.name} loading="lazy" className="h-full w-full object-cover transition duration-500 group-hover:scale-105" />
         ) : (
-          <div className="member-card h-full w-full" />
+          <div className="grid h-full w-full place-items-center"><Building2 className="h-12 w-12 text-muted-foreground" /></div>
         )}
-        <div className="absolute left-3 top-3 flex h-11 w-11 items-center justify-center overflow-hidden rounded-2xl border-2 border-card bg-card">
-          {s.logo_url ? <img src={s.logo_url} alt="" className="h-full w-full object-cover" /> : <SponsorAvatar name={s.name} size={40} />}
-        </div>
+        {s.logo_url && <div className="absolute bottom-3 left-3 h-12 w-12 overflow-hidden rounded-lg border border-border bg-card p-1"><img src={s.logo_url} alt="" className="h-full w-full object-contain" /></div>}
+        <span className="absolute right-3 top-3 rounded-md bg-ink px-2.5 py-1 text-xs font-bold text-ink-foreground">EXOTIC</span>
       </div>
-      <div className="px-4 pb-4">
-        <p className="mt-2 truncate font-bold">{s.name}</p>
+      <div className="flex flex-1 flex-col p-4">
+        <p className="eyebrow text-muted-foreground">{s.category}</p>
+        <h2 className="mt-1 text-lg font-bold leading-snug">{s.name}</h2>
         <p className="flex items-center gap-1 truncate text-xs text-muted-foreground">
-          <MapPin className="h-3 w-3" /> {s.category} · {s.d != null ? fmtKm(s.d) : s.city}
+          <MapPin className="h-3 w-3 shrink-0" /> {s.city}{s.d != null ? ` · ${fmtKm(s.d)}` : ""}
         </p>
-        {s.benefit && (
-          <p className="mt-2 flex items-center gap-1 text-sm font-semibold text-primary">
-            <Star className="h-3.5 w-3.5 fill-primary" /> {s.benefit} para membros
-          </p>
-        )}
-        <span className="mt-3 block rounded-full border py-2 text-center text-xs font-semibold">Ver parceiro</span>
+        <div className="mt-4 border-t pt-3">
+          <p className="flex items-center gap-1.5 text-xs font-bold text-primary-deep"><Ticket className="h-3.5 w-3.5" />Benefício EXOTIC</p>
+          {s.benefit ? <><p className="mt-1 text-2xl font-extrabold">{s.benefit.discount_label}</p><p className="mt-1 line-clamp-2 text-sm text-muted-foreground">{s.benefit.title}</p></> : <p className="mt-2 text-sm text-muted-foreground">Novos benefícios em breve</p>}
+        </div>
+        <span className="mt-auto flex items-center justify-between gap-2 pt-4 text-sm font-semibold">Conhecer parceiro<ArrowUpRight className="h-4 w-4 shrink-0 transition group-hover:translate-x-0.5" /></span>
       </div>
     </Link>
   );
@@ -66,7 +66,7 @@ function PartnersBenefits() {
       sponsors.map((sp) => ({
         ...sp,
         d: distanceKm(loc, sp.lat, sp.lng),
-        benefit: benefits.find((b) => b.sponsor?.id === sp.id)?.discount_label,
+        benefit: benefits.find((b) => b.sponsor?.id === sp.id && (!b.expires_at || b.expires_at >= new Date().toISOString().slice(0, 10))),
       })),
     [sponsors, benefits, loc],
   );
@@ -92,14 +92,14 @@ function PartnersBenefits() {
 
   return (
     <div>
-      <PageTitle title="Parceiros & benefícios" subtitle="Todos os parceiros do clube e suas vantagens." />
-      <div className="sticky top-0 z-20 -mx-5 mb-5 space-y-3 bg-background/90 px-5 py-2 backdrop-blur md:static md:mx-0 md:bg-transparent md:px-0">
+      <PageTitle eyebrow="Ecossistema EXOTIC" title="Parceiros" subtitle="Empresas que fazem parte da sua experiência EXOTIC." />
+      <div className="mb-5 space-y-3">
         <div className="grid grid-cols-2 gap-1 rounded-full border bg-card p-1">
           {(["parceiros", "beneficios"] as const).map((t) => (
-            <button key={t} onClick={() => navigate({ search: t === "parceiros" ? { cat: cat || undefined } : { tab: t, cat: cat || undefined }, replace: true })}
-              className={`rounded-full py-2.5 text-sm font-semibold transition ${tab === t ? "bg-primary text-primary-foreground" : "text-muted-foreground"}`}>
+            <Button key={t} variant={tab === t ? "default" : "ghost"} onClick={() => navigate({ search: t === "parceiros" ? { cat: cat || undefined } : { tab: t, cat: cat || undefined }, replace: true })}
+              className="rounded-full">
               {t === "parceiros" ? `Parceiros (${partners.length})` : "Benefícios"}
-            </button>
+            </Button>
           ))}
         </div>
         <div className="relative">
@@ -125,7 +125,7 @@ function PartnersBenefits() {
 
       {tab === "parceiros" ? (
         filteredPartners.length ? (
-          <div className="grid grid-cols-2 gap-3 md:grid-cols-3 lg:grid-cols-4">
+          <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
             {filteredPartners.map((p) => <PartnerCard key={p.id} s={p} />)}
           </div>
         ) : (
