@@ -24,6 +24,7 @@ export const Route = createFileRoute("/parceiros")({
 
 function Partners() {
   const [cat, setCat] = useState("");
+  const [open, setOpen] = useState<string | null>(null);
   const { data = [] } = useQuery({
     queryKey: ["public-sponsors"],
     queryFn: async () => (await supabase.from("sponsors").select("id,name,category,city,address,lat,lng,cover_url,description").order("name")).data ?? [],
@@ -41,13 +42,6 @@ function Partners() {
             </button>
           ))}
         </div>
-        <div className="mt-8 overflow-hidden rounded-2xl border">
-          <ClientOnly fallback={<div className="h-[420px] bg-secondary" />}>
-            <Suspense fallback={<div className="h-[420px] bg-secondary" />}>
-              <SponsorMap sponsors={list} height={420} />
-            </Suspense>
-          </ClientOnly>
-        </div>
         <div className="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
           {list.map((s) => (
             <div key={s.id} className="surface overflow-hidden">
@@ -57,7 +51,19 @@ function Partners() {
                 <h3 className="mt-1 text-lg font-semibold">{s.name}</h3>
                 <p className="mt-1 line-clamp-2 text-sm text-muted-foreground">{s.description}</p>
                 <p className="mt-3 flex items-center gap-1 text-xs text-muted-foreground"><MapPin className="h-3 w-3" />{s.city}</p>
+                {s.lat != null && s.lng != null && (
+                  <button onClick={() => setOpen(open === s.id ? null : s.id)} className="mt-3 rounded-full border px-4 py-1.5 text-sm">
+                    {open === s.id ? "Fechar mapa" : "Ver localização"}
+                  </button>
+                )}
               </div>
+              {open === s.id && (
+                <ClientOnly fallback={<div className="h-[260px] bg-secondary" />}>
+                  <Suspense fallback={<div className="h-[260px] bg-secondary" />}>
+                    <SponsorMap sponsors={[s]} height={260} />
+                  </Suspense>
+                </ClientOnly>
+              )}
             </div>
           ))}
         </div>
