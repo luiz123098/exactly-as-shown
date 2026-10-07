@@ -36,7 +36,7 @@ function Benefits() {
 
   return (
     <div>
-      <PageTitle title="Benefícios" subtitle="Descubra vantagens exclusivas para membros." />
+      <PageTitle title="Parceiros & benefícios" subtitle="Todos os parceiros do clube e suas vantagens." />
       <div className="sticky top-0 z-20 -mx-5 mb-5 space-y-3 bg-background/90 px-5 py-2 backdrop-blur md:static md:mx-0 md:bg-transparent md:px-0">
         <div className="relative">
           <Search className="absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
