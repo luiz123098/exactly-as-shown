@@ -14,7 +14,7 @@ const SponsorMap = lazy(() => import("@/components/sponsor-map"));
 
 export const Route = createFileRoute("/app/")({ component: Home });
 
-type Partner = SponsorFull & { d: number | null; benefit?: string; promo?: string };
+type Partner = SponsorFull & { d: number | null; benefit?: string | undefined; promo?: string | undefined };
 
 function Cover({ s, className = "" }: { s: SponsorFull; className?: string }) {
   return s.cover_url ? (
