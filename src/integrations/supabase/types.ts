@@ -273,9 +273,12 @@ export type Database = {
           created_at: string
           description: string
           id: string
+          image_meta: Json
+          image_source: string
           model: string
           photo_url: string | null
           user_id: string
+          version: string | null
           video_url: string | null
           year: number | null
         }
@@ -286,9 +289,12 @@ export type Database = {
           created_at?: string
           description?: string
           id?: string
+          image_meta?: Json
+          image_source?: string
           model: string
           photo_url?: string | null
           user_id: string
+          version?: string | null
           video_url?: string | null
           year?: number | null
         }
@@ -299,9 +305,12 @@ export type Database = {
           created_at?: string
           description?: string
           id?: string
+          image_meta?: Json
+          image_source?: string
           model?: string
           photo_url?: string | null
           user_id?: string
+          version?: string | null
           video_url?: string | null
           year?: number | null
         }
