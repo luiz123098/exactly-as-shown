@@ -1,32 +1,35 @@
 import { useState } from "react";
 import { createFileRoute } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
+import { distanceKm, useUserLocation } from "@/lib/geo";
 import { fetchPromotions } from "@/lib/queries";
-import { Empty, PageTitle, PromoCard } from "@/components/cards";
-import { CategoryChips } from "./app.beneficios";
+import { useFavorites } from "@/lib/use-member";
+import { CategoryChips, Empty, PageTitle, PromoCard } from "@/components/cards";
 
 export const Route = createFileRoute("/app/promocoes")({ component: Promos });
 
+const NEAR_KM = 5;
+
 function Promos() {
   const [cat, setCat] = useState("");
-  const [sort, setSort] = useState<"new" | "ending">("new");
+  const { loc } = useUserLocation();
+  const fav = useFavorites();
   const { data = [] } = useQuery({ queryKey: ["promos"], queryFn: fetchPromotions });
-  let list = data.filter((p) => !cat || p.category === cat);
-  if (sort === "ending") list = [...list].sort((a, b) => (a.ends_at ?? "9999").localeCompare(b.ends_at ?? "9999"));
+  let list = data.map((p) => ({ p, d: distanceKm(loc, p.sponsor?.lat, p.sponsor?.lng) }));
+  if (cat === "__near") list = list.filter((x) => x.d != null && x.d <= NEAR_KM).sort((a, b) => a.d! - b.d!);
+  else if (cat) list = list.filter((x) => x.p.category === cat);
   return (
     <div>
-      <PageTitle eyebrow="Por tempo limitado" title="Promoções">
-        <div className="flex rounded-full bg-secondary p-1 text-xs font-semibold">
-          {(["new", "ending"] as const).map((s) => (
-            <button key={s} onClick={() => setSort(s)} className={`rounded-full px-4 py-1.5 ${sort === s ? "bg-card shadow-soft" : "text-muted-foreground"}`}>
-              {s === "new" ? "Novidades" : "Terminando"}
-            </button>
+      <PageTitle title="Promoções" subtitle="Ofertas exclusivas disponíveis agora." />
+      <div className="mb-5">
+        <CategoryChips value={cat} onChange={setCat} extra={[{ value: "__near", label: "📍 Perto de mim" }]} />
+      </div>
+      {list.length === 0 ? <Empty text="Nenhuma promoção ativa aqui no momento." /> : (
+        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          {list.map(({ p, d }) => (
+            <PromoCard key={p.id} p={p} distance={d} saved={fav.isSaved("promotion", p.id)} onToggleSave={() => fav.toggleSaved("promotion", p.id)} />
           ))}
         </div>
-      </PageTitle>
-      <div className="mb-8"><CategoryChips value={cat} onChange={setCat} /></div>
-      {list.length === 0 ? <Empty text="Nenhuma promoção ativa nesta categoria." /> : (
-        <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">{list.map((p) => <PromoCard key={p.id} p={p} />)}</div>
       )}
     </div>
   );
