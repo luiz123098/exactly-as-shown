@@ -271,6 +271,27 @@ export type Database = {
           },
         ]
       }
+      saved_items: {
+        Row: {
+          created_at: string
+          item_id: string
+          kind: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          item_id: string
+          kind: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          item_id?: string
+          kind?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       sponsors: {
         Row: {
           address: string

@@ -18,6 +18,7 @@ import { Route as ParceirosRouteImport } from './routes/parceiros'
 import { Route as PlanosRouteImport } from './routes/planos'
 import { Route as ResetPasswordRouteImport } from './routes/reset-password'
 import { Route as AdminIndexRouteImport } from './routes/admin.index'
+import { Route as AdminAssinaturasRouteImport } from './routes/admin.assinaturas'
 import { Route as AdminNotificacoesRouteImport } from './routes/admin.notificacoes'
 import { Route as AdminParceirosRouteImport } from './routes/admin.parceiros'
 import { Route as AdminPromocoesRouteImport } from './routes/admin.promocoes'
@@ -79,6 +80,11 @@ const ResetPasswordRoute = ResetPasswordRouteImport.update({
 const AdminIndexRoute = AdminIndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminAssinaturasRoute = AdminAssinaturasRouteImport.update({
+  id: '/assinaturas',
+  path: '/assinaturas',
   getParentRoute: () => AdminRoute,
 } as any)
 const AdminNotificacoesRoute = AdminNotificacoesRouteImport.update({
@@ -176,6 +182,7 @@ export interface FileRoutesByFullPath {
   '/parceiros': typeof ParceirosRoute
   '/planos': typeof PlanosRoute
   '/reset-password': typeof ResetPasswordRoute
+  '/admin/assinaturas': typeof AdminAssinaturasRoute
   '/admin/notificacoes': typeof AdminNotificacoesRoute
   '/admin/parceiros': typeof AdminParceirosRoute
   '/admin/promocoes': typeof AdminPromocoesRoute
@@ -201,6 +208,7 @@ export interface FileRoutesByTo {
   '/parceiros': typeof ParceirosRoute
   '/planos': typeof PlanosRoute
   '/reset-password': typeof ResetPasswordRoute
+  '/admin/assinaturas': typeof AdminAssinaturasRoute
   '/admin/notificacoes': typeof AdminNotificacoesRoute
   '/admin/parceiros': typeof AdminParceirosRoute
   '/admin/promocoes': typeof AdminPromocoesRoute
@@ -230,6 +238,7 @@ export interface FileRoutesById {
   '/parceiros': typeof ParceirosRoute
   '/planos': typeof PlanosRoute
   '/reset-password': typeof ResetPasswordRoute
+  '/admin/assinaturas': typeof AdminAssinaturasRoute
   '/admin/notificacoes': typeof AdminNotificacoesRoute
   '/admin/parceiros': typeof AdminParceirosRoute
   '/admin/promocoes': typeof AdminPromocoesRoute
@@ -260,6 +269,7 @@ export interface FileRouteTypes {
     | '/parceiros'
     | '/planos'
     | '/reset-password'
+    | '/admin/assinaturas'
     | '/admin/notificacoes'
     | '/admin/parceiros'
     | '/admin/promocoes'
@@ -285,6 +295,7 @@ export interface FileRouteTypes {
     | '/parceiros'
     | '/planos'
     | '/reset-password'
+    | '/admin/assinaturas'
     | '/admin/notificacoes'
     | '/admin/parceiros'
     | '/admin/promocoes'
@@ -313,6 +324,7 @@ export interface FileRouteTypes {
     | '/parceiros'
     | '/planos'
     | '/reset-password'
+    | '/admin/assinaturas'
     | '/admin/notificacoes'
     | '/admin/parceiros'
     | '/admin/promocoes'
@@ -407,6 +419,13 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/admin/'
       preLoaderRoute: typeof AdminIndexRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/assinaturas': {
+      id: '/admin/assinaturas'
+      path: '/assinaturas'
+      fullPath: '/admin/assinaturas'
+      preLoaderRoute: typeof AdminAssinaturasRouteImport
       parentRoute: typeof AdminRoute
     }
     '/admin/notificacoes': {
@@ -532,6 +551,7 @@ declare module '@tanstack/react-router' {
 }
 
 interface AdminRouteChildren {
+  AdminAssinaturasRoute: typeof AdminAssinaturasRoute
   AdminNotificacoesRoute: typeof AdminNotificacoesRoute
   AdminParceirosRoute: typeof AdminParceirosRoute
   AdminPromocoesRoute: typeof AdminPromocoesRoute
@@ -540,6 +560,7 @@ interface AdminRouteChildren {
 }
 
 const AdminRouteChildren: AdminRouteChildren = {
+  AdminAssinaturasRoute: AdminAssinaturasRoute,
   AdminNotificacoesRoute: AdminNotificacoesRoute,
   AdminParceirosRoute: AdminParceirosRoute,
   AdminPromocoesRoute: AdminPromocoesRoute,

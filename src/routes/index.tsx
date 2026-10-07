@@ -1,9 +1,10 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { useEffect } from "react";
+import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { ArrowRight, Bell, Check, Map, ShieldCheck } from "lucide-react";
 import hero from "@/assets/hero.jpg";
 import { supabase } from "@/integrations/supabase/client";
-import { brl, type Plan } from "@/lib/auth";
+import { brl, homePath, useAuth, type Plan } from "@/lib/auth";
 import { Button } from "@/components/ui/button";
 import { PublicFooter, PublicHeader } from "@/components/brand";
 
@@ -20,6 +21,11 @@ export const Route = createFileRoute("/")({
 });
 
 function Landing() {
+  const { user, roles, loading } = useAuth();
+  const navigate = useNavigate();
+  useEffect(() => {
+    if (!loading && user) navigate({ to: homePath(roles), replace: true });
+  }, [user, roles, loading, navigate]);
   const { data: plans = [] } = useQuery({
     queryKey: ["plans"],
     queryFn: async () => (await supabase.from("plans").select("*").order("level")).data as Plan[],

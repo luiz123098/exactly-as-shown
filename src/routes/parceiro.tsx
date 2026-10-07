@@ -5,7 +5,7 @@ export const Route = createFileRoute("/parceiro")({
   ssr: false,
   head: () => ({ meta: [{ title: "Painel do parceiro — Exotic Experience" }, { name: "robots", content: "noindex" }] }),
   component: () => (
-    <AppShell require="sponsor">
+    <AppShell area="sponsor">
       <Outlet />
     </AppShell>
   ),
