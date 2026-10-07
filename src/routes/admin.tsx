@@ -5,7 +5,7 @@ export const Route = createFileRoute("/admin")({
   ssr: false,
   head: () => ({ meta: [{ title: "Administração — Exotic Experience" }, { name: "robots", content: "noindex" }] }),
   component: () => (
-    <AppShell require="admin">
+    <AppShell area="admin">
       <Outlet />
     </AppShell>
   ),
