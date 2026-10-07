@@ -166,7 +166,7 @@ export function AppShell({ children, area }: { children: ReactNode; area: Area }
               {!isMember && (
                 <button className="lg:hidden" onClick={() => setOpen(true)} aria-label="Menu"><Menu className="h-5 w-5" /></button>
               )}
-              <span className="text-sm font-bold uppercase tracking-[0.18em] lg:hidden">Exotic<span className="text-highlight">.</span></span>
+              <span className="lg:hidden"><Logo compact /></span>
               <span className="hidden truncate text-sm text-muted-foreground lg:block">
                 {auth.subscription ? <><span className="font-semibold text-primary">● Membro ativo</span> · Plano {planLabel(auth.level)}</> : AREA_LABEL[area]}
               </span>

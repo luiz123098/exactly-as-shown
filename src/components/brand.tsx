@@ -1,16 +1,14 @@
 import { Link } from "@tanstack/react-router";
 import { useAuth } from "@/lib/auth";
 import { Button } from "@/components/ui/button";
+import darkLogo from "@/assets/exotic-logo-dark.png.asset.json";
+import lightLogo from "@/assets/exotic-logo-light.png.asset.json";
 
-export function Logo({ light = false }: { light?: boolean }) {
+export function Logo({ light = false, compact = false }: { light?: boolean; compact?: boolean }) {
   return (
-    <Link to="/" className="flex items-center gap-2.5">
-      <span className="grid h-8 w-8 place-items-center rounded-full bg-primary font-display text-lg text-primary-foreground">
-        E
-      </span>
-      <span className={`text-sm font-bold tracking-[0.18em] uppercase ${light ? "text-ink-foreground" : "text-foreground"}`}>
-        Exotic<span className="text-highlight">.</span>
-      </span>
+    <Link to="/" aria-label="Exotic Experience — início" className="inline-flex shrink-0 items-center">
+      <img src={light ? lightLogo.url : darkLogo.url} alt="Exotic Experience" width={1526} height={223}
+        className={`${compact ? "w-36" : "w-44 sm:w-52"} h-auto object-contain`} />
     </Link>
   );
 }
@@ -19,7 +17,7 @@ export function PublicHeader({ light = false }: { light?: boolean }) {
   const { user } = useAuth();
   return (
     <header className={`${light ? "absolute inset-x-0 top-0 z-20" : "border-b bg-card"}`}>
-      <div className="mx-auto flex h-20 max-w-7xl items-center justify-between px-6">
+      <div className="mx-auto flex h-20 max-w-7xl items-center justify-between gap-4 px-6">
         <Logo light={light} />
         <nav className={`hidden gap-8 text-sm md:flex ${light ? "text-ink-foreground/80" : "text-muted-foreground"}`}>
           <Link to="/planos" className="hover:opacity-100">Planos</Link>

@@ -15,3 +15,4 @@
 - Promotion approval notifications are created by a DB trigger (`notify_promotion`), not app code.
 - Signed-in areas (/app, /parceiro, /admin) are `ssr:false` layouts guarded by `AppShell`.
 - Leaflet map is lazy-loaded behind `<ClientOnly>` because it touches `window` at import.
+- Official brand images are CDN pointers rendered by the shared Logo component; the favicon stays local — keeps branding consistent without storing large uploads.
