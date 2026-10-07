@@ -122,5 +122,5 @@ export const CATEGORIES = [
 export function homePath(roles: string[]) {
   if (roles.includes("admin")) return "/admin";
   if (roles.includes("sponsor")) return "/parceiro";
-  return "/app";
+  return "/app/beneficios";
 }

@@ -13,8 +13,8 @@ type Area = "member" | "sponsor" | "admin";
 
 const NAV: Record<Area, NavItem[]> = {
   member: [
+    { to: "/app/beneficios", label: "Parceiros & benefícios", icon: Gift },
     { to: "/app", label: "Home", icon: Home, exact: true },
-    { to: "/app/beneficios", label: "Benefícios", icon: Gift },
     { to: "/app/promocoes", label: "Promoções", icon: Tag },
     { to: "/app/mapa", label: "Mapa", icon: Map },
     { to: "/app/favoritos", label: "Favoritos", icon: Heart },
@@ -39,15 +39,15 @@ const NAV: Record<Area, NavItem[]> = {
 };
 
 const BOTTOM: NavItem[] = [
-  { to: "/app", label: "Home", icon: Home, exact: true },
-  { to: "/app/beneficios", label: "Benefícios", icon: Gift },
+  { to: "/app/beneficios", label: "Parceiros", icon: Gift },
   { to: "/app/mapa", label: "Mapa", icon: Map },
   { to: "/app/promocoes", label: "Promoções", icon: Tag },
+  { to: "/app", label: "Home", icon: Home, exact: true },
   { to: "/app/perfil", label: "Perfil", icon: User },
 ];
 
 const AREA_LABEL: Record<Area, string> = { member: "App do membro", sponsor: "Painel do parceiro", admin: "Administração" };
-const AREA_HOME: Record<Area, string> = { member: "/app", sponsor: "/parceiro", admin: "/admin" };
+const AREA_HOME: Record<Area, string> = { member: "/app/beneficios", sponsor: "/parceiro", admin: "/admin" };
 
 export function useUnread() {
   const { user } = useAuth();
