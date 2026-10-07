@@ -43,6 +43,13 @@
       "when": 1791407825740,
       "tag": "0005_profile_instagram",
       "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "7",
+      "when": 1791409152224,
+      "tag": "0006_garage_auto_image",
+      "breakpoints": true
     }
   ]
 }

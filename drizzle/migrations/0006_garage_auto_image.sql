@@ -1,0 +1,2 @@
+ALTER TABLE public.garage_cars ADD COLUMN IF NOT EXISTS version text, ADD COLUMN IF NOT EXISTS image_source text NOT NULL DEFAULT 'USER_UPLOAD', ADD COLUMN IF NOT EXISTS image_meta jsonb NOT NULL DEFAULT '{}'::jsonb;
+ALTER TABLE public.garage_cars ADD CONSTRAINT garage_cars_image_source_chk CHECK (image_source IN ('AUTO','USER_UPLOAD'));
