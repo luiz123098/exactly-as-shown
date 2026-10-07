@@ -29,7 +29,7 @@ function Sub() {
     if (subscription) await supabase.from("subscriptions").update({ status: "replaced" }).eq("id", subscription.id);
     const { error } = await supabase.from("subscriptions").insert({ user_id: user!.id, plan_id: plan.id });
     setBusy(false);
-    if (error) return toast.error(error.message);
+    if (error) return void toast.error(error.message);
     toast.success(`Bem-vindo ao plano ${plan.name}!`);
     refresh();
   }

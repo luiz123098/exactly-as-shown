@@ -32,11 +32,11 @@ function SponsorPromos() {
 
   async function save() {
     if (!edit) return;
-    if (!edit.title.trim() || !edit.discount_label.trim()) return toast.error("Título e desconto são obrigatórios");
+    if (!edit.title.trim() || !edit.discount_label.trim()) return void toast.error("Título e desconto são obrigatórios");
     const { id, ...rest } = edit;
     const row = { ...rest, title: rest.title.slice(0, 120), description: rest.description.slice(0, 1000), image_url: rest.image_url || sp!.cover_url, starts_at: rest.starts_at || today(), ends_at: rest.ends_at || null, sponsor_id: sp!.id };
     const { error } = id ? await supabase.from("promotions").update(row).eq("id", id) : await supabase.from("promotions").insert(row);
-    if (error) return toast.error(error.message);
+    if (error) return void toast.error(error.message);
     toast.success("Promoção enviada para aprovação");
     setEdit(null);
     refresh();

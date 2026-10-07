@@ -55,7 +55,7 @@ export function BenefitCard({
     if (!user) return;
     const c = "EX-" + Math.random().toString(36).slice(2, 8).toUpperCase();
     const { error } = await supabase.from("benefit_usages").insert({ user_id: user.id, benefit_id: b.id, code: c });
-    if (error) return toast.error("Seu plano não dá acesso a este benefício.");
+    if (error) return void toast.error("Seu plano não dá acesso a este benefício.");
     setCode(c);
   }
 

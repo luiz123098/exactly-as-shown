@@ -32,11 +32,11 @@ function SponsorBenefits() {
 
   async function save() {
     if (!edit) return;
-    if (!edit.title.trim() || !edit.discount_label.trim()) return toast.error("Título e desconto são obrigatórios");
+    if (!edit.title.trim() || !edit.discount_label.trim()) return void toast.error("Título e desconto são obrigatórios");
     const { id, ...rest } = edit;
     const row = { ...rest, title: rest.title.slice(0, 120), description: rest.description.slice(0, 1000), expires_at: rest.expires_at || null, rules: rest.rules || null, sponsor_id: sp!.id };
     const { error } = id ? await supabase.from("benefits").update(row).eq("id", id) : await supabase.from("benefits").insert(row);
-    if (error) return toast.error(error.message);
+    if (error) return void toast.error(error.message);
     toast.success("Benefício salvo");
     setEdit(null);
     refresh();

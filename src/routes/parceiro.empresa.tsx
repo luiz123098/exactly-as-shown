@@ -28,14 +28,14 @@ function Company() {
   async function locate() {
     const q = encodeURIComponent(`${f.address}, ${f.city}, Goiás, Brasil`);
     const r = await fetch(`https://nominatim.openstreetmap.org/search?format=json&limit=1&q=${q}`).then((r) => r.json()).catch(() => []);
-    if (!r[0]) return toast.error("Endereço não encontrado. Preencha latitude/longitude manualmente.");
+    if (!r[0]) return void toast.error("Endereço não encontrado. Preencha latitude/longitude manualmente.");
     setF({ ...f, lat: r[0].lat, lng: r[0].lon });
     toast.success("Localização encontrada");
   }
 
   async function save(e: React.FormEvent) {
     e.preventDefault();
-    if (f.name.trim().length < 2) return toast.error("Informe o nome da empresa");
+    if (f.name.trim().length < 2) return void toast.error("Informe o nome da empresa");
     const row = {
       ...f,
       name: f.name.trim().slice(0, 120),
@@ -47,7 +47,7 @@ function Company() {
     const { error } = sp
       ? await supabase.from("sponsors").update(row).eq("id", sp.id)
       : await supabase.from("sponsors").insert({ ...row, owner_id: user!.id });
-    if (error) return toast.error(error.message);
+    if (error) return void toast.error(error.message);
     toast.success(sp ? "Dados atualizados" : "Empresa enviada para análise");
     qc.invalidateQueries({ queryKey: ["my-sponsor"] });
   }

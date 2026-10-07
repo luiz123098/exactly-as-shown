@@ -92,7 +92,7 @@ export function AppShell({ children, require }: { children: ReactNode; require?:
               <Link
                 key={i.to}
                 to={i.to}
-                activeOptions={{ exact: i.exact }}
+                activeOptions={{ exact: !!i.exact }}
                 onClick={() => setOpen(false)}
                 className="flex items-center gap-3 rounded-lg px-3 py-2 text-sm text-sidebar-foreground transition hover:bg-sidebar-accent"
                 activeProps={{ className: "bg-sidebar-accent !text-sidebar-accent-foreground" }}

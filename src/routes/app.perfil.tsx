@@ -18,9 +18,9 @@ function Profile() {
   }, [profile]);
   async function save(e: React.FormEvent) {
     e.preventDefault();
-    if (f.full_name.trim().length < 2) return toast.error("Informe seu nome");
+    if (f.full_name.trim().length < 2) return void toast.error("Informe seu nome");
     const { error } = await supabase.from("profiles").update({ full_name: f.full_name.trim().slice(0, 100), phone: f.phone.slice(0, 30), city: f.city.slice(0, 80) }).eq("id", user!.id);
-    if (error) return toast.error(error.message);
+    if (error) return void toast.error(error.message);
     toast.success("Perfil atualizado");
     refresh();
   }

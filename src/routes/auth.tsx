@@ -54,7 +54,7 @@ function AuthPage() {
     try {
       if (mode === "signup") {
         const parsed = signupSchema.safeParse(f);
-        if (!parsed.success) return toast.error(parsed.error.issues[0].message);
+        if (!parsed.success) return void toast.error(parsed.error.issues[0]?.message ?? "Dados inválidos");
         const { error } = await supabase.auth.signUp({
           email: f.email,
           password: f.password,
@@ -63,15 +63,15 @@ function AuthPage() {
             data: { full_name: f.full_name, phone: f.phone, city: f.city, account_type: accountType },
           },
         });
-        if (error) return toast.error(error.message);
+        if (error) return void toast.error(error.message);
         setSent(true);
       } else if (mode === "forgot") {
         const { error } = await supabase.auth.resetPasswordForEmail(f.email, { redirectTo: window.location.origin + "/reset-password" });
-        if (error) return toast.error(error.message);
+        if (error) return void toast.error(error.message);
         toast.success("Enviamos um link de recuperação para seu e-mail.");
       } else {
         const { error } = await supabase.auth.signInWithPassword({ email: f.email, password: f.password });
-        if (error) return toast.error("E-mail ou senha incorretos.");
+        if (error) return void toast.error("E-mail ou senha incorretos.");
       }
     } finally {
       setBusy(false);

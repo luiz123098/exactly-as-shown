@@ -31,7 +31,7 @@ function AdminUsers() {
   });
   async function toggle(uid: string, role: (typeof ROLES)[number], has: boolean) {
     const { error } = await supabase.rpc("admin_set_role", { _user: uid, _role: role, _grant: !has });
-    if (error) return toast.error(error.message);
+    if (error) return void toast.error(error.message);
     qc.invalidateQueries({ queryKey: ["admin-users"] });
   }
   const list = data.filter((u) => !q || u.full_name.toLowerCase().includes(q.toLowerCase()) || (u.city ?? "").toLowerCase().includes(q.toLowerCase()));

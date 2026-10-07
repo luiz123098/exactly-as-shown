@@ -15,11 +15,11 @@ function Broadcast() {
   const [busy, setBusy] = useState(false);
   async function send(e: React.FormEvent) {
     e.preventDefault();
-    if (!f.title.trim()) return toast.error("Informe um título");
+    if (!f.title.trim()) return void toast.error("Informe um título");
     setBusy(true);
     const { data, error } = await supabase.rpc("broadcast_notification", { _title: f.title.slice(0, 120), _body: f.body.slice(0, 500), _target: f.target });
     setBusy(false);
-    if (error) return toast.error(error.message);
+    if (error) return void toast.error(error.message);
     toast.success(`Aviso enviado para ${data} usuário(s)`);
     setF({ ...f, title: "", body: "" });
   }
