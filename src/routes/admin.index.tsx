@@ -5,7 +5,9 @@ import { brl } from "@/lib/auth";
 import { PageTitle } from "@/components/cards";
 import { Stat } from "./parceiro.index";
 
-export const Route = createFileRoute("/admin/")({ component: AdminHome });
+export const Route = createFileRoute("/admin/")({
+  head: () => ({ meta: [{"title": "Visão geral administrativa — Exotic Experience"}, {"name": "description", "content": "Acompanhe membros, parceiros e operações do clube."}, {"property": "og:title", "content": "Visão geral administrativa — Exotic Experience"}, {"property": "og:description", "content": "Acompanhe membros, parceiros e operações do clube."}, {"property": "og:type", "content": "website"}, {"name": "twitter:card", "content": "summary_large_image"}] }),
+  component: AdminHome });
 
 function AdminHome() {
   const { data } = useQuery({

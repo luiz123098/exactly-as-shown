@@ -11,6 +11,8 @@ import { PublicFooter, PublicHeader } from "@/components/brand";
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
       { title: "Exotic Experience — O clube de benefícios mais exclusivo de Goiás" },
       { name: "description", content: "Torne-se membro e acesse benefícios e promoções exclusivas em restaurantes, academias, viagens e muito mais em Goiás." },
       { property: "og:title", content: "Exotic Experience — Clube de membros" },

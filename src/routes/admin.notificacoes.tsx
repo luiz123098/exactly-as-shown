@@ -8,7 +8,9 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { L } from "./parceiro.beneficios";
 
-export const Route = createFileRoute("/admin/notificacoes")({ component: Broadcast });
+export const Route = createFileRoute("/admin/notificacoes")({
+  head: () => ({ meta: [{"title": "Envio de notificações — Exotic Experience"}, {"name": "description", "content": "Gerencie os comunicados enviados aos membros do clube."}, {"property": "og:title", "content": "Envio de notificações — Exotic Experience"}, {"property": "og:description", "content": "Gerencie os comunicados enviados aos membros do clube."}, {"property": "og:type", "content": "website"}, {"name": "twitter:card", "content": "summary_large_image"}] }),
+  component: Broadcast });
 
 function Broadcast() {
   const [f, setF] = useState({ title: "", body: "", target: "members" });

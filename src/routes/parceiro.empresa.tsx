@@ -11,7 +11,9 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 
-export const Route = createFileRoute("/parceiro/empresa")({ component: Company });
+export const Route = createFileRoute("/parceiro/empresa")({
+  head: () => ({ meta: [{"title": "Minha empresa — Exotic Experience"}, {"name": "description", "content": "Atualize as informações da sua empresa no clube."}, {"property": "og:title", "content": "Minha empresa — Exotic Experience"}, {"property": "og:description", "content": "Atualize as informações da sua empresa no clube."}, {"property": "og:type", "content": "website"}, {"name": "twitter:card", "content": "summary_large_image"}] }),
+  component: Company });
 
 const empty = { name: "", description: "", category: "Restaurantes", address: "", city: "Goiânia", lat: "", lng: "", phone: "", whatsapp: "", website: "", instagram: "", hours: "", cover_url: "" };
 

@@ -8,7 +8,9 @@ import { StatusPill } from "@/lib/sponsor";
 import { PageTitle } from "@/components/cards";
 import { Button } from "@/components/ui/button";
 
-export const Route = createFileRoute("/admin/promocoes")({ component: AdminPromos });
+export const Route = createFileRoute("/admin/promocoes")({
+  head: () => ({ meta: [{"title": "Moderação de promoções — Exotic Experience"}, {"name": "description", "content": "Revise as promoções dos parceiros do clube."}, {"property": "og:title", "content": "Moderação de promoções — Exotic Experience"}, {"property": "og:description", "content": "Revise as promoções dos parceiros do clube."}, {"property": "og:type", "content": "website"}, {"name": "twitter:card", "content": "summary_large_image"}] }),
+  component: AdminPromos });
 
 function AdminPromos() {
   const qc = useQueryClient();

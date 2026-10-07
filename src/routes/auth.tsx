@@ -20,6 +20,8 @@ export const Route = createFileRoute("/auth")({
   validateSearch: search,
   head: () => ({
     meta: [
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
       { title: "Entrar — Exotic Experience" },
       { name: "description", content: "Acesse sua conta de membro ou parceiro da Exotic Experience." },
       { property: "og:title", content: "Entrar — Exotic Experience" },

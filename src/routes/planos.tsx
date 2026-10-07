@@ -8,6 +8,8 @@ import { PlanCard } from "./index";
 export const Route = createFileRoute("/planos")({
   head: () => ({
     meta: [
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
       { title: "Planos — Exotic Experience" },
       { name: "description", content: "Conheça os planos Essencial e Premium do clube Exotic Experience." },
       { property: "og:title", content: "Planos — Exotic Experience" },

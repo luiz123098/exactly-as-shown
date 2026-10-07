@@ -10,7 +10,9 @@ import { Button } from "@/components/ui/button";
 
 const SponsorMap = lazy(() => import("@/components/sponsor-map"));
 
-export const Route = createFileRoute("/app/mapa")({ component: MapPage });
+export const Route = createFileRoute("/app/mapa")({
+  head: () => ({ meta: [{"title": "Mapa de parceiros — Exotic Experience"}, {"name": "description", "content": "Encontre parceiros da Exotic Experience em Goiânia e Goiás."}, {"property": "og:title", "content": "Mapa de parceiros — Exotic Experience"}, {"property": "og:description", "content": "Encontre parceiros da Exotic Experience em Goiânia e Goiás."}, {"property": "og:type", "content": "website"}, {"name": "twitter:card", "content": "summary_large_image"}] }),
+  component: MapPage });
 
 function MapPage() {
   const [cat, setCat] = useState("");

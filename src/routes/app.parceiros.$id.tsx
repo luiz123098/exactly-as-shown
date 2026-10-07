@@ -10,7 +10,9 @@ import { useFavorites } from "@/lib/use-member";
 
 const SponsorMap = lazy(() => import("@/components/sponsor-map"));
 
-export const Route = createFileRoute("/app/parceiros/$id")({ component: SponsorPage });
+export const Route = createFileRoute("/app/parceiros/$id")({
+  head: () => ({ meta: [{"title": "Detalhes do parceiro — Exotic Experience"}, {"name": "description", "content": "Confira fotos, benefícios e promoções deste parceiro do clube."}, {"property": "og:title", "content": "Detalhes do parceiro — Exotic Experience"}, {"property": "og:description", "content": "Confira fotos, benefícios e promoções deste parceiro do clube."}, {"property": "og:type", "content": "website"}, {"name": "twitter:card", "content": "summary_large_image"}] }),
+  component: SponsorPage });
 
 function SponsorPage() {
   const { id } = Route.useParams();

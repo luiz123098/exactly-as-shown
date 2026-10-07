@@ -6,7 +6,9 @@ import { fetchBenefits, fetchPromotions, fetchSponsors } from "@/lib/queries";
 import { useFavorites } from "@/lib/use-member";
 import { BenefitCard, Empty, HeartButton, PageTitle, PromoCard, SponsorRow } from "@/components/cards";
 
-export const Route = createFileRoute("/app/favoritos")({ component: Favs });
+export const Route = createFileRoute("/app/favoritos")({
+  head: () => ({ meta: [{"title": "Meus favoritos — Exotic Experience"}, {"name": "description", "content": "Consulte seus parceiros, benefícios e promoções salvos."}, {"property": "og:title", "content": "Meus favoritos — Exotic Experience"}, {"property": "og:description", "content": "Consulte seus parceiros, benefícios e promoções salvos."}, {"property": "og:type", "content": "website"}, {"name": "twitter:card", "content": "summary_large_image"}] }),
+  component: Favs });
 
 type Tab = "benefits" | "sponsors" | "promos";
 

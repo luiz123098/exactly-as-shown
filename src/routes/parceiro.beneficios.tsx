@@ -14,7 +14,9 @@ import { Textarea } from "@/components/ui/textarea";
 import { Switch } from "@/components/ui/switch";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 
-export const Route = createFileRoute("/parceiro/beneficios")({ component: SponsorBenefits });
+export const Route = createFileRoute("/parceiro/beneficios")({
+  head: () => ({ meta: [{"title": "Benefícios da empresa — Exotic Experience"}, {"name": "description", "content": "Gerencie os benefícios da sua empresa para os membros."}, {"property": "og:title", "content": "Benefícios da empresa — Exotic Experience"}, {"property": "og:description", "content": "Gerencie os benefícios da sua empresa para os membros."}, {"property": "og:type", "content": "website"}, {"name": "twitter:card", "content": "summary_large_image"}] }),
+  component: SponsorBenefits });
 
 const blank = { id: "", title: "", description: "", discount_label: "", rules: "", category: "Outros", min_plan_level: 1, active: true, expires_at: "" };
 
