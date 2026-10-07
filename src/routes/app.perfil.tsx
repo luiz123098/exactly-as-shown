@@ -20,19 +20,29 @@ function Profile() {
   const qc = useQueryClient();
   const navigate = useNavigate();
   const [edit, setEdit] = useState(false);
-  const [f, setF] = useState({ full_name: "", phone: "", city: "" });
+  const [f, setF] = useState({ full_name: "", phone: "", city: "", instagram: "" });
+  const [saving, setSaving] = useState(false);
   const { data: joined } = useQuery({
-    queryKey: ["joined", user!.id],
-    queryFn: async () => (await supabase.from("profiles").select("created_at").eq("id", user!.id).maybeSingle()).data?.created_at,
+    queryKey: ["joined", user?.id],
+    enabled: Boolean(user),
+    queryFn: async () => {
+      if (!user) return null;
+      return (await supabase.from("profiles").select("created_at").eq("id", user.id).maybeSingle()).data?.created_at;
+    },
   });
   useEffect(() => {
-    if (profile) setF({ full_name: profile.full_name, phone: profile.phone ?? "", city: profile.city ?? "" });
+    if (profile) setF({ full_name: profile.full_name, phone: profile.phone ?? "", city: profile.city ?? "", instagram: profile.instagram ?? "" });
   }, [profile]);
 
   async function save(e: React.FormEvent) {
     e.preventDefault();
+    if (!user || saving) return;
     if (f.full_name.trim().length < 2) return void toast.error("Informe seu nome");
-    const { error } = await supabase.from("profiles").update({ full_name: f.full_name.trim().slice(0, 100), phone: f.phone.slice(0, 30), city: f.city.slice(0, 80) }).eq("id", user!.id);
+    const instagram = f.instagram.trim().replace(/^https?:\/\/(?:www\.)?instagram\.com\//i, "").replace(/^@/, "").replace(/\/$/, "");
+    if (instagram && !/^[A-Za-z0-9._]{1,30}$/.test(instagram)) return void toast.error("Informe um usuário válido do Instagram");
+    setSaving(true);
+    const { error } = await supabase.from("profiles").update({ full_name: f.full_name.trim().slice(0, 100), phone: f.phone.slice(0, 30), city: f.city.slice(0, 80), instagram: instagram || null }).eq("id", user.id);
+    setSaving(false);
     if (error) return void toast.error(error.message);
     toast.success("Perfil atualizado");
     setEdit(false);
@@ -49,6 +59,7 @@ function Profile() {
     ["E-mail", user?.email ?? "—"],
     ["Telefone", profile?.phone || "—"],
     ["Cidade", profile?.city || "—"],
+    ["Instagram", profile?.instagram ? `@${profile.instagram}` : "—"],
     ["Membro desde", joined ? new Date(joined).toLocaleDateString("pt-BR", { month: "long", year: "numeric" }) : "—"],
     ["Status", subscription ? "Ativa" : "Sem assinatura"],
     ["Plano atual", subscription ? planLabel(level) : "—"],
@@ -70,7 +81,9 @@ function Profile() {
         {rows.map(([k, v]) => (
           <div key={k} className="flex items-center justify-between gap-4 py-3.5 text-sm">
             <span className="text-muted-foreground">{k}</span>
-            <span className="truncate font-semibold">{v}</span>
+            {k === "Instagram" && profile?.instagram ? (
+              <a className="min-w-0 truncate font-semibold text-primary underline underline-offset-4" href={`https://www.instagram.com/${profile.instagram}/`} target="_blank" rel="noopener noreferrer">{v}</a>
+            ) : <span className="truncate font-semibold">{v}</span>}
           </div>
         ))}
       </div>
@@ -84,8 +97,9 @@ function Profile() {
             const on = (profile?.interests ?? []).includes(c);
             return (
               <button key={c} onClick={async () => {
+                if (!user) return;
                 const cur = profile?.interests ?? [];
-                await supabase.from("profiles").update({ interests: on ? cur.filter((x) => x !== c) : [...cur, c] }).eq("id", user!.id);
+                await supabase.from("profiles").update({ interests: on ? cur.filter((x) => x !== c) : [...cur, c] }).eq("id", user.id);
                 refresh();
               }} className={`rounded-full border px-3 py-1.5 text-xs font-bold transition ${on ? "border-ink bg-ink text-highlight" : "bg-card"}`}>{c}</button>
             );
@@ -111,7 +125,8 @@ function Profile() {
             <div className="space-y-1.5"><Label>Nome</Label><Input value={f.full_name} onChange={(e) => setF({ ...f, full_name: e.target.value })} /></div>
             <div className="space-y-1.5"><Label>Telefone</Label><Input value={f.phone} onChange={(e) => setF({ ...f, phone: e.target.value })} /></div>
             <div className="space-y-1.5"><Label>Cidade</Label><Input value={f.city} onChange={(e) => setF({ ...f, city: e.target.value })} /></div>
-            <Button size="lg" className="w-full">Salvar</Button>
+            <div className="space-y-1.5"><Label htmlFor="profile-instagram">Instagram</Label><Input id="profile-instagram" value={f.instagram} onChange={(e) => setF({ ...f, instagram: e.target.value })} placeholder="@seuusuario" autoCapitalize="none" autoCorrect="off" spellCheck={false} /></div>
+            <Button size="lg" className="w-full" disabled={saving}>{saving ? "Salvando…" : "Salvar"}</Button>
           </form>
         </DrawerContent>
       </Drawer>

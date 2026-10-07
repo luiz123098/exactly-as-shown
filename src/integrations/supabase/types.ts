@@ -499,6 +499,7 @@ export type Database = {
           full_name: string
           garage_public: boolean
           id: string
+          instagram: string | null
           interests: string[]
           member_code: string | null
           phone: string | null
@@ -510,6 +511,7 @@ export type Database = {
           full_name?: string
           garage_public?: boolean
           id: string
+          instagram?: string | null
           interests?: string[]
           member_code?: string | null
           phone?: string | null
@@ -521,6 +523,7 @@ export type Database = {
           full_name?: string
           garage_public?: boolean
           id?: string
+          instagram?: string | null
           interests?: string[]
           member_code?: string | null
           phone?: string | null

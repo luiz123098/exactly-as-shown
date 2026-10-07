@@ -19,7 +19,7 @@ export type Subscription = {
   renews_at: string;
   plan: Plan;
 };
-type Profile = { id: string; full_name: string; phone: string | null; city: string | null; avatar_url: string | null; interests: string[]; member_code: string | null; created_at: string; garage_public: boolean };
+type Profile = { id: string; full_name: string; phone: string | null; city: string | null; instagram: string | null; avatar_url: string | null; interests: string[]; member_code: string | null; created_at: string; garage_public: boolean };
 
 type AuthCtx = {
   user: User | null;
@@ -53,7 +53,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     }
     const [r, p, s] = await Promise.all([
       supabase.from("user_roles").select("role").eq("user_id", u.id),
-      supabase.from("profiles").select("id, full_name, phone, city, avatar_url, interests, member_code, created_at, garage_public").eq("id", u.id).maybeSingle(),
+      supabase.from("profiles").select("id, full_name, phone, city, instagram, avatar_url, interests, member_code, created_at, garage_public").eq("id", u.id).maybeSingle(),
       supabase
         .from("subscriptions")
         .select("id, status, started_at, renews_at, plan:plans(*)")

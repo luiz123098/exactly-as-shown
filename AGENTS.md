@@ -10,6 +10,7 @@
 <!-- LOVABLE:END -->
 
 ## Architecture rules
+- Store member Instagram as a nullable, validated username in profiles and render only a fixed Instagram-origin link — prevents arbitrary external profile URLs.
 - Data access uses the browser Supabase client with RLS; roles live in `user_roles` checked via `has_role()` — keeps privileges server-enforced.
 - Moderation (status/featured) is enforced by the `guard_moderation` DB trigger, so only admins can approve sponsors/promotions.
 - Promotion approval notifications are created by a DB trigger (`notify_promotion`), not app code.
