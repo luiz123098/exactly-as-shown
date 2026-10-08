@@ -57,6 +57,13 @@
       "when": 1791478113117,
       "tag": "0007_news_magazine",
       "breakpoints": true
+    },
+    {
+      "idx": 8,
+      "version": "7",
+      "when": 1791478357847,
+      "tag": "0008_enable_cron",
+      "breakpoints": true
     }
   ]
 }
