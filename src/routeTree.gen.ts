@@ -38,6 +38,7 @@ import { Route as AppPerfilRouteImport } from './routes/app.perfil'
 import { Route as AppPromocoesRouteImport } from './routes/app.promocoes'
 import { Route as ParceiroIndexRouteImport } from './routes/parceiro.index'
 import { Route as ParceiroBeneficiosRouteImport } from './routes/parceiro.beneficios'
+import { Route as ParceiroConteudoRouteImport } from './routes/parceiro.conteudo'
 import { Route as ParceiroEmpresaRouteImport } from './routes/parceiro.empresa'
 import { Route as ParceiroPromocoesRouteImport } from './routes/parceiro.promocoes'
 import { Route as ParceiroValidarRouteImport } from './routes/parceiro.validar'
@@ -193,6 +194,11 @@ const ParceiroBeneficiosRoute = ParceiroBeneficiosRouteImport.update({
   path: '/beneficios',
   getParentRoute: () => ParceiroRoute,
 } as any)
+const ParceiroConteudoRoute = ParceiroConteudoRouteImport.update({
+  id: '/conteudo',
+  path: '/conteudo',
+  getParentRoute: () => ParceiroRoute,
+} as any)
 const ParceiroEmpresaRoute = ParceiroEmpresaRouteImport.update({
   id: '/empresa',
   path: '/empresa',
@@ -266,6 +272,7 @@ export interface FileRoutesByFullPath {
   '/app/perfil': typeof AppPerfilRoute
   '/app/promocoes': typeof AppPromocoesRoute
   '/parceiro/beneficios': typeof ParceiroBeneficiosRoute
+  '/parceiro/conteudo': typeof ParceiroConteudoRoute
   '/parceiro/empresa': typeof ParceiroEmpresaRoute
   '/parceiro/promocoes': typeof ParceiroPromocoesRoute
   '/parceiro/validar': typeof ParceiroValidarRoute
@@ -303,6 +310,7 @@ export interface FileRoutesByTo {
   '/app/perfil': typeof AppPerfilRoute
   '/app/promocoes': typeof AppPromocoesRoute
   '/parceiro/beneficios': typeof ParceiroBeneficiosRoute
+  '/parceiro/conteudo': typeof ParceiroConteudoRoute
   '/parceiro/empresa': typeof ParceiroEmpresaRoute
   '/parceiro/promocoes': typeof ParceiroPromocoesRoute
   '/parceiro/validar': typeof ParceiroValidarRoute
@@ -344,6 +352,7 @@ export interface FileRoutesById {
   '/app/perfil': typeof AppPerfilRoute
   '/app/promocoes': typeof AppPromocoesRoute
   '/parceiro/beneficios': typeof ParceiroBeneficiosRoute
+  '/parceiro/conteudo': typeof ParceiroConteudoRoute
   '/parceiro/empresa': typeof ParceiroEmpresaRoute
   '/parceiro/promocoes': typeof ParceiroPromocoesRoute
   '/parceiro/validar': typeof ParceiroValidarRoute
@@ -386,6 +395,7 @@ export interface FileRouteTypes {
     | '/app/perfil'
     | '/app/promocoes'
     | '/parceiro/beneficios'
+    | '/parceiro/conteudo'
     | '/parceiro/empresa'
     | '/parceiro/promocoes'
     | '/parceiro/validar'
@@ -423,6 +433,7 @@ export interface FileRouteTypes {
     | '/app/perfil'
     | '/app/promocoes'
     | '/parceiro/beneficios'
+    | '/parceiro/conteudo'
     | '/parceiro/empresa'
     | '/parceiro/promocoes'
     | '/parceiro/validar'
@@ -463,6 +474,7 @@ export interface FileRouteTypes {
     | '/app/perfil'
     | '/app/promocoes'
     | '/parceiro/beneficios'
+    | '/parceiro/conteudo'
     | '/parceiro/empresa'
     | '/parceiro/promocoes'
     | '/parceiro/validar'
@@ -694,6 +706,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ParceiroBeneficiosRouteImport
       parentRoute: typeof ParceiroRoute
     }
+    '/parceiro/conteudo': {
+      id: '/parceiro/conteudo'
+      path: '/conteudo'
+      fullPath: '/parceiro/conteudo'
+      preLoaderRoute: typeof ParceiroConteudoRouteImport
+      parentRoute: typeof ParceiroRoute
+    }
     '/parceiro/empresa': {
       id: '/parceiro/empresa'
       path: '/empresa'
@@ -826,6 +845,7 @@ const AppRouteWithChildren = AppRoute._addFileChildren(AppRouteChildren)
 
 interface ParceiroRouteChildren {
   ParceiroBeneficiosRoute: typeof ParceiroBeneficiosRoute
+  ParceiroConteudoRoute: typeof ParceiroConteudoRoute
   ParceiroEmpresaRoute: typeof ParceiroEmpresaRoute
   ParceiroPromocoesRoute: typeof ParceiroPromocoesRoute
   ParceiroValidarRoute: typeof ParceiroValidarRoute
@@ -834,6 +854,7 @@ interface ParceiroRouteChildren {
 
 const ParceiroRouteChildren: ParceiroRouteChildren = {
   ParceiroBeneficiosRoute: ParceiroBeneficiosRoute,
+  ParceiroConteudoRoute: ParceiroConteudoRoute,
   ParceiroEmpresaRoute: ParceiroEmpresaRoute,
   ParceiroPromocoesRoute: ParceiroPromocoesRoute,
   ParceiroValidarRoute: ParceiroValidarRoute,
