@@ -8,6 +8,8 @@ export type ClubEvent = {
 export type Article = {
   id: string; title: string; category: string; excerpt: string; body: string;
   cover_url: string | null; video_url: string | null; featured: boolean; published: boolean; created_at: string;
+  status: string; origin: string; sponsor_id: string | null; source_name: string | null; source_url: string | null;
+  external_url: string | null; tags: string[]; publish_at: string | null; cta_kind: string | null; cta_id: string | null;
 };
 export type HomeConfig = {
   sections: string[]; hero_title: string; hero_subtitle: string; hero_image: string | null;
@@ -23,7 +25,15 @@ export const HOME_SECTIONS: Record<string, string> = {
   events: "Experiências EXOTIC",
   content: "Conteúdo EXOTIC",
 };
-export const ARTICLE_CATEGORIES = ["Lifestyle", "Business", "Automotive", "Travel", "Gastronomia", "Experiences"];
+export const ARTICLE_CATEGORIES = ["Automotivo", "Lazer", "Business", "Lifestyle", "Experiências", "Tecnologia", "Viagens", "Eventos"];
+export const PARTNER_NICHES = ["Automotivo", "Lazer", "Business", "Lifestyle", "Gastronomia", "Viagens", "Tecnologia", "Serviços", "Eventos", "Outros"];
+export const ARTICLE_STATUS: Record<string, string> = { draft: "Rascunho", pending: "Enviado para aprovação", approved: "Aprovado", published: "Publicado", rejected: "Rejeitado" };
+export const timeAgo = (d: string) => {
+  const m = Math.max(1, Math.round((Date.now() - new Date(d).getTime()) / 60000));
+  if (m < 60) return `Há ${m} min`;
+  const h = Math.round(m / 60); if (h < 24) return `Há ${h} h`;
+  const days = Math.round(h / 24); return days < 7 ? `Há ${days} d` : new Date(d).toLocaleDateString("pt-BR");
+};
 export const EVENT_KINDS = ["Encontro", "Festa", "Jantar", "Experiência", "Viagem", "Track day", "Lançamento", "Networking"];
 
 export async function fetchEvents(): Promise<ClubEvent[]> {
@@ -31,7 +41,7 @@ export async function fetchEvents(): Promise<ClubEvent[]> {
   return (data ?? []) as ClubEvent[];
 }
 export async function fetchArticles(): Promise<Article[]> {
-  const { data } = await supabase.from("articles").select("*").order("featured", { ascending: false }).order("created_at", { ascending: false });
+  const { data } = await supabase.from("articles").select("*").eq("published", true).order("created_at", { ascending: false }).limit(200);
   return (data ?? []) as Article[];
 }
 export async function fetchHomeConfig(): Promise<HomeConfig | null> {

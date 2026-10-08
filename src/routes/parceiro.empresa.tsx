@@ -4,6 +4,7 @@ import { useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { CATEGORIES, useAuth } from "@/lib/auth";
+import { PARTNER_NICHES } from "@/lib/club";
 import { useMySponsor } from "@/lib/sponsor";
 import { PageTitle } from "@/components/cards";
 import { Button } from "@/components/ui/button";
@@ -15,7 +16,7 @@ export const Route = createFileRoute("/parceiro/empresa")({
   head: () => ({ meta: [{"title": "Minha empresa — Exotic Experience"}, {"name": "description", "content": "Atualize as informações da sua empresa no clube."}, {"property": "og:title", "content": "Minha empresa — Exotic Experience"}, {"property": "og:description", "content": "Atualize as informações da sua empresa no clube."}, {"property": "og:type", "content": "website"}, {"name": "twitter:card", "content": "summary_large_image"}] }),
   component: Company });
 
-const empty = { name: "", description: "", category: "Restaurantes", address: "", city: "Goiânia", lat: "", lng: "", phone: "", whatsapp: "", website: "", instagram: "", hours: "", cover_url: "" };
+const empty = { name: "", description: "", category: "Restaurantes", niche: "Lifestyle", address: "", city: "Goiânia", lat: "", lng: "", phone: "", whatsapp: "", website: "", instagram: "", hours: "", cover_url: "" };
 
 function Company() {
   const { user } = useAuth();
@@ -63,6 +64,11 @@ function Company() {
         <F label="Categoria">
           <select value={f.category} onChange={set("category")} className="h-10 w-full rounded-md border bg-card px-3 text-sm">
             {CATEGORIES.map((c) => <option key={c}>{c}</option>)}
+          </select>
+        </F>
+        <F label="Nicho na revista EXOTIC">
+          <select value={f.niche} onChange={set("niche")} className="h-10 w-full rounded-md border bg-card px-3 text-sm">
+            {PARTNER_NICHES.map((c) => <option key={c}>{c}</option>)}
           </select>
         </F>
         <F label="Horário"><Input value={f.hours} onChange={set("hours")} placeholder="Seg–Sex 9h–18h" /></F>

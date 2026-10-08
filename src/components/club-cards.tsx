@@ -1,6 +1,6 @@
 import { Link } from "@tanstack/react-router";
 import { Calendar, MessageCircle } from "lucide-react";
-import { eventWhatsappUrl, fmtDate, fmtTime, type Article, type ClubEvent } from "@/lib/club";
+import { eventWhatsappUrl, timeAgo, fmtDate, fmtTime, type Article, type ClubEvent } from "@/lib/club";
 
 export function EventInfoButton({ title, className = "" }: { title: string; className?: string }) {
   return (
@@ -28,6 +28,11 @@ export function EventCard({ e, wide }: { e: ClubEvent; wide?: boolean }) {
   );
 }
 
+export function OriginBadge({ a }: { a: Article }) {
+  if (a.origin === "partner") return <span className="rounded-full bg-highlight px-2 py-0.5 text-[0.55rem] font-extrabold uppercase tracking-wider text-ink">Conteúdo do parceiro</span>;
+  return null;
+}
+
 export function ArticleCard({ a, row }: { a: Article; row?: boolean }) {
   if (row)
     return (
@@ -35,10 +40,11 @@ export function ArticleCard({ a, row }: { a: Article; row?: boolean }) {
         <div className="h-20 w-24 shrink-0 overflow-hidden rounded-xl bg-ink">
           {a.cover_url && <img src={a.cover_url} alt="" loading="lazy" className="h-full w-full object-cover" />}
         </div>
-        <div className="min-w-0">
-          <p className="eyebrow text-[0.6rem] text-highlight">{a.category}</p>
+        <div className="min-w-0 flex-1">
+          <div className="flex flex-wrap items-center gap-1.5"><p className="eyebrow text-[0.6rem] text-highlight">{a.category}</p><OriginBadge a={a} /></div>
           <p className="line-clamp-2 font-bold leading-snug">{a.title}</p>
           <p className="line-clamp-1 text-xs text-muted-foreground">{a.excerpt}</p>
+          <p className="mt-0.5 text-[0.65rem] text-muted-foreground">{timeAgo(a.created_at)}{a.source_name ? ` · ${a.source_name}` : a.origin === "partner" ? " · Parceiro EXOTIC" : " · EXOTIC"}</p>
         </div>
       </Link>
     );
@@ -48,8 +54,9 @@ export function ArticleCard({ a, row }: { a: Article; row?: boolean }) {
         {a.cover_url && <img src={a.cover_url} alt="" loading="lazy" className="h-full w-full object-cover transition duration-700 group-hover:scale-105" />}
       </div>
       <div className="p-4">
-        <p className="eyebrow text-[0.6rem] text-highlight">{a.category}</p>
+        <div className="flex flex-wrap items-center gap-1.5"><p className="eyebrow text-[0.6rem] text-highlight">{a.category}</p><OriginBadge a={a} /></div>
         <p className="mt-1 line-clamp-2 font-bold leading-snug">{a.title}</p>
+        <p className="mt-1 text-[0.65rem] text-muted-foreground">{timeAgo(a.created_at)}{a.source_name ? ` · ${a.source_name}` : ""}</p>
       </div>
     </Link>
   );

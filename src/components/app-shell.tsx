@@ -18,7 +18,7 @@ const NAV: Record<Area, NavItem[]> = {
     { to: "/app/promocoes", label: "Ofertas", icon: Tag },
     { to: "/app/eventos", label: "Experiências", icon: CalendarDays },
     { to: "/app/garagem", label: "Garagem", icon: Car },
-    { to: "/app/conteudo", label: "Conteúdo", icon: Newspaper },
+    { to: "/app/conteudo", label: "Notícias", icon: Newspaper },
     { to: "/app/carteirinha", label: "Carteirinha", icon: IdCard },
     { to: "/app/economia", label: "Minha economia", icon: PiggyBank },
     { to: "/app/favoritos", label: "Favoritos", icon: Heart },
@@ -32,6 +32,7 @@ const NAV: Record<Area, NavItem[]> = {
     { to: "/parceiro/validar", label: "Validar benefício", icon: ScanLine },
     { to: "/parceiro/beneficios", label: "Benefícios", icon: Gift },
     { to: "/parceiro/promocoes", label: "Promoções", icon: Megaphone },
+    { to: "/parceiro/conteudo", label: "Conteúdo", icon: Newspaper },
   ],
   admin: [
     { to: "/admin", label: "Dashboard", icon: ShieldCheck, exact: true },
@@ -41,7 +42,7 @@ const NAV: Record<Area, NavItem[]> = {
     { to: "/admin/assinaturas", label: "Assinaturas", icon: CreditCard },
     { to: "/admin/promocoes", label: "Promoções", icon: Megaphone },
     { to: "/admin/eventos", label: "Eventos", icon: CalendarDays },
-    { to: "/admin/conteudo", label: "Conteúdo", icon: Newspaper },
+    { to: "/admin/conteudo", label: "Gestão de conteúdo", icon: Newspaper },
     { to: "/admin/notificacoes", label: "Notificações", icon: Send },
   ],
 };
@@ -50,8 +51,8 @@ const BOTTOM: NavItem[] = [
   { to: "/app", label: "Home", icon: Home, exact: true },
   { to: "/app/beneficios", label: "Parceiros", icon: Building2 },
   { to: "/app/eventos", label: "Eventos", icon: CalendarDays },
+  { to: "/app/conteudo", label: "Notícias", icon: Newspaper },
   { to: "/app/garagem", label: "Garagem", icon: Car },
-  { to: "/app/perfil", label: "Perfil", icon: User },
 ];
 
 const AREA_LABEL: Record<Area, string> = { member: "App do membro", sponsor: "Painel do parceiro", admin: "Administração" };

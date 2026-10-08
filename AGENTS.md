@@ -20,3 +20,5 @@
 - Home section order and hero live in the single-row `home_config` table so admins control the Home without deploys.
 - Benefit codes are validated only via the `validate_usage` security-definer RPC, so sponsors can't edit usage rows directly.
 - Community author names are copied onto posts/comments by trigger, since profiles are private under RLS.
+- News magazine reuses the `articles` table (origin auto|partner|editorial, status workflow); partner rules are enforced by the `guard_article` trigger — one content area, server-enforced moderation.
+- Automatic news is imported by `runNewsSync` (RSS, summaries + source link only, deduped by external_url) from an hourly scheduler and an admin-only server function; the admin interval is checked inside — respects copyright and avoids duplicate work.

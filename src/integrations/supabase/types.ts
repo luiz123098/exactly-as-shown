@@ -14,40 +14,105 @@ export type Database = {
   }
   public: {
     Tables: {
+      article_reads: {
+        Row: {
+          article_id: string
+          category: string
+          read_at: string
+          user_id: string
+        }
+        Insert: {
+          article_id: string
+          category: string
+          read_at?: string
+          user_id: string
+        }
+        Update: {
+          article_id?: string
+          category?: string
+          read_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "article_reads_article_id_fkey"
+            columns: ["article_id"]
+            isOneToOne: false
+            referencedRelation: "articles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       articles: {
         Row: {
+          author_id: string | null
           body: string
           category: string
           cover_url: string | null
           created_at: string
+          cta_id: string | null
+          cta_kind: string | null
           excerpt: string
+          external_url: string | null
           featured: boolean
           id: string
+          origin: string
+          publish_at: string | null
           published: boolean
+          score: number
+          source_name: string | null
+          source_url: string | null
+          sponsor_id: string | null
+          status: string
+          tags: string[]
           title: string
           video_url: string | null
         }
         Insert: {
+          author_id?: string | null
           body?: string
           category?: string
           cover_url?: string | null
           created_at?: string
+          cta_id?: string | null
+          cta_kind?: string | null
           excerpt?: string
+          external_url?: string | null
           featured?: boolean
           id?: string
+          origin?: string
+          publish_at?: string | null
           published?: boolean
+          score?: number
+          source_name?: string | null
+          source_url?: string | null
+          sponsor_id?: string | null
+          status?: string
+          tags?: string[]
           title: string
           video_url?: string | null
         }
         Update: {
+          author_id?: string | null
           body?: string
           category?: string
           cover_url?: string | null
           created_at?: string
+          cta_id?: string | null
+          cta_kind?: string | null
           excerpt?: string
+          external_url?: string | null
           featured?: boolean
           id?: string
+          origin?: string
+          publish_at?: string | null
           published?: boolean
+          score?: number
+          source_name?: string | null
+          source_url?: string | null
+          sponsor_id?: string | null
+          status?: string
+          tags?: string[]
           title?: string
           video_url?: string | null
         }
@@ -346,6 +411,66 @@ export type Database = {
           id?: number
           sections?: string[]
           updated_at?: string
+        }
+        Relationships: []
+      }
+      news_settings: {
+        Row: {
+          auto_publish: boolean
+          id: number
+          interval_minutes: number
+          last_run_at: string | null
+          min_score: number
+        }
+        Insert: {
+          auto_publish?: boolean
+          id?: number
+          interval_minutes?: number
+          last_run_at?: string | null
+          min_score?: number
+        }
+        Update: {
+          auto_publish?: boolean
+          id?: number
+          interval_minutes?: number
+          last_run_at?: string | null
+          min_score?: number
+        }
+        Relationships: []
+      }
+      news_sources: {
+        Row: {
+          active: boolean
+          category: string
+          created_at: string
+          id: string
+          last_count: number
+          last_status: string | null
+          last_synced_at: string | null
+          name: string
+          url: string
+        }
+        Insert: {
+          active?: boolean
+          category?: string
+          created_at?: string
+          id?: string
+          last_count?: number
+          last_status?: string | null
+          last_synced_at?: string | null
+          name: string
+          url: string
+        }
+        Update: {
+          active?: boolean
+          category?: string
+          created_at?: string
+          id?: string
+          last_count?: number
+          last_status?: string | null
+          last_synced_at?: string | null
+          name?: string
+          url?: string
         }
         Relationships: []
       }
@@ -665,6 +790,7 @@ export type Database = {
           lng: number | null
           logo_url: string | null
           name: string
+          niche: string
           owner_id: string | null
           phone: string | null
           status: Database["public"]["Enums"]["approval_status"]
@@ -687,6 +813,7 @@ export type Database = {
           lng?: number | null
           logo_url?: string | null
           name: string
+          niche?: string
           owner_id?: string | null
           phone?: string | null
           status?: Database["public"]["Enums"]["approval_status"]
@@ -709,6 +836,7 @@ export type Database = {
           lng?: number | null
           logo_url?: string | null
           name?: string
+          niche?: string
           owner_id?: string | null
           phone?: string | null
           status?: Database["public"]["Enums"]["approval_status"]
@@ -801,11 +929,13 @@ export type Database = {
       }
       is_sponsor_owner: { Args: { _sponsor: string }; Returns: boolean }
       member_level: { Args: { _uid: string }; Returns: number }
+      niche_category: { Args: { _niche: string }; Returns: string }
       sponsor_approved: { Args: { _sponsor: string }; Returns: boolean }
       validate_usage: {
         Args: { _amount: number; _code: string }
         Returns: Json
       }
+      verify_member: { Args: { _code: string }; Returns: Json }
     }
     Enums: {
       app_role: "admin" | "sponsor" | "member"

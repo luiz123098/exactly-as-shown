@@ -38,6 +38,7 @@ import { Route as AppPerfilRouteImport } from './routes/app.perfil'
 import { Route as AppPromocoesRouteImport } from './routes/app.promocoes'
 import { Route as ParceiroIndexRouteImport } from './routes/parceiro.index'
 import { Route as ParceiroBeneficiosRouteImport } from './routes/parceiro.beneficios'
+import { Route as ParceiroConteudoRouteImport } from './routes/parceiro.conteudo'
 import { Route as ParceiroEmpresaRouteImport } from './routes/parceiro.empresa'
 import { Route as ParceiroPromocoesRouteImport } from './routes/parceiro.promocoes'
 import { Route as ParceiroValidarRouteImport } from './routes/parceiro.validar'
@@ -46,6 +47,7 @@ import { Route as AppConteudoIdRouteImport } from './routes/app.conteudo.$id'
 import { Route as AppEventosIndexRouteImport } from './routes/app.eventos.index'
 import { Route as AppEventosIdRouteImport } from './routes/app.eventos.$id'
 import { Route as AppParceirosIdRouteImport } from './routes/app.parceiros.$id'
+import { Route as ApiPublicHooksNewsSyncRouteImport } from './routes/api/public/hooks/news-sync'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -192,6 +194,11 @@ const ParceiroBeneficiosRoute = ParceiroBeneficiosRouteImport.update({
   path: '/beneficios',
   getParentRoute: () => ParceiroRoute,
 } as any)
+const ParceiroConteudoRoute = ParceiroConteudoRouteImport.update({
+  id: '/conteudo',
+  path: '/conteudo',
+  getParentRoute: () => ParceiroRoute,
+} as any)
 const ParceiroEmpresaRoute = ParceiroEmpresaRouteImport.update({
   id: '/empresa',
   path: '/empresa',
@@ -232,6 +239,11 @@ const AppParceirosIdRoute = AppParceirosIdRouteImport.update({
   path: '/parceiros/$id',
   getParentRoute: () => AppRoute,
 } as any)
+const ApiPublicHooksNewsSyncRoute = ApiPublicHooksNewsSyncRouteImport.update({
+  id: '/api/public/hooks/news-sync',
+  path: '/api/public/hooks/news-sync',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -260,6 +272,7 @@ export interface FileRoutesByFullPath {
   '/app/perfil': typeof AppPerfilRoute
   '/app/promocoes': typeof AppPromocoesRoute
   '/parceiro/beneficios': typeof ParceiroBeneficiosRoute
+  '/parceiro/conteudo': typeof ParceiroConteudoRoute
   '/parceiro/empresa': typeof ParceiroEmpresaRoute
   '/parceiro/promocoes': typeof ParceiroPromocoesRoute
   '/parceiro/validar': typeof ParceiroValidarRoute
@@ -271,6 +284,7 @@ export interface FileRoutesByFullPath {
   '/app/parceiros/$id': typeof AppParceirosIdRoute
   '/app/conteudo/': typeof AppConteudoIndexRoute
   '/app/eventos/': typeof AppEventosIndexRoute
+  '/api/public/hooks/news-sync': typeof ApiPublicHooksNewsSyncRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -296,6 +310,7 @@ export interface FileRoutesByTo {
   '/app/perfil': typeof AppPerfilRoute
   '/app/promocoes': typeof AppPromocoesRoute
   '/parceiro/beneficios': typeof ParceiroBeneficiosRoute
+  '/parceiro/conteudo': typeof ParceiroConteudoRoute
   '/parceiro/empresa': typeof ParceiroEmpresaRoute
   '/parceiro/promocoes': typeof ParceiroPromocoesRoute
   '/parceiro/validar': typeof ParceiroValidarRoute
@@ -307,6 +322,7 @@ export interface FileRoutesByTo {
   '/app/parceiros/$id': typeof AppParceirosIdRoute
   '/app/conteudo': typeof AppConteudoIndexRoute
   '/app/eventos': typeof AppEventosIndexRoute
+  '/api/public/hooks/news-sync': typeof ApiPublicHooksNewsSyncRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -336,6 +352,7 @@ export interface FileRoutesById {
   '/app/perfil': typeof AppPerfilRoute
   '/app/promocoes': typeof AppPromocoesRoute
   '/parceiro/beneficios': typeof ParceiroBeneficiosRoute
+  '/parceiro/conteudo': typeof ParceiroConteudoRoute
   '/parceiro/empresa': typeof ParceiroEmpresaRoute
   '/parceiro/promocoes': typeof ParceiroPromocoesRoute
   '/parceiro/validar': typeof ParceiroValidarRoute
@@ -347,6 +364,7 @@ export interface FileRoutesById {
   '/app/parceiros/$id': typeof AppParceirosIdRoute
   '/app/conteudo/': typeof AppConteudoIndexRoute
   '/app/eventos/': typeof AppEventosIndexRoute
+  '/api/public/hooks/news-sync': typeof ApiPublicHooksNewsSyncRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -377,6 +395,7 @@ export interface FileRouteTypes {
     | '/app/perfil'
     | '/app/promocoes'
     | '/parceiro/beneficios'
+    | '/parceiro/conteudo'
     | '/parceiro/empresa'
     | '/parceiro/promocoes'
     | '/parceiro/validar'
@@ -388,6 +407,7 @@ export interface FileRouteTypes {
     | '/app/parceiros/$id'
     | '/app/conteudo/'
     | '/app/eventos/'
+    | '/api/public/hooks/news-sync'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -413,6 +433,7 @@ export interface FileRouteTypes {
     | '/app/perfil'
     | '/app/promocoes'
     | '/parceiro/beneficios'
+    | '/parceiro/conteudo'
     | '/parceiro/empresa'
     | '/parceiro/promocoes'
     | '/parceiro/validar'
@@ -424,6 +445,7 @@ export interface FileRouteTypes {
     | '/app/parceiros/$id'
     | '/app/conteudo'
     | '/app/eventos'
+    | '/api/public/hooks/news-sync'
   id:
     | '__root__'
     | '/'
@@ -452,6 +474,7 @@ export interface FileRouteTypes {
     | '/app/perfil'
     | '/app/promocoes'
     | '/parceiro/beneficios'
+    | '/parceiro/conteudo'
     | '/parceiro/empresa'
     | '/parceiro/promocoes'
     | '/parceiro/validar'
@@ -463,6 +486,7 @@ export interface FileRouteTypes {
     | '/app/parceiros/$id'
     | '/app/conteudo/'
     | '/app/eventos/'
+    | '/api/public/hooks/news-sync'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -474,6 +498,7 @@ export interface RootRouteChildren {
   ParceirosRoute: typeof ParceirosRoute
   PlanosRoute: typeof PlanosRoute
   ResetPasswordRoute: typeof ResetPasswordRoute
+  ApiPublicHooksNewsSyncRoute: typeof ApiPublicHooksNewsSyncRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -681,6 +706,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ParceiroBeneficiosRouteImport
       parentRoute: typeof ParceiroRoute
     }
+    '/parceiro/conteudo': {
+      id: '/parceiro/conteudo'
+      path: '/conteudo'
+      fullPath: '/parceiro/conteudo'
+      preLoaderRoute: typeof ParceiroConteudoRouteImport
+      parentRoute: typeof ParceiroRoute
+    }
     '/parceiro/empresa': {
       id: '/parceiro/empresa'
       path: '/empresa'
@@ -736,6 +768,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/app/parceiros/$id'
       preLoaderRoute: typeof AppParceirosIdRouteImport
       parentRoute: typeof AppRoute
+    }
+    '/api/public/hooks/news-sync': {
+      id: '/api/public/hooks/news-sync'
+      path: '/api/public/hooks/news-sync'
+      fullPath: '/api/public/hooks/news-sync'
+      preLoaderRoute: typeof ApiPublicHooksNewsSyncRouteImport
+      parentRoute: typeof rootRouteImport
     }
   }
 }
@@ -806,6 +845,7 @@ const AppRouteWithChildren = AppRoute._addFileChildren(AppRouteChildren)
 
 interface ParceiroRouteChildren {
   ParceiroBeneficiosRoute: typeof ParceiroBeneficiosRoute
+  ParceiroConteudoRoute: typeof ParceiroConteudoRoute
   ParceiroEmpresaRoute: typeof ParceiroEmpresaRoute
   ParceiroPromocoesRoute: typeof ParceiroPromocoesRoute
   ParceiroValidarRoute: typeof ParceiroValidarRoute
@@ -814,6 +854,7 @@ interface ParceiroRouteChildren {
 
 const ParceiroRouteChildren: ParceiroRouteChildren = {
   ParceiroBeneficiosRoute: ParceiroBeneficiosRoute,
+  ParceiroConteudoRoute: ParceiroConteudoRoute,
   ParceiroEmpresaRoute: ParceiroEmpresaRoute,
   ParceiroPromocoesRoute: ParceiroPromocoesRoute,
   ParceiroValidarRoute: ParceiroValidarRoute,
@@ -833,6 +874,7 @@ const rootRouteChildren: RootRouteChildren = {
   ParceirosRoute: ParceirosRoute,
   PlanosRoute: PlanosRoute,
   ResetPasswordRoute: ResetPasswordRoute,
+  ApiPublicHooksNewsSyncRoute: ApiPublicHooksNewsSyncRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
