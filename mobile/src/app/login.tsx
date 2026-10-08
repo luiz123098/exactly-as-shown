@@ -29,11 +29,16 @@ export default function Login() {
     setErrors({});
     setBusy(true);
     const { email, password } = parsed.data;
-    const { error } = signup
+    const { data, error } = signup
       ? await supabase.auth.signUp({ email, password })
       : await supabase.auth.signInWithPassword({ email, password });
     setBusy(false);
-    if (error) Alert.alert('Não foi possível continuar', signup ? error.message : 'E-mail ou senha incorretos.');
+    if (error) return void Alert.alert('Não foi possível continuar', signup ? error.message : 'E-mail ou senha incorretos.');
+    // With email confirmation on, sign-up returns no session until the link is opened.
+    if (signup && !data.session) {
+      Alert.alert('Confirme seu e-mail', `Enviamos um link para ${email}. Abra-o e depois entre com sua senha.`);
+      setSignup(false);
+    }
   }
 
   const title = intent === 'partner' ? 'Torne-se parceiro' : intent === 'member' ? 'Torne-se membro' : 'Entrar';
