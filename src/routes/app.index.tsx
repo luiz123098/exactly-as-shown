@@ -140,7 +140,7 @@ function Home() {
       <section><SectionHeader title="Próximos eventos" to="/app/eventos" /><Rail>{upcoming.map((e) => <EventCard key={e.id} e={e} />)}</Rail></section>
     ),
     content: articles.length > 0 && (
-      <section><SectionHeader title="Conteúdo EXOTIC" to="/app/conteudo" /><Rail>{articles.slice(0, 6).map((a) => <ArticleCard key={a.id} a={a} />)}</Rail></section>
+      <section><SectionHeader title="EXOTIC News" to="/app/conteudo" /><Rail>{articles.slice(0, 3).map((a) => <ArticleCard key={a.id} a={a} />)}</Rail></section>
     ),
   };
 
