@@ -19,7 +19,7 @@ function parse(xml: string) {
     const img = it.match(/<enclosure[^>]*url="([^"]+)"/i)?.[1]
       ?? it.match(/<media:(?:content|thumbnail)[^>]*url="([^"]+)"/i)?.[1]
       ?? decode(desc).match(/<img[^>]*src="([^"]+)"/i)?.[1] ?? null;
-    const cats = [...it.matchAll(/<category[^>]*>([\s\S]*?)<\/category>/gi)].map((m) => strip(m[1])).filter(Boolean);
+    const cats = [...it.matchAll(/<category[^>]*>([\s\S]*?)<\/category>/gi)].map((m) => strip(m[1] ?? "")).filter(Boolean);
     return {
       title: strip(tag(it, "title")),
       link: strip(tag(it, "link")) || strip(tag(it, "guid")),
