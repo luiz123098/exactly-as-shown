@@ -45,7 +45,7 @@ export default function Admin() {
   const pending = (rows?: { status: string }[]) => rows?.filter((r) => r.status === 'pending').length ?? 0;
 
   return (
-    <Screen refreshControl={<RefreshControl refreshing={q.isRefetching} onRefresh={() => q.refetch()} />}>
+    <Screen statusBarScrim refreshControl={<RefreshControl refreshing={q.isRefetching} onRefresh={() => q.refetch()} />}>
         <Text variant="title">Admin</Text>
         <View style={{ flexDirection: 'row', gap: space.sm }}>
           <Segment label="Parceiros" count={pending(partners.data)} active={tab === 'partners'} onPress={() => setTab('partners')} />

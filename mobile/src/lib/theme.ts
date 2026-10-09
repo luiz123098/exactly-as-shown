@@ -15,6 +15,7 @@ export const colors = {
   border: '#e4e4e4',
   input: '#dedede',
   danger: '#d63330',
+  success: '#1f8a4c',
 } as const;
 
 export const fonts = {

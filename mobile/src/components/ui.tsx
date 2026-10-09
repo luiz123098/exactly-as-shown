@@ -1,4 +1,4 @@
-import type { ReactNode } from 'react';
+import type { ReactNode, Ref } from 'react';
 import {
   ActivityIndicator,
   Pressable,
@@ -14,6 +14,7 @@ import {
   type TextProps,
   type ViewStyle,
 } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { colors, fonts, radius, space } from '@/lib/theme';
 
@@ -25,24 +26,31 @@ export function Text({ variant = 'body', style, ...rest }: TextProps & { variant
 
 // Every screen scrolls inside the system safe areas: iOS adds the status bar,
 // navigation header, floating tab bar and keyboard as insets, so content never
-// ends up hidden behind them.
-export function Screen({ children, scroll = true, style, refreshControl }: {
+// ends up hidden behind them. Tab roots have no header, so they pass
+// `statusBarScrim` to keep scrolled content from showing under the clock.
+export function Screen({ children, scroll = true, style, refreshControl, statusBarScrim, ref }: {
   children: ReactNode;
   scroll?: boolean;
   style?: StyleProp<ViewStyle>;
   refreshControl?: ScrollViewProps['refreshControl'];
+  statusBarScrim?: boolean;
+  ref?: Ref<ScrollView>;
 }) {
+  const insets = useSafeAreaInsets();
   return (
-    <ScrollView
-      style={styles.screen}
-      contentContainerStyle={[styles.content, style]}
-      contentInsetAdjustmentBehavior="automatic"
-      automaticallyAdjustKeyboardInsets
-      keyboardShouldPersistTaps="handled"
-      scrollEnabled={scroll}
-      refreshControl={refreshControl}>
-      {children}
-    </ScrollView>
+    <View style={styles.screen}>
+      <ScrollView
+        ref={ref}
+        contentContainerStyle={[styles.content, style]}
+        contentInsetAdjustmentBehavior="automatic"
+        automaticallyAdjustKeyboardInsets
+        keyboardShouldPersistTaps="handled"
+        scrollEnabled={scroll}
+        refreshControl={refreshControl}>
+        {children}
+      </ScrollView>
+      {statusBarScrim && <View pointerEvents="none" style={[styles.scrim, { height: insets.top }]} />}
+    </View>
   );
 }
 
@@ -126,6 +134,7 @@ export function ErrorState({ onRetry, text = 'Não foi possível carregar. Verif
 
 const styles = StyleSheet.create({
   screen: { flex: 1, backgroundColor: colors.background },
+  scrim: { position: 'absolute', top: 0, left: 0, right: 0, backgroundColor: colors.background },
   content: { padding: space.md, gap: space.md },
   body: { fontFamily: fonts.medium, fontSize: 16, lineHeight: 23, color: colors.text },
   muted: { fontFamily: fonts.medium, fontSize: 15, lineHeight: 21, color: colors.textMuted },

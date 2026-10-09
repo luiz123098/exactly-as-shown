@@ -47,7 +47,7 @@ export default function Profile() {
   }
 
   return (
-    <Screen>
+    <Screen statusBarScrim>
       <Text variant="title">Perfil</Text>
       <View style={{ flexDirection: 'row', alignItems: 'center', gap: space.md }}>
         {uri && <Image source={{ uri }} style={{ width: 72, height: 72, borderRadius: 36, backgroundColor: colors.secondary }} />}

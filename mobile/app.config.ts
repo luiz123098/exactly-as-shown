@@ -7,6 +7,16 @@ export default ({ config }: ConfigContext): ExpoConfig => {
   const plugins: ExpoConfig['plugins'] = [
     ...(config.plugins ?? []),
     'expo-apple-authentication',
+    // Must come before expo-image-picker: plugins modify Info.plist last-first,
+    // and the picker (with cameraPermission: false) would drop this text.
+    [
+      'expo-camera',
+      {
+        cameraPermission: 'O Exotic Club usa a câmera para o parceiro ler o QR da carteirinha dos membros.',
+        microphonePermission: false,
+        recordAudioAndroid: false,
+      },
+    ],
     [
       'expo-image-picker',
       {
