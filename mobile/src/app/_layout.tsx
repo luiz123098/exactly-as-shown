@@ -42,10 +42,19 @@ export default function RootLayout() {
 }
 
 function RootStack() {
-  const { ready, session, loaded, profile } = useAuth();
+  const { ready, session, loaded, profile, access, intent, setIntent } = useAuth();
   useEffect(() => {
     if (ready) SplashScreen.hideAsync();
   }, [ready]);
+  // An application already sent (or an admin account) needs no form; a rejected
+  // member application can be edited and sent again.
+  const memberApp = access?.member_application;
+  const formDone = !access || access.is_admin
+    || (intent === 'partner' ? !!access.partner
+      : intent === 'member' ? !!memberApp && memberApp.status !== 'rejected' : true);
+  useEffect(() => {
+    if (intent && loaded && formDone) setIntent(null);
+  }, [intent, loaded, formDone, setIntent]);
   // Keep the splash up until we know which profile is signed in, so the tab
   // bar mounts once with the right tabs.
   if (!ready) return null;
@@ -62,7 +71,14 @@ function RootStack() {
       <Stack.Protected guard={signedIn && !complete}>
         <Stack.Screen name="completar-perfil" />
       </Stack.Protected>
-      <Stack.Protected guard={signedIn && complete}>
+      {/* "Torne-se membro/parceiro" leads straight to its form; Perfil reuses the same path. */}
+      <Stack.Protected guard={signedIn && complete && intent === 'member' && !formDone}>
+        <Stack.Screen name="solicitar-assinatura" />
+      </Stack.Protected>
+      <Stack.Protected guard={signedIn && complete && intent === 'partner' && !formDone}>
+        <Stack.Screen name="solicitar-parceria" />
+      </Stack.Protected>
+      <Stack.Protected guard={signedIn && complete && (!intent || formDone)}>
         <Stack.Screen name="(tabs)" />
         <Stack.Screen name="editar-perfil" options={{ headerShown: true, title: 'Editar perfil', headerBackTitle: 'Voltar' }} />
       </Stack.Protected>

@@ -17,9 +17,9 @@ export default function TabsLayout() {
         <NativeTabs.Trigger.Label>Garagem</NativeTabs.Trigger.Label>
         <NativeTabs.Trigger.Icon sf="car.fill" md="directions_car" />
       </NativeTabs.Trigger>
-      <NativeTabs.Trigger name="promocoes">
-        <NativeTabs.Trigger.Label>Promoções</NativeTabs.Trigger.Label>
-        <NativeTabs.Trigger.Icon sf="tag.fill" md="sell" />
+      <NativeTabs.Trigger name="parceiros">
+        <NativeTabs.Trigger.Label>Parceiros</NativeTabs.Trigger.Label>
+        <NativeTabs.Trigger.Icon sf="storefront.fill" md="storefront" />
       </NativeTabs.Trigger>
       <NativeTabs.Trigger name="carteirinha" hidden={!isMember}>
         <NativeTabs.Trigger.Label>Carteirinha</NativeTabs.Trigger.Label>

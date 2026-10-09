@@ -2,10 +2,11 @@ import * as AppleAuthentication from 'expo-apple-authentication';
 import { useLocalSearchParams } from 'expo-router';
 import { useEffect, useState } from 'react';
 import { Alert, View } from 'react-native';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { z } from 'zod';
 
 import { Button, Field, Screen, Text } from '@/components/ui';
+import { useAuth } from '@/lib/auth';
+import { authRedirectUrl } from '@/lib/auth-link';
 import { googleConfigured, signInWithApple, signInWithGoogle, type SocialResult } from '@/lib/social';
 import { supabase } from '@/lib/supabase';
 import { colors, radius, space } from '@/lib/theme';
@@ -25,11 +26,18 @@ export default function Login() {
   const [busy, setBusy] = useState(false);
   const [social, setSocial] = useState<'apple' | 'google' | null>(null);
   const [appleAvailable, setAppleAvailable] = useState(false);
-  const insets = useSafeAreaInsets();
+
+  const { setIntent } = useAuth();
 
   useEffect(() => {
     AppleAuthentication.isAvailableAsync().then(setAppleAvailable);
   }, []);
+
+  // Remember which button brought the person here, so the matching application
+  // form opens right after sign-up (plain "Entrar" opens the app directly).
+  useEffect(() => {
+    setIntent(intent ?? null);
+  }, [intent, setIntent]);
 
   async function socialSignIn(provider: 'apple' | 'google') {
     if (social) return;
@@ -51,13 +59,13 @@ export default function Login() {
     setBusy(true);
     const { email, password } = parsed.data;
     const { data, error } = signup
-      ? await supabase.auth.signUp({ email, password })
+      ? await supabase.auth.signUp({ email, password, options: { emailRedirectTo: authRedirectUrl() } })
       : await supabase.auth.signInWithPassword({ email, password });
     setBusy(false);
     if (error) return void Alert.alert('Não foi possível continuar', signup ? error.message : 'E-mail ou senha incorretos.');
     // With email confirmation on, sign-up returns no session until the link is opened.
     if (signup && !data.session) {
-      Alert.alert('Confirme seu e-mail', `Enviamos um link para ${email}. Abra-o e depois entre com sua senha.`);
+      Alert.alert('Confirme seu e-mail', `Enviamos um link para ${email}. Abra-o neste iPhone para entrar direto no app.`);
       setSignup(false);
     }
   }
@@ -75,7 +83,7 @@ export default function Login() {
       <Button title={signup ? 'Já tenho conta' : 'Criar uma conta'} variant="ghost" onPress={() => setSignup(!signup)} />
       {/* Social sign-in sits at the bottom, as is standard on iOS. */}
       <View style={{ flex: 1 }} />
-      <View style={{ gap: space.sm, paddingBottom: insets.bottom }}>
+      <View style={{ gap: space.sm }}>
         {(appleAvailable || googleConfigured) && (
           <View style={{ flexDirection: 'row', alignItems: 'center', gap: space.sm }}>
             <View style={{ flex: 1, height: 1, backgroundColor: colors.border }} />

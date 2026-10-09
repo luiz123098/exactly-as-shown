@@ -1,7 +1,10 @@
 import type { Session } from '@supabase/supabase-js';
+import * as Linking from 'expo-linking';
 import { createContext, useCallback, useContext, useEffect, useMemo, useState, type ReactNode } from 'react';
 
 import { kindOf, type Access, type Kind } from '@/lib/access';
+import { readIntent, writeIntent, type Intent } from '@/lib/applications';
+import { handleAuthRedirect } from '@/lib/auth-link';
 import type { Profile } from '@/lib/profile';
 import { signOutSocial } from '@/lib/social';
 import { supabase } from '@/lib/supabase';
@@ -16,6 +19,9 @@ type AuthState = {
   // True once access and profile were loaded for the current session.
   loaded: boolean;
   kind: Kind | null;
+  // Application form the person still has to see (from "Torne-se membro/parceiro").
+  intent: Intent | null;
+  setIntent: (intent: Intent | null) => void;
   refresh: () => Promise<void>;
   signOut: () => Promise<void>;
 };
@@ -28,6 +34,12 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [profile, setProfile] = useState<Profile | null>(null);
   const [loadedFor, setLoadedFor] = useState<string | null>(null);
   const [ready, setReady] = useState(false);
+  const [intent, setIntentState] = useState<Intent | null>(readIntent);
+
+  const setIntent = useCallback((next: Intent | null) => {
+    writeIntent(next);
+    setIntentState(next);
+  }, []);
 
   const loadAccess = useCallback(async (s: Session | null) => {
     if (!s) {
@@ -57,6 +69,12 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     return () => sub.subscription.unsubscribe();
   }, [loadAccess]);
 
+  // Email confirmation links open the app with the session in the URL.
+  const url = Linking.useURL();
+  useEffect(() => {
+    if (url) handleAuthRedirect(url);
+  }, [url]);
+
   const value = useMemo<AuthState>(
     () => ({
       ready,
@@ -65,13 +83,16 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       profile,
       loaded: !!session && loadedFor === session.user.id,
       kind: session && access ? kindOf(access) : null,
+      intent,
+      setIntent,
       refresh: () => loadAccess(session),
       signOut: async () => {
+        setIntent(null);
         await signOutSocial();
         await supabase.auth.signOut();
       },
     }),
-    [ready, session, access, profile, loadedFor, loadAccess],
+    [ready, session, access, profile, loadedFor, loadAccess, intent, setIntent],
   );
 
   return <Ctx.Provider value={value}>{children}</Ctx.Provider>;

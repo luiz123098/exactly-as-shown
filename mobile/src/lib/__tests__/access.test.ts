@@ -21,7 +21,10 @@ describe('kindOf', () => {
   });
 
   it('only counts approved and active partners', () => {
-    const partner = { id: 'p', company_name: 'X', status: 'approved' as const, active: true };
+    const partner = {
+      id: 'p', company_name: 'X', status: 'approved' as const, active: true,
+      decision_reason: null, meeting_at: null, meeting_place: null, meeting_request: null,
+    };
     expect(kindOf({ ...base, partner })).toBe('partner');
     expect(kindOf({ ...base, partner: { ...partner, active: false } })).toBe('non_subscriber');
     expect(kindOf({ ...base, partner: { ...partner, status: 'meeting_proposed' } })).toBe('non_subscriber');

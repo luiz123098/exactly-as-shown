@@ -7,7 +7,16 @@ export type Access = {
   is_subscriber: boolean;
   membership_expires_at: string | null;
   member_application: { status: ApplicationStatus; decision_reason: string | null } | null;
-  partner: { id: string; status: PartnerStatus; active: boolean; company_name: string } | null;
+  partner: {
+    id: string;
+    status: PartnerStatus;
+    active: boolean;
+    company_name: string;
+    decision_reason: string | null;
+    meeting_at: string | null;
+    meeting_place: string | null;
+    meeting_request: string | null;
+  } | null;
 };
 
 // The four profiles of the spec. UI uses this to choose screens; the server

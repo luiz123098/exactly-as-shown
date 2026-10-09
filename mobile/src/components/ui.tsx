@@ -8,12 +8,12 @@ import {
   TextInput,
   View,
   type PressableProps,
+  type ScrollViewProps,
   type StyleProp,
   type TextInputProps,
   type TextProps,
   type ViewStyle,
 } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { colors, fonts, radius, space } from '@/lib/theme';
 
@@ -23,17 +23,26 @@ export function Text({ variant = 'body', style, ...rest }: TextProps & { variant
   return <RNText style={[styles[variant], style]} {...rest} />;
 }
 
-export function Screen({ children, scroll = true, style }: { children: ReactNode; scroll?: boolean; style?: StyleProp<ViewStyle> }) {
+// Every screen scrolls inside the system safe areas: iOS adds the status bar,
+// navigation header, floating tab bar and keyboard as insets, so content never
+// ends up hidden behind them.
+export function Screen({ children, scroll = true, style, refreshControl }: {
+  children: ReactNode;
+  scroll?: boolean;
+  style?: StyleProp<ViewStyle>;
+  refreshControl?: ScrollViewProps['refreshControl'];
+}) {
   return (
-    <SafeAreaView edges={['top']} style={styles.screen}>
-      {scroll ? (
-        <ScrollView contentContainerStyle={[styles.content, style]} keyboardShouldPersistTaps="handled">
-          {children}
-        </ScrollView>
-      ) : (
-        <View style={[styles.content, { flex: 1 }, style]}>{children}</View>
-      )}
-    </SafeAreaView>
+    <ScrollView
+      style={styles.screen}
+      contentContainerStyle={[styles.content, style]}
+      contentInsetAdjustmentBehavior="automatic"
+      automaticallyAdjustKeyboardInsets
+      keyboardShouldPersistTaps="handled"
+      scrollEnabled={scroll}
+      refreshControl={refreshControl}>
+      {children}
+    </ScrollView>
   );
 }
 
@@ -71,11 +80,11 @@ const buttonVariants = {
   inkOutline: { box: { backgroundColor: 'transparent', borderWidth: 1, borderColor: colors.textMuted }, text: { color: colors.inkText } },
 } as const;
 
-export function Field({ label, error, ...rest }: TextInputProps & { label: string; error?: string | undefined }) {
+export function Field({ label, error, style, ...rest }: TextInputProps & { label: string; error?: string | undefined }) {
   return (
     <View style={{ gap: space.xs }}>
       <Text variant="label">{label}</Text>
-      <TextInput placeholderTextColor={colors.textMuted} style={[styles.input, !!error && { borderColor: colors.danger }]} {...rest} />
+      <TextInput placeholderTextColor={colors.textMuted} style={[styles.input, !!error && { borderColor: colors.danger }, style]} {...rest} />
       {!!error && <Text style={{ color: colors.danger, fontSize: 13 }}>{error}</Text>}
     </View>
   );
