@@ -2,6 +2,8 @@ import type { Session } from '@supabase/supabase-js';
 import { createContext, useCallback, useContext, useEffect, useMemo, useState, type ReactNode } from 'react';
 
 import { kindOf, type Access, type Kind } from '@/lib/access';
+import type { Profile } from '@/lib/profile';
+import { signOutSocial } from '@/lib/social';
 import { supabase } from '@/lib/supabase';
 
 export type { Access, Kind } from '@/lib/access';
@@ -10,6 +12,9 @@ type AuthState = {
   ready: boolean;
   session: Session | null;
   access: Access | null;
+  profile: Profile | null;
+  // True once access and profile were loaded for the current session.
+  loaded: boolean;
   kind: Kind | null;
   refresh: () => Promise<void>;
   signOut: () => Promise<void>;
@@ -20,17 +25,22 @@ const Ctx = createContext<AuthState | null>(null);
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [session, setSession] = useState<Session | null>(null);
   const [access, setAccess] = useState<Access | null>(null);
+  const [profile, setProfile] = useState<Profile | null>(null);
+  const [loadedFor, setLoadedFor] = useState<string | null>(null);
   const [ready, setReady] = useState(false);
 
   const loadAccess = useCallback(async (s: Session | null) => {
     if (!s) {
       setAccess(null);
+      setProfile(null);
       setReady(true);
       return;
     }
-    const { data, error } = await supabase.rpc('my_access');
-    // On a failed load keep the previous access instead of downgrading the user.
-    if (!error) setAccess(data as Access);
+    const [a, p] = await Promise.all([supabase.rpc('my_access'), supabase.rpc('my_profile')]);
+    // On a failed load keep the previous values instead of downgrading the user.
+    if (!a.error) setAccess(a.data as Access);
+    if (!p.error) setProfile(p.data as Profile | null);
+    setLoadedFor(s.user.id);
     setReady(true);
   }, []);
 
@@ -52,13 +62,16 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       ready,
       session,
       access,
+      profile,
+      loaded: !!session && loadedFor === session.user.id,
       kind: session && access ? kindOf(access) : null,
       refresh: () => loadAccess(session),
       signOut: async () => {
+        await signOutSocial();
         await supabase.auth.signOut();
       },
     }),
-    [ready, session, access, loadAccess],
+    [ready, session, access, profile, loadedFor, loadAccess],
   );
 
   return <Ctx.Provider value={value}>{children}</Ctx.Provider>;

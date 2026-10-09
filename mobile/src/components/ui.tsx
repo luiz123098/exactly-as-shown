@@ -39,7 +39,7 @@ export function Screen({ children, scroll = true, style }: { children: ReactNode
 
 type ButtonProps = Omit<PressableProps, 'children'> & {
   title: string;
-  variant?: 'primary' | 'ink' | 'outline' | 'ghost';
+  variant?: 'primary' | 'ink' | 'outline' | 'ghost' | 'inkOutline';
   loading?: boolean;
 };
 
@@ -67,6 +67,8 @@ const buttonVariants = {
   ink: { box: { backgroundColor: colors.ink }, text: { color: colors.inkText } },
   outline: { box: { borderWidth: 1, borderColor: colors.border, backgroundColor: colors.card }, text: { color: colors.text } },
   ghost: { box: { backgroundColor: 'transparent' }, text: { color: colors.text } },
+  // For dark (ink) backgrounds: transparent box, light text, thin visible border.
+  inkOutline: { box: { backgroundColor: 'transparent', borderWidth: 1, borderColor: colors.textMuted }, text: { color: colors.inkText } },
 } as const;
 
 export function Field({ label, error, ...rest }: TextInputProps & { label: string; error?: string | undefined }) {

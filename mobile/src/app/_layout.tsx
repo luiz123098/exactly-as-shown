@@ -12,7 +12,9 @@ import * as SplashScreen from 'expo-splash-screen';
 import { StatusBar } from 'expo-status-bar';
 import { useEffect } from 'react';
 
+import { Loading } from '@/components/ui';
 import { AuthProvider, useAuth } from '@/lib/auth';
+import { isProfileComplete } from '@/lib/profile';
 import { colors } from '@/lib/theme';
 
 SplashScreen.preventAutoHideAsync();
@@ -40,7 +42,7 @@ export default function RootLayout() {
 }
 
 function RootStack() {
-  const { ready, session } = useAuth();
+  const { ready, session, loaded, profile } = useAuth();
   useEffect(() => {
     if (ready) SplashScreen.hideAsync();
   }, [ready]);
@@ -48,14 +50,21 @@ function RootStack() {
   // bar mounts once with the right tabs.
   if (!ready) return null;
   const signedIn = !!session;
+  if (signedIn && !loaded) return <Loading label="Entrando…" />;
+  // Every sign-in method goes through the same profile step (name, Instagram, photo).
+  const complete = isProfileComplete(profile);
   return (
     <Stack screenOptions={{ headerShown: false, contentStyle: { backgroundColor: colors.background } }}>
       <Stack.Protected guard={!signedIn}>
         <Stack.Screen name="welcome" />
         <Stack.Screen name="login" options={{ headerShown: true, title: '', headerShadowVisible: false, headerBackTitle: 'Voltar' }} />
       </Stack.Protected>
-      <Stack.Protected guard={signedIn}>
+      <Stack.Protected guard={signedIn && !complete}>
+        <Stack.Screen name="completar-perfil" />
+      </Stack.Protected>
+      <Stack.Protected guard={signedIn && complete}>
         <Stack.Screen name="(tabs)" />
+        <Stack.Screen name="editar-perfil" options={{ headerShown: true, title: 'Editar perfil', headerBackTitle: 'Voltar' }} />
       </Stack.Protected>
     </Stack>
   );
