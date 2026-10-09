@@ -5,6 +5,7 @@ import { useCallback, useEffect, useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 
 import { QrCode } from '@/components/qr-code';
+import { TitleRow } from '@/components/title-row';
 import { Button, Card, ErrorState, Screen, Text } from '@/components/ui';
 import { useAuth } from '@/lib/auth';
 import { formatCode, qrPayload, secondsLeft } from '@/lib/card';
@@ -59,6 +60,7 @@ function ActiveCard() {
 
   return (
     <Screen statusBarScrim>
+      <TitleRow title="Carteirinha" />
       <View style={styles.card}>
         <Text variant="eyebrow">Exotic Club · Membro</Text>
         <View style={{ flexDirection: 'row', alignItems: 'center', gap: space.md }}>
@@ -107,7 +109,7 @@ function NoCard() {
   if (app?.status === 'rejected') text = 'Sua solicitação não foi aprovada. Veja os detalhes no seu perfil.';
   return (
     <Screen statusBarScrim>
-      <Text variant="title">Carteirinha</Text>
+      <TitleRow title="Carteirinha" />
       <Card>
         <Text variant="heading">{title}</Text>
         <Text variant="muted">{text}</Text>

@@ -1,8 +1,11 @@
 import { useQuery } from '@tanstack/react-query';
-import { router } from 'expo-router';
+import { router, useLocalSearchParams } from 'expo-router';
 import { useState } from 'react';
 import { Pressable, RefreshControl, View } from 'react-native';
 
+import { useRefetchOnFocus } from '@/lib/use-refetch-on-focus';
+import { PhotoQueue, ReportList, useOpenReports, usePendingPhotos } from '@/components/admin-moderation';
+import { TitleRow } from '@/components/title-row';
 import { Card, Empty, ErrorState, Loading, Screen, Text } from '@/components/ui';
 import { byStatus, MEMBER_STATUS, PARTNER_STATUS } from '@/lib/applications';
 import type { ApplicationStatus, PartnerStatus } from '@/lib/access';
@@ -36,45 +39,80 @@ function useMembers() {
   });
 }
 
-// Admin home: partnership and membership requests, pending ones first.
+type Tab = 'partners' | 'members' | 'reports';
+
+// Admin home: partnership requests, members (requests and their car photos to
+// approve) and open reports. Partners have no garage, so photos live under Membros.
 export default function Admin() {
-  const [tab, setTab] = useState<'partners' | 'members'>('partners');
+  const [tab, setTab] = useState<Tab>('partners');
+  const [memberView, setMemberView] = useState<'requests' | 'photos'>('requests');
+  // Notifications open a section directly: /admin?aba=fotos|membros|parceiros|denuncias
+  const { aba, n } = useLocalSearchParams<{ aba?: string; n?: string }>();
+  const link = `${aba}:${n}`;
+  const [appliedLink, setAppliedLink] = useState<string | undefined>();
+  if (link !== appliedLink) {
+    setAppliedLink(link);
+    if (aba === 'fotos' || aba === 'membros') {
+      setTab('members');
+      setMemberView(aba === 'fotos' ? 'photos' : 'requests');
+    } else if (aba === 'parceiros') setTab('partners');
+    else if (aba === 'denuncias') setTab('reports');
+  }
   const partners = usePartners();
   const members = useMembers();
-  const q = tab === 'partners' ? partners : members;
+  const photos = usePendingPhotos();
+  const reports = useOpenReports();
+  const q = tab === 'members' && memberView === 'photos' ? photos : { partners, members, reports }[tab];
+  useRefetchOnFocus(q.refetch);
   const pending = (rows?: { status: string }[]) => rows?.filter((r) => r.status === 'pending').length ?? 0;
 
   return (
     <Screen statusBarScrim refreshControl={<RefreshControl refreshing={q.isRefetching} onRefresh={() => q.refetch()} />}>
-        <Text variant="title">Admin</Text>
+      <TitleRow title="Admin" />
+      <View style={{ flexDirection: 'row', gap: space.sm }}>
+        <Segment label="Parceiros" count={pending(partners.data)} active={tab === 'partners'} onPress={() => setTab('partners')} />
+        <Segment label="Membros" count={pending(members.data) + (photos.data?.length ?? 0)} active={tab === 'members'}
+          onPress={() => setTab('members')} />
+        <Segment label="Denúncias" count={reports.data?.length ?? 0} active={tab === 'reports'} onPress={() => setTab('reports')} />
+      </View>
+      {tab === 'members' && (
         <View style={{ flexDirection: 'row', gap: space.sm }}>
-          <Segment label="Parceiros" count={pending(partners.data)} active={tab === 'partners'} onPress={() => setTab('partners')} />
-          <Segment label="Membros" count={pending(members.data)} active={tab === 'members'} onPress={() => setTab('members')} />
+          <Segment small label="Solicitações" count={pending(members.data)} active={memberView === 'requests'}
+            onPress={() => setMemberView('requests')} />
+          <Segment small label="Fotos dos carros" count={photos.data?.length ?? 0} active={memberView === 'photos'}
+            onPress={() => setMemberView('photos')} />
         </View>
-        {q.isLoading ? <Loading /> : q.isError ? <ErrorState onRetry={() => q.refetch()} /> : tab === 'partners' ? (
-          partners.data?.length ? partners.data.map((p) => (
-            <Row key={p.id} title={p.company_name} subtitle={`${p.responsible_name} · ${p.niche}`}
-              status={PARTNER_STATUS[p.status]} highlight={p.status === 'pending'}
-              note={p.status === 'pending' && p.meeting_request ? 'Pediu outro horário' : undefined}
-              onPress={() => router.push(`/admin/parceiro/${p.id}`)} />
-          )) : <Empty title="Nenhuma solicitação de parceria" />
-        ) : (
-          members.data?.length ? members.data.map((m) => (
-            <Row key={m.id} title={m.full_name} subtitle={`${m.profession} · ${m.city}`}
-              status={MEMBER_STATUS[m.status]} highlight={m.status === 'pending'}
-              onPress={() => router.push(`/admin/membro/${m.id}`)} />
-          )) : <Empty title="Nenhuma solicitação de membro" />
-        )}
+      )}
+      {q.isLoading ? <Loading /> : q.isError ? <ErrorState onRetry={() => q.refetch()} /> : tab === 'partners' ? (
+        partners.data?.length ? partners.data.map((p) => (
+          <Row key={p.id} title={p.company_name} subtitle={`${p.responsible_name} · ${p.niche}`}
+            status={PARTNER_STATUS[p.status]} highlight={p.status === 'pending'}
+            note={p.status === 'pending' && p.meeting_request ? 'Pediu outro horário' : undefined}
+            onPress={() => router.push(`/admin/parceiro/${p.id}`)} />
+        )) : <Empty title="Nenhuma solicitação de parceria" />
+      ) : tab === 'members' && memberView === 'photos' ? (
+        <PhotoQueue cars={photos.data ?? []} />
+      ) : tab === 'members' ? (
+        members.data?.length ? members.data.map((m) => (
+          <Row key={m.id} title={m.full_name} subtitle={`${m.profession} · ${m.city}`}
+            status={MEMBER_STATUS[m.status]} highlight={m.status === 'pending'}
+            onPress={() => router.push(`/admin/membro/${m.id}`)} />
+        )) : <Empty title="Nenhuma solicitação de membro" />
+      ) : (
+        <ReportList reports={reports.data ?? []} />
+      )}
     </Screen>
   );
 }
 
-function Segment({ label, count, active, onPress }: { label: string; count: number; active: boolean; onPress: () => void }) {
+function Segment({ label, count, active, onPress, small }: {
+  label: string; count: number; active: boolean; onPress: () => void; small?: boolean;
+}) {
   return (
     <Pressable accessibilityRole="tab" accessibilityState={{ selected: active }} onPress={onPress}
-      style={{ flex: 1, paddingVertical: space.sm + 2, borderRadius: radius.pill, alignItems: 'center',
-        backgroundColor: active ? colors.ink : colors.secondary }}>
-      <Text style={{ color: active ? colors.inkText : colors.text, fontSize: 15 }}>
+      style={{ flex: 1, paddingVertical: small ? space.sm : space.sm + 2, borderRadius: radius.pill, alignItems: 'center',
+        backgroundColor: active ? (small ? colors.accent : colors.ink) : colors.secondary }}>
+      <Text style={{ color: active ? (small ? colors.accentText : colors.inkText) : colors.text, fontSize: small ? 14 : 15 }}>
         {label}{count ? ` (${count})` : ''}
       </Text>
     </Pressable>

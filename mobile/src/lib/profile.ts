@@ -5,6 +5,7 @@ export type Profile = {
   full_name: string;
   instagram: string | null;
   avatar_path: string | null;
+  garage_visible?: boolean;
 };
 
 // Same rule as the profiles.instagram check in the database.

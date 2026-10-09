@@ -4,6 +4,7 @@ import { useFocusEffect } from 'expo-router';
 import { useCallback, useRef, useState } from 'react';
 import { Keyboard, Linking, ScrollView, StyleSheet, View } from 'react-native';
 
+import { TitleRow } from '@/components/title-row';
 import { Button, Card, Field, Screen, Text } from '@/components/ui';
 import { looksLikeCardCode } from '@/lib/card';
 import { avatarUrl } from '@/lib/profile';
@@ -64,7 +65,7 @@ export default function Scanner() {
 
   return (
     <Screen statusBarScrim ref={scroll}>
-      <Text variant="title">Ler carteirinha</Text>
+      <TitleRow title="Ler carteirinha" />
       {result ? (
         <ResultCard result={result} onNext={reset} />
       ) : (

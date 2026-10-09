@@ -14,8 +14,11 @@ Deno.serve(async (req) => {
   // revocation is never skipped.
   if (apple && !(await revoke(apple.refresh_token))) return json({ error: 'apple revoke failed' }, 502);
 
-  const { data: files } = await db.storage.from('avatars').list(user.id);
-  if (files?.length) await db.storage.from('avatars').remove(files.map((f) => `${user.id}/${f.name}`));
+  // Profile photo and car photos live in folders named after the user.
+  for (const bucket of ['avatars', 'cars']) {
+    const { data: files } = await db.storage.from(bucket).list(user.id, { limit: 1000 });
+    if (files?.length) await db.storage.from(bucket).remove(files.map((f) => `${user.id}/${f.name}`));
+  }
 
   const { error } = await db.auth.admin.deleteUser(user.id);
   if (error) return json({ error: error.message }, 500);

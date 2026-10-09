@@ -12,6 +12,9 @@ if (!url || !key) {
 
 // Only the publishable key ships in the app; every rule is enforced by RLS and
 // server functions in the database.
+export const supabaseUrl = url;
+export const supabaseKey = key;
+
 export const supabase = createClient(url, key, {
   auth: {
     storage: localStorage,

@@ -14,6 +14,7 @@ import { useEffect } from 'react';
 
 import { Loading } from '@/components/ui';
 import { AuthProvider, useAuth } from '@/lib/auth';
+import { useNotificationsLive } from '@/lib/notifications';
 import { isProfileComplete } from '@/lib/profile';
 import { colors } from '@/lib/theme';
 
@@ -43,6 +44,7 @@ export default function RootLayout() {
 
 function RootStack() {
   const { ready, session, loaded, profile, access, intent, setIntent } = useAuth();
+  useNotificationsLive(session?.user.id);
   useEffect(() => {
     if (ready) SplashScreen.hideAsync();
   }, [ready]);
@@ -81,6 +83,8 @@ function RootStack() {
       <Stack.Protected guard={signedIn && complete && (!intent || formDone)}>
         <Stack.Screen name="(tabs)" />
         <Stack.Screen name="editar-perfil" options={{ headerShown: true, title: 'Editar perfil', headerBackTitle: 'Voltar' }} />
+        <Stack.Screen name="bloqueados" options={{ headerShown: true, title: 'Usuários bloqueados', headerBackTitle: 'Voltar' }} />
+        <Stack.Screen name="notificacoes" options={{ headerShown: true, title: 'Notificações', headerBackTitle: 'Voltar' }} />
       </Stack.Protected>
     </Stack>
   );

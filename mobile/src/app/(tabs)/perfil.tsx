@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { Alert, View } from 'react-native';
 
 import { ApplicationStatus } from '@/components/application-status';
+import { TitleRow } from '@/components/title-row';
 import { Button, Card, Screen, Text } from '@/components/ui';
 import { useAuth, type Kind } from '@/lib/auth';
 import { avatarUrl, deleteAccount } from '@/lib/profile';
@@ -48,7 +49,7 @@ export default function Profile() {
 
   return (
     <Screen statusBarScrim>
-      <Text variant="title">Perfil</Text>
+      <TitleRow title="Perfil" />
       <View style={{ flexDirection: 'row', alignItems: 'center', gap: space.md }}>
         {uri && <Image source={{ uri }} style={{ width: 72, height: 72, borderRadius: 36, backgroundColor: colors.secondary }} />}
         <View style={{ flex: 1, gap: space.xs }}>
@@ -70,6 +71,7 @@ export default function Profile() {
         )}
       </Card>
       <ApplicationStatus />
+      <Button title="Usuários bloqueados" variant="outline" onPress={() => router.push('/bloqueados')} />
       <Button title="Atualizar status" variant="outline" onPress={refresh} />
       <Button title="Sair" variant="ink" onPress={signOut} />
       <Button title="Excluir conta" variant="ghost" loading={deleting} onPress={confirmDelete}
