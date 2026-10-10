@@ -1,12 +1,15 @@
+import { useQuery } from '@tanstack/react-query';
 import { CameraView, useCameraPermissions } from 'expo-camera';
 import { Image } from 'expo-image';
 import { useFocusEffect } from 'expo-router';
 import { useCallback, useRef, useState } from 'react';
-import { Keyboard, Linking, ScrollView, StyleSheet, View } from 'react-native';
+import { Alert, Keyboard, Linking, ScrollView, StyleSheet, View } from 'react-native';
 
 import { TitleRow } from '@/components/title-row';
-import { Button, Card, Field, Screen, Text } from '@/components/ui';
+import { Button, Card, Field, Loading, Screen, Text } from '@/components/ui';
+import { useAuth } from '@/lib/auth';
 import { looksLikeCardCode } from '@/lib/card';
+import { isLive, USAGE_LIMIT, type Promotion } from '@/lib/partners';
 import { avatarUrl } from '@/lib/profile';
 import { supabase } from '@/lib/supabase';
 import { colors, radius, space } from '@/lib/theme';
@@ -18,6 +21,7 @@ type ScanResult = {
   instagram?: string | null;
   expires_at?: string | null;
   reason?: string | null;
+  scan_id?: number;
 };
 
 // Partner side: read the member's QR (or type the code) and see on the spot
@@ -121,8 +125,57 @@ function ResultCard({ result, onNext }: { result: ScanResult; onNext: () => void
         </Card>
       ) : null}
       {!!result.reason && <Text style={{ textAlign: 'center' }}>{result.reason}</Text>}
+      {ok && result.scan_id && <RedeemPromotions scanId={result.scan_id} />}
       <Button title="Ler outra carteirinha" onPress={onNext} />
     </>
+  );
+}
+
+// After a valid scan the partner taps the promotion the member is using; the
+// server checks the promotion's limit for this member and records the use.
+function RedeemPromotions({ scanId }: { scanId: number }) {
+  const { access } = useAuth();
+  const pid = access?.partner?.id;
+  const [busy, setBusy] = useState<string | null>(null);
+  const [done, setDone] = useState<Set<string>>(new Set());
+  const q = useQuery({
+    queryKey: ['partners', 'mine', 'live-promos', pid],
+    enabled: !!pid,
+    queryFn: async () => {
+      const { data, error } = await supabase.from('promotions').select('*').eq('partner_id', pid!).eq('active', true)
+        .order('created_at', { ascending: false });
+      if (error) throw error;
+      return (data as Promotion[]).filter((p) => isLive(p));
+    },
+  });
+
+  async function redeem(p: Promotion) {
+    setBusy(p.id);
+    const { error } = await supabase.rpc('partner_redeem_promotion', { _scan: scanId, _promotion: p.id });
+    setBusy(null);
+    if (error) return void Alert.alert('Não foi possível registrar', error.message);
+    setDone((prev) => new Set(prev).add(p.id));
+    Alert.alert('Promoção registrada', `${p.title} foi registrada para este membro.`);
+  }
+
+  if (!pid) return null;
+  if (q.isLoading) return <Loading label="Carregando promoções…" />;
+  if (!q.data?.length) return <Text variant="muted" style={{ textAlign: 'center' }}>Sua empresa não tem promoções ativas.</Text>;
+  return (
+    <Card>
+      <Text variant="heading">Qual promoção o membro está usando?</Text>
+      {q.data.map((p) => (
+        <View key={p.id} style={{ flexDirection: 'row', alignItems: 'center', gap: space.sm }}>
+          <View style={{ flex: 1 }}>
+            <Text>{p.title}</Text>
+            <Text variant="label">{[p.discount_label, USAGE_LIMIT[p.usage_limit]].filter(Boolean).join(' · ')}</Text>
+          </View>
+          {done.has(p.id)
+            ? <Text style={{ color: colors.success }}>Registrada ✓</Text>
+            : <Button title="Registrar" loading={busy === p.id} disabled={!!busy} onPress={() => redeem(p)} />}
+        </View>
+      ))}
+    </Card>
   );
 }
 

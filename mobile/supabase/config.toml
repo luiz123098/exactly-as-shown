@@ -424,3 +424,6 @@ verify_jwt = false
 
 [functions.instagram-avatar]
 verify_jwt = false
+
+[functions.news-sync]
+verify_jwt = false

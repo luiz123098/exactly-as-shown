@@ -83,8 +83,11 @@ function RootStack() {
       <Stack.Protected guard={signedIn && complete && (!intent || formDone)}>
         <Stack.Screen name="(tabs)" />
         <Stack.Screen name="editar-perfil" options={{ headerShown: true, title: 'Editar perfil', headerBackTitle: 'Voltar' }} />
+        <Stack.Screen name="perfil" options={{ headerShown: true, title: 'Perfil', headerBackTitle: 'Voltar' }} />
         <Stack.Screen name="bloqueados" options={{ headerShown: true, title: 'Usuários bloqueados', headerBackTitle: 'Voltar' }} />
         <Stack.Screen name="notificacoes" options={{ headerShown: true, title: 'Notificações', headerBackTitle: 'Voltar' }} />
+        <Stack.Screen name="noticia/[id]" options={{ headerShown: true, title: 'Notícia', headerBackTitle: 'Voltar' }} />
+        <Stack.Screen name="novo-post" options={{ headerShown: true, title: 'Novo post', headerBackTitle: 'Voltar' }} />
       </Stack.Protected>
     </Stack>
   );

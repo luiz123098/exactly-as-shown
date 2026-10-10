@@ -13,6 +13,10 @@ export default function TabsLayout() {
         <NativeTabs.Trigger.Label>Notícias</NativeTabs.Trigger.Label>
         <NativeTabs.Trigger.Icon sf="newspaper.fill" md="newspaper" />
       </NativeTabs.Trigger>
+      <NativeTabs.Trigger name="eventos">
+        <NativeTabs.Trigger.Label>Eventos</NativeTabs.Trigger.Label>
+        <NativeTabs.Trigger.Icon sf="calendar" md="event" />
+      </NativeTabs.Trigger>
       <NativeTabs.Trigger name="garagem">
         <NativeTabs.Trigger.Label>Garagem</NativeTabs.Trigger.Label>
         <NativeTabs.Trigger.Icon sf="car.fill" md="directions_car" />
@@ -32,10 +36,6 @@ export default function TabsLayout() {
       <NativeTabs.Trigger name="admin" hidden={kind !== 'admin'}>
         <NativeTabs.Trigger.Label>Admin</NativeTabs.Trigger.Label>
         <NativeTabs.Trigger.Icon sf="shield.lefthalf.filled" md="admin_panel_settings" />
-      </NativeTabs.Trigger>
-      <NativeTabs.Trigger name="perfil">
-        <NativeTabs.Trigger.Label>Perfil</NativeTabs.Trigger.Label>
-        <NativeTabs.Trigger.Icon sf="person.crop.circle.fill" md="account_circle" />
       </NativeTabs.Trigger>
     </NativeTabs>
   );

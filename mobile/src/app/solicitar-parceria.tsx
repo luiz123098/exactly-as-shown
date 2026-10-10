@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Alert } from 'react-native';
 
+import { NichePicker } from '@/components/niche-picker';
 import { Button, Field, Screen, Text } from '@/components/ui';
 import { fieldErrors, partnerSchema } from '@/lib/applications';
 import { useAuth } from '@/lib/auth';
@@ -25,16 +26,19 @@ export default function PartnerApplication() {
   });
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [busy, setBusy] = useState(false);
+  const [nicheId, setNicheId] = useState<string | null>(null);
 
   const set = (key: keyof Form) => (value: string) => setF((prev) => ({ ...prev, [key]: value }));
 
   async function submit() {
     if (!userId) return;
     const parsed = partnerSchema.safeParse(f);
-    if (!parsed.success) return void setErrors(fieldErrors(parsed.error));
+    if (!parsed.success || !nicheId) {
+      return void setErrors({ ...(parsed.success ? {} : fieldErrors(parsed.error)), ...(nicheId ? {} : { niche: 'Escolha o segmento da empresa' }) });
+    }
     setErrors({});
     setBusy(true);
-    const { error } = await supabase.from('partners').insert({ ...parsed.data, owner_id: userId });
+    const { error } = await supabase.from('partners').insert({ ...parsed.data, niche_id: nicheId, owner_id: userId });
     setBusy(false);
     if (error) return void Alert.alert('Não foi possível enviar', 'Verifique sua conexão e tente novamente.');
     await refresh();
@@ -54,8 +58,7 @@ export default function PartnerApplication() {
       <Field label="Telefone (WhatsApp)" value={f.phone} onChangeText={set('phone')} error={errors['phone']}
         keyboardType="phone-pad" autoComplete="tel" placeholder="(11) 98765-4321" />
       <Field label="Nome da empresa" value={f.company_name} onChangeText={set('company_name')} error={errors['company_name']} />
-      <Field label="Segmento" value={f.niche} onChangeText={set('niche')} error={errors['niche']}
-        placeholder="Ex.: estética automotiva, restaurante, hotel" />
+      <NichePicker value={nicheId} error={errors['niche']} onChange={(id, name) => { setNicheId(id); set('niche')(name); }} />
       <Field label="Seu Instagram" value={f.instagram_responsible} onChangeText={set('instagram_responsible')}
         error={errors['instagram_responsible']} autoCapitalize="none" autoCorrect={false} placeholder="@seuperfil" />
       <Field label="Instagram da empresa" value={f.instagram_company} onChangeText={set('instagram_company')}

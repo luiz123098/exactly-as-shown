@@ -4,7 +4,8 @@ import { supabase } from '@/lib/supabase';
 
 // Report and block, required for user-generated content (App Store 1.2).
 
-export function report(reporterId: string, reportedUser: string, carId: string | null, done?: () => void) {
+export function report(reporterId: string, reportedUser: string, carId: string | null, done?: () => void, articleId?: string,
+  promotionId?: string) {
   Alert.prompt('Denunciar', 'Conte o que há de errado. A equipe do Exotic Club vai analisar.', [
     { text: 'Cancelar', style: 'cancel' },
     {
@@ -12,7 +13,8 @@ export function report(reporterId: string, reportedUser: string, carId: string |
       onPress: async (reason?: string) => {
         if (!reason || reason.trim().length < 3) return void Alert.alert('Descreva o motivo da denúncia.');
         const { error } = await supabase.from('content_reports')
-          .insert({ reporter_id: reporterId, reported_user: reportedUser, car_id: carId, reason: reason.trim() });
+          .insert({ reporter_id: reporterId, reported_user: reportedUser, car_id: carId, article_id: articleId ?? null,
+            promotion_id: promotionId ?? null, reason: reason.trim() });
         if (error) return void Alert.alert('Não foi possível enviar', 'Verifique sua conexão e tente novamente.');
         Alert.alert('Denúncia enviada', 'Obrigado. Vamos analisar em breve.');
         done?.();

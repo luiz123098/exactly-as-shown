@@ -48,6 +48,7 @@ export function useNotificationsLive(userId: string | undefined) {
 export function notificationHref(link: string | null, id?: string): string {
   if (!link) return '/notificacoes';
   if (link === '/parceiro' || link === '/status') return '/perfil';
+  if (link === '/noticias') return '/';
   return id && link.includes('?') ? `${link}&n=${id}` : link;
 }
 

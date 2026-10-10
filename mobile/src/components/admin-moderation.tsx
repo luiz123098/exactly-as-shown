@@ -6,6 +6,8 @@ import { askReason, useAdminAction } from '@/components/admin';
 import { CarCard } from '@/components/garage';
 import { Button, Card, Empty, Text } from '@/components/ui';
 import { carTitle, removeCarPhoto, type Car } from '@/lib/garage';
+import { removeNewsImage } from '@/lib/news';
+import { removePartnerImage } from '@/lib/partners';
 import { supabase } from '@/lib/supabase';
 import { colors, space } from '@/lib/theme';
 
@@ -13,9 +15,52 @@ import { colors, space } from '@/lib/theme';
 
 type PendingCar = Car & { owner: { full_name: string } | null };
 type Report = {
-  id: string; reason: string; created_at: string; car_id: string | null; reported_user: string;
+  id: string; reason: string; created_at: string; car_id: string | null; article_id: string | null; reported_user: string;
   reported: { full_name: string } | null; car: Pick<Car, 'brand' | 'model' | 'version' | 'year' | 'photo_path'> | null;
+  article: { title: string } | null;
+  promotion_id: string | null;
+  promotion: { title: string; partner_id: string; image_path: string | null } | null;
 };
+type PendingNiche = { id: string; name: string; created_at: string };
+
+export function usePendingNiches() {
+  return useQuery({
+    queryKey: ['admin', 'niches'],
+    queryFn: async () => {
+      const { data, error } = await supabase.from('niches').select('id, name, created_at').eq('status', 'pending').order('created_at');
+      if (error) throw error;
+      return data as PendingNiche[];
+    },
+  });
+}
+
+// Segments: the admins keep the list companies pick from (old suggestions
+// still waiting are approved or refused here). A segment shows up as a news
+// filter once one of its companies publishes.
+export function NicheQueue({ niches }: { niches: PendingNiche[] }) {
+  const { busy, run } = useAdminAction(['niches'], ['news']);
+  function add() {
+    Alert.prompt('Novo segmento', 'Ex.: Produtos de limpeza automotiva', [
+      { text: 'Cancelar', style: 'cancel' },
+      { text: 'Adicionar', onPress: (name?: string) => name?.trim() && run('add', 'admin_add_niche', { _name: name }, 'Segmento adicionado') },
+    ], 'plain-text');
+  }
+  return (
+    <Card>
+      <Text variant="heading">Segmentos</Text>
+      <Text variant="muted">As empresas escolhem o segmento desta lista. Ele aparece nas Notícias quando alguma empresa publicar.</Text>
+      {niches.map((n) => (
+        <View key={n.id} style={{ flexDirection: 'row', alignItems: 'center', gap: space.sm }}>
+          <Text style={{ flex: 1 }}>{n.name} <Text variant="muted">(sugerido)</Text></Text>
+          <Button title="Aprovar" loading={busy === n.id} onPress={() => run(n.id, 'admin_review_niche', { _niche: n.id, _approve: true })} />
+          <Button title="Recusar" variant="outline" disabled={busy === n.id}
+            onPress={() => run(n.id, 'admin_review_niche', { _niche: n.id, _approve: false })} />
+        </View>
+      ))}
+      <Button title="Adicionar segmento" variant="outline" loading={busy === 'add'} onPress={add} />
+    </Card>
+  );
+}
 
 export function usePendingPhotos() {
   return useQuery({
@@ -34,7 +79,7 @@ export function useOpenReports() {
     queryKey: ['admin', 'reports'],
     queryFn: async () => {
       const { data, error } = await supabase.from('content_reports')
-        .select('id, reason, created_at, car_id, reported_user, reported:profiles!content_reports_reported_user_fkey(full_name), car:cars(brand, model, version, year, photo_path)')
+        .select('id, reason, created_at, car_id, article_id, reported_user, reported:profiles!content_reports_reported_user_fkey(full_name), car:cars(brand, model, version, year, photo_path), article:articles(title), promotion_id, promotion:promotions(title, partner_id, image_path)')
         .eq('status', 'open').order('created_at', { ascending: false });
       if (error) throw error;
       return data as unknown as Report[];
@@ -84,14 +129,49 @@ export function ReportList({ reports }: { reports: Report[] }) {
     }, { action: 'Remover', required: true });
   }
 
+  function removePost(r: Report) {
+    askReason('Remover post', async (reason) => {
+      const { data, error } = await supabase.rpc('admin_remove_article', { _article: r.article_id, _reason: reason });
+      if (error) return void Alert.alert('Não foi possível remover', error.message);
+      await removeNewsImage(data as string | null);
+      await resolve(r.id);
+      qc.invalidateQueries({ queryKey: ['news'] });
+    }, { action: 'Remover', required: true });
+  }
+
+  function removePromotion(r: Report) {
+    askReason('Remover promoção', async (reason) => {
+      const { data, error } = await supabase.rpc('admin_remove_promotion', { _promotion: r.promotion_id, _reason: reason });
+      if (error) return void Alert.alert('Não foi possível remover', error.message);
+      await removePartnerImage(data as string | null);
+      await refresh();
+      qc.invalidateQueries({ queryKey: ['partners'] });
+    }, { action: 'Remover', required: true });
+  }
+
   if (!reports.length) return <Empty title="Nenhuma denúncia aberta" />;
   return reports.map((r) => (
     <Card key={r.id}>
       <Text variant="label">{new Date(r.created_at).toLocaleString('pt-BR')}</Text>
-      <Text variant="heading">{r.car ? carTitle(r.car) : `Usuário: ${r.reported?.full_name ?? '—'}`}</Text>
-      {r.car && <Text variant="muted">De {r.reported?.full_name ?? 'membro'}</Text>}
+      <Text variant="heading">
+        {r.car ? carTitle(r.car) : r.article ? `Post: ${r.article.title}` : r.promotion ? `Promoção: ${r.promotion.title}`
+          : `Usuário: ${r.reported?.full_name ?? '—'}`}
+      </Text>
+      {(r.car || r.article || r.promotion) && <Text variant="muted">De {r.reported?.full_name ?? 'membro'}</Text>}
       <Text>“{r.reason}”</Text>
-      <Button title="Ver garagem" variant="outline" onPress={() => router.push(`/admin/garagem/${r.reported_user}`)} />
+      {r.promotion ? (
+        <Button title="Ver empresa" variant="outline" onPress={() => router.push(`/parceiros/${r.promotion!.partner_id}`)} />
+      ) : r.article_id ? (
+        <Button title="Ver post" variant="outline" onPress={() => router.push(`/noticia/${r.article_id}`)} />
+      ) : (
+        <Button title="Ver garagem" variant="outline" onPress={() => router.push(`/admin/garagem/${r.reported_user}`)} />
+      )}
+      {r.promotion_id && (
+        <Button title="Remover promoção" variant="ghost" onPress={() => removePromotion(r)} style={{ borderWidth: 1, borderColor: colors.danger }} />
+      )}
+      {r.article_id && (
+        <Button title="Remover post" variant="ghost" onPress={() => removePost(r)} style={{ borderWidth: 1, borderColor: colors.danger }} />
+      )}
       {r.car_id && (
         <Button title="Remover carro" variant="ghost" onPress={() => removeCar(r)} style={{ borderWidth: 1, borderColor: colors.danger }} />
       )}

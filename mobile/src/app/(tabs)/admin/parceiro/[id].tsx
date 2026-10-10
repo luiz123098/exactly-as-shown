@@ -2,9 +2,10 @@ import { DatePicker, Host } from '@expo/ui/swift-ui';
 import { useQuery } from '@tanstack/react-query';
 import { useLocalSearchParams } from 'expo-router';
 import { useState } from 'react';
-import { Alert, View } from 'react-native';
+import { ActionSheetIOS, Alert, View } from 'react-native';
 
 import { askReason, Contact, Info, useAdminAction } from '@/components/admin';
+import { useApprovedNiches } from '@/components/niche-picker';
 import { Button, Card, ErrorState, Field, Loading, Screen, Text } from '@/components/ui';
 import type { PartnerStatus } from '@/lib/access';
 import { formatMeeting, PARTNER_STATUS } from '@/lib/applications';
@@ -38,7 +39,8 @@ export default function PartnerReview() {
       return data as Partner;
     },
   });
-  const { busy, run } = useAdminAction(key);
+  const { busy, run } = useAdminAction(key, ['news']);
+  const niches = useApprovedNiches();
   const [scheduling, setScheduling] = useState(false);
   const [when, setWhen] = useState(defaultMeeting);
   const [place, setPlace] = useState('');
@@ -47,6 +49,16 @@ export default function PartnerReview() {
   if (q.isError || !q.data) return <ErrorState onRetry={() => q.refetch()} />;
   const p = q.data;
   const open = p.status === 'pending' || p.status === 'meeting_proposed' || p.status === 'meeting_confirmed';
+
+  // The company's posts move with it to the new segment.
+  function changeNiche() {
+    const list = niches.data ?? [];
+    const labels = [...list.map((n) => n.name), 'Cancelar'];
+    ActionSheetIOS.showActionSheetWithOptions({ title: 'Segmento da empresa', options: labels, cancelButtonIndex: list.length }, (i) => {
+      const n = list[i];
+      if (n) run('niche', 'admin_set_partner_niche', { _partner: p.id, _niche: n.id }, `Segmento alterado para ${n.name}`);
+    });
+  }
 
   function approve() {
     Alert.alert('Aprovar parceria', `${p.company_name} passa a ser parceiro do clube.`, [
@@ -91,6 +103,7 @@ export default function PartnerReview() {
         {p.status === 'rejected' && <Info label="Motivo da reprovação" value={p.decision_reason} />}
       </Card>
       <Contact phone={p.phone} instagram={p.instagram_company} />
+      <Button title="Trocar segmento" variant="outline" disabled={!niches.data?.length} loading={busy === 'niche'} onPress={changeNiche} />
 
       {open && (scheduling ? (
         <Card>

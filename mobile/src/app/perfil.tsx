@@ -4,7 +4,6 @@ import { useState } from 'react';
 import { Alert, View } from 'react-native';
 
 import { ApplicationStatus } from '@/components/application-status';
-import { TitleRow } from '@/components/title-row';
 import { Button, Card, Screen, Text } from '@/components/ui';
 import { useAuth, type Kind } from '@/lib/auth';
 import { avatarUrl, deleteAccount } from '@/lib/profile';
@@ -48,8 +47,7 @@ export default function Profile() {
   }
 
   return (
-    <Screen statusBarScrim>
-      <TitleRow title="Perfil" />
+    <Screen>
       <View style={{ flexDirection: 'row', alignItems: 'center', gap: space.md }}>
         {uri && <Image source={{ uri }} style={{ width: 72, height: 72, borderRadius: 36, backgroundColor: colors.secondary }} />}
         <View style={{ flex: 1, gap: space.xs }}>

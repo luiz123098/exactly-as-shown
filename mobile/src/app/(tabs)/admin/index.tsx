@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { Pressable, RefreshControl, View } from 'react-native';
 
 import { useRefetchOnFocus } from '@/lib/use-refetch-on-focus';
-import { PhotoQueue, ReportList, useOpenReports, usePendingPhotos } from '@/components/admin-moderation';
+import { NicheQueue, PhotoQueue, ReportList, useOpenReports, usePendingNiches, usePendingPhotos } from '@/components/admin-moderation';
 import { TitleRow } from '@/components/title-row';
 import { Card, Empty, ErrorState, Loading, Screen, Text } from '@/components/ui';
 import { byStatus, MEMBER_STATUS, PARTNER_STATUS } from '@/lib/applications';
@@ -62,6 +62,7 @@ export default function Admin() {
   const members = useMembers();
   const photos = usePendingPhotos();
   const reports = useOpenReports();
+  const niches = usePendingNiches();
   const q = tab === 'members' && memberView === 'photos' ? photos : { partners, members, reports }[tab];
   useRefetchOnFocus(q.refetch);
   const pending = (rows?: { status: string }[]) => rows?.filter((r) => r.status === 'pending').length ?? 0;
@@ -70,7 +71,7 @@ export default function Admin() {
     <Screen statusBarScrim refreshControl={<RefreshControl refreshing={q.isRefetching} onRefresh={() => q.refetch()} />}>
       <TitleRow title="Admin" />
       <View style={{ flexDirection: 'row', gap: space.sm }}>
-        <Segment label="Parceiros" count={pending(partners.data)} active={tab === 'partners'} onPress={() => setTab('partners')} />
+        <Segment label="Parceiros" count={pending(partners.data) + (niches.data?.length ?? 0)} active={tab === 'partners'} onPress={() => setTab('partners')} />
         <Segment label="Membros" count={pending(members.data) + (photos.data?.length ?? 0)} active={tab === 'members'}
           onPress={() => setTab('members')} />
         <Segment label="Denúncias" count={reports.data?.length ?? 0} active={tab === 'reports'} onPress={() => setTab('reports')} />
@@ -84,12 +85,15 @@ export default function Admin() {
         </View>
       )}
       {q.isLoading ? <Loading /> : q.isError ? <ErrorState onRetry={() => q.refetch()} /> : tab === 'partners' ? (
-        partners.data?.length ? partners.data.map((p) => (
+        <>
+        <NicheQueue niches={niches.data ?? []} />
+        {partners.data?.length ? partners.data.map((p) => (
           <Row key={p.id} title={p.company_name} subtitle={`${p.responsible_name} · ${p.niche}`}
             status={PARTNER_STATUS[p.status]} highlight={p.status === 'pending'}
             note={p.status === 'pending' && p.meeting_request ? 'Pediu outro horário' : undefined}
             onPress={() => router.push(`/admin/parceiro/${p.id}`)} />
-        )) : <Empty title="Nenhuma solicitação de parceria" />
+        )) : <Empty title="Nenhuma solicitação de parceria" />}
+        </>
       ) : tab === 'members' && memberView === 'photos' ? (
         <PhotoQueue cars={photos.data ?? []} />
       ) : tab === 'members' ? (
