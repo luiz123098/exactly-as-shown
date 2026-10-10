@@ -1,6 +1,7 @@
 import { useQueryClient } from '@tanstack/react-query';
 import { Image } from 'expo-image';
 import * as ImagePicker from 'expo-image-picker';
+import * as Location from 'expo-location';
 import { router } from 'expo-router';
 import { useEffect, useState } from 'react';
 import { Alert, Pressable } from 'react-native';
@@ -55,8 +56,18 @@ export default function MyCompany() {
     let uploaded: string | null = null;
     try {
       if (logo) uploaded = await uploadPartnerImage(me, 'logo', logo.uri, logo.mimeType);
+      // Coordinates for the map on the company page (Apple geocoder, no location access).
+      const v = parsed.data;
+      let coords: { lat: number | null; lng: number | null } = { lat: partner.lat, lng: partner.lng };
+      if (v.address !== partner.address || v.city !== partner.city) {
+        coords = { lat: null, lng: null };
+        if (v.address) {
+          const [hit] = await Location.geocodeAsync([v.address, v.city].filter(Boolean).join(', ')).catch(() => []);
+          if (hit) coords = { lat: hit.latitude, lng: hit.longitude };
+        }
+      }
       const { error } = await supabase.from('partners')
-        .update({ ...parsed.data, logo_path: uploaded ?? partner.logo_path }).eq('id', partner.id);
+        .update({ ...v, ...coords, logo_path: uploaded ?? partner.logo_path }).eq('id', partner.id);
       if (error) throw error;
       if (uploaded) await removePartnerImage(partner.logo_path);
       await Promise.all([qc.invalidateQueries({ queryKey: ['partners'] }), refresh()]);

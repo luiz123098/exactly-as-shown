@@ -10,6 +10,7 @@ export default function PartnersLayout() {
       <Stack.Screen name="minha-empresa" options={{ title: 'Página da empresa' }} />
       <Stack.Screen name="promocoes" options={{ title: 'Minhas promoções' }} />
       <Stack.Screen name="promocao/[id]" options={{ title: 'Promoção' }} />
+      <Stack.Screen name="historico" options={{ title: 'Histórico' }} />
     </Stack>
   );
 }

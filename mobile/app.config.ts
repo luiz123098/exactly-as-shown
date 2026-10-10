@@ -18,6 +18,22 @@ export default ({ config }: ConfigContext): ExpoConfig => {
       },
     ],
     [
+      'expo-calendar',
+      {
+        // iOS 17+: only adds events (opens the system "New Event" screen), never reads the calendar.
+        writeOnlyAccess: true,
+        writeOnlyCalendarPermission: 'O Exotic Club adiciona os eventos que você escolher à sua agenda.',
+        calendarPermission: 'O Exotic Club adiciona os eventos que você escolher à sua agenda.',
+      },
+    ],
+    [
+      'expo-location',
+      {
+        // Only turns partner addresses into map coordinates; the app never tracks the user.
+        locationWhenInUsePermission: 'O Exotic Club usa endereços para mostrar a localização dos parceiros no mapa.',
+      },
+    ],
+    [
       'expo-image-picker',
       {
         photosPermission: 'O Exotic Club usa suas fotos para você escolher a foto de perfil.',

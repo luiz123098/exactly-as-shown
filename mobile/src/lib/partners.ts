@@ -16,11 +16,13 @@ export type PartnerPage = {
   description: string;
   address: string | null;
   city: string | null;
+  lat: number | null;
+  lng: number | null;
   public_whatsapp: string | null;
   website: string | null;
 };
 export const PARTNER_FIELDS =
-  'id, owner_id, company_name, niche, niche_id, instagram_company, logo_path, description, address, city, public_whatsapp, website';
+  'id, owner_id, company_name, niche, niche_id, instagram_company, logo_path, description, address, city, lat, lng, public_whatsapp, website';
 
 export type UsageLimit = 'once' | 'daily' | 'monthly' | 'unlimited';
 export type Promotion = {
@@ -51,8 +53,9 @@ export function isLive(p: Pick<Promotion, 'active' | 'ends_at'>, now = Date.now(
   return p.active && (!p.ends_at || new Date(p.ends_at).getTime() > now);
 }
 
+// Opens Google Maps (the app if installed, otherwise the site) at the address.
 export function mapsUrl(address: string, city?: string | null) {
-  return `https://maps.apple.com/?q=${encodeURIComponent([address, city].filter(Boolean).join(', '))}`;
+  return `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent([address, city].filter(Boolean).join(', '))}`;
 }
 
 export function websiteUrl(site: string) {

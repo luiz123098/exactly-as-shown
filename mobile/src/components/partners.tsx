@@ -12,7 +12,7 @@ export function PartnerLogo({ path, name, size = 56 }: { path: string | null | u
     <Image source={{ uri }} style={{ width: size, height: size, borderRadius: size / 4, backgroundColor: colors.secondary }} contentFit="cover" />
   ) : (
     <View style={{ width: size, height: size, borderRadius: size / 4, backgroundColor: colors.ink, alignItems: 'center', justifyContent: 'center' }}>
-      <Text style={{ color: colors.inkText, fontSize: size / 2.6 }}>{name.trim().charAt(0).toUpperCase()}</Text>
+      <Text style={{ color: colors.inkText, fontSize: size / 2.6, lineHeight: size / 2.1 }}>{name.trim().charAt(0).toUpperCase()}</Text>
     </View>
   );
 }

@@ -58,6 +58,7 @@ export default function Partners() {
             <Button title="Editar página" variant="outline" style={{ flex: 1 }} onPress={() => router.push('/parceiros/minha-empresa')} />
             <Button title="Promoções" style={{ flex: 1 }} onPress={() => router.push('/parceiros/promocoes')} />
           </View>
+          <Button title="Histórico de leituras" variant="ghost" onPress={() => router.push('/parceiros/historico')} />
         </Card>
       )}
       {kind === 'non_subscriber' && (

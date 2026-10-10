@@ -17,7 +17,7 @@ describe('partner page', () => {
   });
 
   it('builds map and site links', () => {
-    expect(mapsUrl('Av. T-63, 100', 'Goiânia')).toBe('https://maps.apple.com/?q=Av.%20T-63%2C%20100%2C%20Goi%C3%A2nia');
+    expect(mapsUrl('Av. T-63, 100', 'Goiânia')).toBe('https://www.google.com/maps/search/?api=1&query=Av.%20T-63%2C%20100%2C%20Goi%C3%A2nia');
     expect(websiteUrl('http://a.com')).toBe('http://a.com');
   });
 });

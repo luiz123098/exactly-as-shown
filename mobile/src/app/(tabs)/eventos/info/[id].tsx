@@ -1,4 +1,5 @@
 import { useQuery, useQueryClient } from '@tanstack/react-query';
+import { createEventInCalendarAsync } from 'expo-calendar/legacy';
 import { Image } from 'expo-image';
 import { useLocalSearchParams } from 'expo-router';
 import { useState } from 'react';
@@ -27,14 +28,15 @@ export default function EventInfo() {
   const q = useQuery({
     queryKey: ['events', 'info', id],
     queryFn: async () => {
-      const [d, mine, list] = await Promise.all([
+      const [d, ev, mine, list] = await Promise.all([
         supabase.from('event_details').select('*').eq('event_id', id).maybeSingle(),
+        supabase.from('events').select('title').eq('id', id).maybeSingle(),
         supabase.from('event_rsvps').select('event_id').eq('event_id', id).eq('user_id', me!).maybeSingle(),
         admin ? supabase.rpc('admin_event_rsvps', { _event: id }) : Promise.resolve({ data: null, error: null }),
       ]);
       if (d.error) throw d.error;
       if (list.error) throw list.error;
-      return { details: d.data as EventDetails | null, going: !!mine.data, rsvps: (list.data ?? []) as Rsvp[] };
+      return { details: d.data as EventDetails | null, title: (ev.data?.title as string | undefined) ?? 'Evento Exotic Experience', going: !!mine.data, rsvps: (list.data ?? []) as Rsvp[] };
     },
   });
 
@@ -49,6 +51,21 @@ export default function EventInfo() {
     await Promise.all([q.refetch(), qc.invalidateQueries({ queryKey: ['events', 'list'] })]);
   }
 
+  // Opens the system "New Event" screen already filled in; the person confirms there.
+  async function addToCalendar(d: EventDetails, title: string) {
+    try {
+      await createEventInCalendarAsync({
+        title,
+        startDate: new Date(d.starts_at),
+        endDate: eventEndsAt(d),
+        location: [d.venue, d.address, d.city].filter(Boolean).join(', ') || undefined,
+        notes: [d.program, d.rules].filter(Boolean).join('\n\n') || undefined,
+      });
+    } catch {
+      Alert.alert('Não foi possível abrir o calendário', 'Verifique a permissão de Calendários em Ajustes.');
+    }
+  }
+
   if (q.isLoading) return <Loading />;
   if (q.isError) return <ErrorState onRetry={() => q.refetch()} />;
   const d = q.data?.details;
@@ -61,6 +78,7 @@ export default function EventInfo() {
       <Card>
         <Text variant="label">Quando</Text>
         <Text variant="heading">{formatEventDate(d.starts_at, d.ends_at)}</Text>
+        {!past && <Button title="Adicionar ao calendário" variant="outline" onPress={() => addToCalendar(d, q.data!.title)} />}
       </Card>
       {(d.venue || d.address) && (
         <Card>

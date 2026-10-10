@@ -3,6 +3,7 @@ import { router, Stack, useLocalSearchParams } from 'expo-router';
 import { ActionSheetIOS, Alert, Linking, Pressable, View } from 'react-native';
 
 import { askReason } from '@/components/admin';
+import { PartnerMap } from '@/components/partner-map';
 import { PartnerLogo, PromotionCard } from '@/components/partners';
 import { Button, Card, ErrorState, Loading, Screen, Text } from '@/components/ui';
 import { instagramUrl, whatsappUrl } from '@/lib/applications';
@@ -10,7 +11,7 @@ import { useAuth } from '@/lib/auth';
 import { report } from '@/lib/moderation';
 import { originLabel, type Article } from '@/lib/news';
 import { timeAgo } from '@/lib/notifications';
-import { isLive, mapsUrl, PARTNER_FIELDS, removePartnerImage, type PartnerPage, type Promotion } from '@/lib/partners';
+import { isLive, PARTNER_FIELDS, removePartnerImage, type PartnerPage, type Promotion } from '@/lib/partners';
 import { supabase } from '@/lib/supabase';
 import { colors, space } from '@/lib/theme';
 import { useRefetchOnFocus } from '@/lib/use-refetch-on-focus';
@@ -69,13 +70,6 @@ export default function PartnerScreen() {
       </View>
       {mine && <Button title="Editar página da empresa" variant="outline" onPress={() => router.push('/parceiros/minha-empresa')} />}
       {!!c.description && <Text>{c.description}</Text>}
-      {!!c.address && (
-        <Card>
-          <Text variant="label">Endereço</Text>
-          <Text>{[c.address, c.city].filter(Boolean).join(' · ')}</Text>
-          <Button title="Como chegar" variant="outline" onPress={() => Linking.openURL(mapsUrl(c.address!, c.city))} />
-        </Card>
-      )}
       <View style={{ flexDirection: 'row', gap: space.sm, flexWrap: 'wrap' }}>
         {!!c.public_whatsapp && <Button title="WhatsApp" variant="outline" style={{ flexGrow: 1 }} onPress={() => Linking.openURL(whatsappUrl(c.public_whatsapp!))} />}
         <Button title="Instagram" variant="outline" style={{ flexGrow: 1 }} onPress={() => Linking.openURL(instagramUrl(c.instagram_company))} />
@@ -111,6 +105,12 @@ export default function PartnerScreen() {
           </Card>
         </Pressable>
       ))}
+      {!!c.address && (
+        <>
+          <Text variant="heading" style={{ marginTop: space.sm }}>Localização</Text>
+          <PartnerMap name={c.company_name} address={c.address} city={c.city} lat={c.lat} lng={c.lng} />
+        </>
+      )}
       {!mine && kind !== 'admin' && me && (
         <Pressable accessibilityRole="button" onPress={() => report(me, c.owner_id, null)} style={{ alignSelf: 'center', padding: space.sm }}>
           <Text variant="label" style={{ color: colors.textMuted }}>Denunciar esta empresa</Text>
