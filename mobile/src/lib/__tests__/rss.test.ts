@@ -31,3 +31,11 @@ describe('scoreItem / categoryOf', () => {
     expect(excerptOf('a'.repeat(300))).toHaveLength(281);
   });
 });
+
+describe('whole-word matching', () => {
+  it('does not match keywords inside other words', () => {
+    expect(scoreItem({ title: 'Fluxo de veículos na balança da rodovia', summary: '', cats: [] })).toBe(0);
+    expect(scoreItem({ title: 'Nova Ford F150 chega ao Brasil', summary: '', cats: [] })).toBe(0);
+    expect(scoreItem({ title: 'Porsche lança 911 GT3 na F1', summary: '', cats: [] })).toBeGreaterThanOrEqual(5);
+  });
+});

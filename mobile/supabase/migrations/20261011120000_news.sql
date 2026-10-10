@@ -64,7 +64,7 @@ alter table public.partners add column niche_id uuid references public.niches(id
 grant insert (niche_id) on public.partners to authenticated;
 -- Existing partners: their typed niche becomes a suggestion for the admin.
 insert into public.niches (name, status)
-  select distinct initcap(trim(niche)), 'pending' from public.partners
+  select distinct left(initcap(trim(niche)), 40), 'pending' from public.partners where char_length(trim(niche)) >= 2
   on conflict do nothing;
 update public.partners p set niche_id = n.id from public.niches n where lower(n.name) = lower(trim(p.niche));
 

@@ -39,7 +39,7 @@ export default function PartnerReview() {
       return data as Partner;
     },
   });
-  const { busy, run } = useAdminAction(key, ['news']);
+  const { busy, run } = useAdminAction(key, ['news'], ['partners']);
   const niches = useApprovedNiches();
   const [scheduling, setScheduling] = useState(false);
   const [when, setWhen] = useState(defaultMeeting);

@@ -1,6 +1,7 @@
 import { z } from 'zod';
 
-import { supabase, supabaseKey, supabaseUrl } from '@/lib/supabase';
+import { supabaseKey, supabaseUrl } from '@/lib/supabase';
+import { removeImages, uploadImage } from '@/lib/upload';
 
 export type PhotoStatus = 'pending' | 'approved' | 'rejected';
 
@@ -74,17 +75,7 @@ export function carPhotoSource(path: string | null | undefined, token: string | 
   };
 }
 
-const ALLOWED = ['image/jpeg', 'image/png', 'image/webp'];
+export const uploadCarPhoto = (userId: string, uri: string, mimeType?: string | null) =>
+  uploadImage('cars', `${userId}/car`, uri, mimeType);
 
-export async function uploadCarPhoto(userId: string, uri: string, mimeType?: string | null) {
-  const type = mimeType && ALLOWED.includes(mimeType) ? mimeType : 'image/jpeg';
-  const path = `${userId}/car-${Date.now()}.${type.split('/')[1]}`;
-  const body = await (await fetch(uri)).arrayBuffer();
-  const { error } = await supabase.storage.from('cars').upload(path, body, { contentType: type });
-  if (error) throw error;
-  return path;
-}
-
-export async function removeCarPhoto(path: string | null | undefined) {
-  if (path) await supabase.storage.from('cars').remove([path]);
-}
+export const removeCarPhoto = (path: string | null | undefined) => removeImages('cars', [path]);

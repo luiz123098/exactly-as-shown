@@ -1,6 +1,7 @@
 import { z } from 'zod';
 
 import { supabase } from '@/lib/supabase';
+import { removeImages, uploadImage } from '@/lib/upload';
 
 export type Article = {
   id: string;
@@ -40,19 +41,10 @@ export const postSchema = z.object({
   body: z.string().trim().min(10, 'Escreva o texto do post (mínimo 10 caracteres)').max(5000),
 });
 
-export const excerptOf = (body: string) => (body.length > 280 ? `${body.slice(0, 280).trimEnd()}…` : body);
+// Same summary rule as the automatic news.
+export { excerptOf } from '../../supabase/functions/_shared/rss';
 
-const ALLOWED = ['image/jpeg', 'image/png', 'image/webp'];
+export const uploadNewsImage = (userId: string, uri: string, mimeType?: string | null) =>
+  uploadImage('news', `${userId}/post`, uri, mimeType);
 
-export async function uploadNewsImage(userId: string, uri: string, mimeType?: string | null) {
-  const type = mimeType && ALLOWED.includes(mimeType) ? mimeType : 'image/jpeg';
-  const path = `${userId}/post-${Date.now()}.${type.split('/')[1]}`;
-  const body = await (await fetch(uri)).arrayBuffer();
-  const { error } = await supabase.storage.from('news').upload(path, body, { contentType: type });
-  if (error) throw error;
-  return path;
-}
-
-export async function removeNewsImage(path: string | null | undefined) {
-  if (path) await supabase.storage.from('news').remove([path]);
-}
+export const removeNewsImage = (path: string | null | undefined) => removeImages('news', [path]);

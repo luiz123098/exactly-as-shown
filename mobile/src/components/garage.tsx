@@ -1,8 +1,9 @@
 import { Image } from 'expo-image';
 import { SymbolView } from 'expo-symbols';
 import { useState, type ReactNode } from 'react';
-import { Modal, Pressable, ScrollView, StyleSheet, View } from 'react-native';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { Pressable, StyleSheet, View } from 'react-native';
+
+import { PhotoViewer } from '@/components/photo-viewer';
 
 import { Card, Text } from '@/components/ui';
 import { useAuth } from '@/lib/auth';
@@ -31,26 +32,6 @@ export function CarPhoto({ path, style, zoomable }: { path: string | null | unde
       </Pressable>
       <PhotoViewer source={source} visible={open} onClose={() => setOpen(false)} />
     </>
-  );
-}
-
-function PhotoViewer({ source, visible, onClose }: {
-  source: NonNullable<ReturnType<typeof carPhotoSource>>; visible: boolean; onClose: () => void;
-}) {
-  const insets = useSafeAreaInsets();
-  return (
-    <Modal visible={visible} animationType="fade" presentationStyle="fullScreen" onRequestClose={onClose} statusBarTranslucent>
-      <View style={{ flex: 1, backgroundColor: '#000' }}>
-        <ScrollView style={{ flex: 1 }} contentContainerStyle={{ flexGrow: 1 }} maximumZoomScale={4} minimumZoomScale={1}
-          centerContent showsHorizontalScrollIndicator={false} showsVerticalScrollIndicator={false} bouncesZoom>
-          <Image source={source} style={{ flex: 1 }} contentFit="contain" />
-        </ScrollView>
-        <Pressable accessibilityRole="button" accessibilityLabel="Fechar" onPress={onClose} hitSlop={12}
-          style={[styles.close, { top: insets.top + space.sm }]}>
-          <SymbolView name="xmark" size={18} tintColor="#fff" weight="semibold" />
-        </Pressable>
-      </View>
-    </Modal>
   );
 }
 
@@ -104,6 +85,5 @@ const styles = StyleSheet.create({
   like: { flexDirection: 'row', alignItems: 'center', gap: 6, alignSelf: 'flex-start', paddingHorizontal: space.md,
     paddingVertical: 8, borderRadius: radius.pill, borderWidth: 1, borderColor: colors.border },
   liked: { borderColor: colors.danger, backgroundColor: '#fdecec' },
-  close: { position: 'absolute', right: space.md, width: 40, height: 40, borderRadius: 20,
-    backgroundColor: 'rgba(255,255,255,0.2)', alignItems: 'center', justifyContent: 'center' },
+
 });

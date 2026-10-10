@@ -5,7 +5,7 @@ import { router, Stack, useLocalSearchParams } from 'expo-router';
 import { useEffect, useState } from 'react';
 import { Alert, Pressable, View } from 'react-native';
 
-import { Button, Field, Loading, Screen, Text } from '@/components/ui';
+import { Button, ErrorState, Field, Loading, Screen, Text } from '@/components/ui';
 import { fieldErrors } from '@/lib/applications';
 import { useAuth } from '@/lib/auth';
 import { coverUri, excerptOf, postSchema, removeNewsImage, uploadNewsImage, type Article } from '@/lib/news';
@@ -26,11 +26,14 @@ export default function PostForm() {
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [loading, setLoading] = useState(!!id);
   const [busy, setBusy] = useState(false);
+  const [loadError, setLoadError] = useState(false);
   const asExotic = kind === 'admin';
 
   useEffect(() => {
     if (!id) return;
-    supabase.from('articles').select('*').eq('id', id).single().then(({ data }) => {
+    supabase.from('articles').select('*').eq('id', id).maybeSingle().then(({ data, error }) => {
+      // Editing a post that is gone must not turn into publishing a new one.
+      if (error || !data) setLoadError(true);
       if (data) {
         const a = data as Article;
         setArticle(a);
@@ -78,6 +81,7 @@ export default function PostForm() {
   }
 
   if (loading) return <Loading />;
+  if (loadError) return <ErrorState text="Este post não está mais disponível para edição." />;
   const preview = picked?.uri ?? (article ? coverUri(article) : null);
   return (
     <Screen>

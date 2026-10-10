@@ -1,4 +1,5 @@
 import { supabase } from '@/lib/supabase';
+import { removeImages, uploadImage } from '@/lib/upload';
 
 export type Profile = {
   id: string;
@@ -30,19 +31,12 @@ export function avatarUrl(path: string | null | undefined): string | null {
   return path ? supabase.storage.from('avatars').getPublicUrl(path).data.publicUrl : null;
 }
 
-const ALLOWED = ['image/jpeg', 'image/png', 'image/webp'];
-
 // Uploads a picked photo to the member's own folder and points the profile at it.
 export async function uploadAvatar(userId: string, uri: string, mimeType?: string | null, previous?: string | null) {
-  const type = mimeType && ALLOWED.includes(mimeType) ? mimeType : 'image/jpeg';
-  const ext = type.split('/')[1];
-  const path = `${userId}/avatar-${Date.now()}.${ext}`;
-  const body = await (await fetch(uri)).arrayBuffer();
-  const { error } = await supabase.storage.from('avatars').upload(path, body, { contentType: type });
-  if (error) throw error;
+  const path = await uploadImage('avatars', `${userId}/avatar`, uri, mimeType);
   const { error: updateError } = await supabase.from('profiles').update({ avatar_path: path }).eq('id', userId);
   if (updateError) throw updateError;
-  if (previous && previous !== path) await supabase.storage.from('avatars').remove([previous]);
+  if (previous && previous !== path) await removeImages('avatars', [previous]);
   return path;
 }
 

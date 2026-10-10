@@ -37,15 +37,20 @@ export function parseFeed(xml: string): FeedItem[] {
   }).filter((i) => i.title && /^https?:\/\//.test(i.link));
 }
 
+// Whole words/phrases only ("luxo" must not match "fluxo", "f1" not "f150").
+const boundary = (k: string) => new RegExp(`(^|[^\\p{L}\\p{N}])${k.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}($|[^\\p{L}\\p{N}])`, 'iu');
+const PREMIUM_RE = PREMIUM.map(boundary);
+const TOPICS_RE = TOPICS.map(boundary);
+const TECH_RE = TECH.map(boundary);
+
 // Premium brands weigh double; launches, motorsport and tech add one each.
 export function scoreItem(i: Pick<FeedItem, 'title' | 'summary' | 'cats'>) {
-  const t = ` ${`${i.title} ${i.summary} ${i.cats.join(' ')}`.toLowerCase()} `;
-  return PREMIUM.filter((k) => t.includes(k)).length * 2 + TOPICS.filter((k) => t.includes(k)).length;
+  const t = `${i.title} ${i.summary} ${i.cats.join(' ')}`;
+  return PREMIUM_RE.filter((r) => r.test(t)).length * 2 + TOPICS_RE.filter((r) => r.test(t)).length;
 }
 
 export function categoryOf(i: Pick<FeedItem, 'title' | 'summary'>, fallback: string) {
-  const t = ` ${`${i.title} ${i.summary}`.toLowerCase()} `;
-  return TECH.some((k) => t.includes(k)) ? 'Tecnologia' : fallback;
+  return TECH_RE.some((r) => r.test(`${i.title} ${i.summary}`)) ? 'Tecnologia' : fallback;
 }
 
 export const excerptOf = (summary: string) => (summary.length > 280 ? `${summary.slice(0, 280).trimEnd()}…` : summary);

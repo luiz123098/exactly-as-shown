@@ -27,13 +27,9 @@ export default function News() {
   const niches = useQuery({
     queryKey: ['news', 'niches'],
     queryFn: async () => {
-      const [n, used] = await Promise.all([
-        supabase.from('niches').select('id, name, status').eq('status', 'approved').order('name'),
-        supabase.from('articles').select('niche_id').eq('origin', 'partner').not('niche_id', 'is', null),
-      ]);
-      if (n.error) throw n.error;
-      const withPosts = new Set((used.data ?? []).map((a) => a.niche_id));
-      return (n.data as Niche[]).filter((x) => withPosts.has(x.id));
+      const { data, error } = await supabase.rpc('news_niches');
+      if (error) throw error;
+      return data as Pick<Niche, 'id' | 'name'>[];
     },
   });
 

@@ -2,6 +2,7 @@ import { z } from 'zod';
 
 import { normalizeInstagram } from '@/lib/profile';
 import { supabase } from '@/lib/supabase';
+import { removeImages, uploadImage } from '@/lib/upload';
 
 // Public fields of a partner company (contact data stays private).
 export type PartnerPage = {
@@ -81,17 +82,7 @@ export const promotionSchema = z.object({
   discount_label: optional(40),
 });
 
-const ALLOWED = ['image/jpeg', 'image/png', 'image/webp'];
+export const uploadPartnerImage = (userId: string, kind: 'logo' | 'promo', uri: string, mimeType?: string | null) =>
+  uploadImage('partners', `${userId}/${kind}`, uri, mimeType);
 
-export async function uploadPartnerImage(userId: string, kind: 'logo' | 'promo', uri: string, mimeType?: string | null) {
-  const type = mimeType && ALLOWED.includes(mimeType) ? mimeType : 'image/jpeg';
-  const path = `${userId}/${kind}-${Date.now()}.${type.split('/')[1]}`;
-  const body = await (await fetch(uri)).arrayBuffer();
-  const { error } = await supabase.storage.from('partners').upload(path, body, { contentType: type });
-  if (error) throw error;
-  return path;
-}
-
-export async function removePartnerImage(path: string | null | undefined) {
-  if (path) await supabase.storage.from('partners').remove([path]);
-}
+export const removePartnerImage = (path: string | null | undefined) => removeImages('partners', [path]);
